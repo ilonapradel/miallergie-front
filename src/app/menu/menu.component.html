@@ -3,13 +3,25 @@
     <ion-grid>
       <ion-row>
         <ion-col align-items-center>
-          <ion-button color="light"><ion-icon expand="full" slot="icon-only" name="search"></ion-icon></ion-button>
+          <ion-button
+            color="light"
+            routerLink="/search"
+            routerDirection="forward"
+            ><ion-icon expand="full" slot="icon-only" name="search"></ion-icon
+          ></ion-button>
         </ion-col>
         <ion-col align-items-center>
-          <ion-button color="light"><ion-icon expand="full" slot="icon-only" name="home"></ion-icon></ion-button>
+          <ion-button color="light" routerLink="/home" routerDirection="forward"
+            ><ion-icon expand="full" slot="icon-only" name="home"></ion-icon
+          ></ion-button>
         </ion-col>
         <ion-col align-items-center>
-          <ion-button color="light"><ion-icon expand="full" slot="icon-only" name="contact"></ion-icon></ion-button>
+          <ion-button
+            color="light"
+            routerLink="/profile"
+            routerDirection="forward"
+            ><ion-icon expand="full" slot="icon-only" name="contact"></ion-icon
+          ></ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
