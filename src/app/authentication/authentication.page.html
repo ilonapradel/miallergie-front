@@ -1,3 +1,16 @@
 <ion-content>
-  <ion-input placeholder="Adresse mail"></ion-input>
+  <form onsubmit="processForm(event)">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Adresse mail</ion-label>
+        <ion-input class="input" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Mot de passe</ion-label>
+        <ion-input class="input" type="password"></ion-input>
+      </ion-item>
+    </ion-list>
+  </form>
+  <ion-text>Vous n'avez pas de compte ? Inscrivez vous !</ion-text>
+  <a routerLink="/register" routerDirection="forward"> Inscrivez vous !</a>
 </ion-content>
