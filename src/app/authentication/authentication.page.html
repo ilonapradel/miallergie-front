@@ -1,16 +1,36 @@
 <ion-content>
-  <form onsubmit="processForm(event)">
-    <ion-list>
-      <ion-item>
-        <ion-label position="stacked">Adresse mail</ion-label>
-        <ion-input class="input" type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Mot de passe</ion-label>
-        <ion-input class="input" type="password"></ion-input>
-      </ion-item>
-    </ion-list>
-  </form>
-  <ion-text>Vous n'avez pas de compte ? Inscrivez vous !</ion-text>
-  <a routerLink="/register" routerDirection="forward"> Inscrivez vous !</a>
+  <ion-grid>
+    <ion-row center>
+      <ion-col text-center ion-align-items-center>
+        <form onsubmit="processForm(event)">
+          <ion-list>
+            <ion-item>
+              <ion-label position="stacked">Adresse mail</ion-label>
+              <ion-input class="input" type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Mot de passe</ion-label>
+              <ion-input class="input" type="password"></ion-input>
+            </ion-item>
+          </ion-list>
+        </form>
+      </ion-col>
+    </ion-row>
+    <ion-row center>
+      <ion-col text-center ion-align-items-center>
+        <ion-button color="tertiary">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row center>
+      <ion-col text-right ion-align-items-center>
+        <ion-button
+          routerLink="/register"
+          routerDirection="forward"
+          color="tertiary"
+        >
+          Inscrivez-vous !
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

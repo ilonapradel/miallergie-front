@@ -4,5 +4,12 @@
 }
 
 ion-content {
-  --background: url("../../assets/img/background.jpg") no-repeat 50% 5%;
+  --background: url("../../assets/img/background.jpg") no-repeat 50% 10%;
+}
+
+ion-grid {
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
 }
