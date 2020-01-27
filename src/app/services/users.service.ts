@@ -26,7 +26,7 @@ export class UsersService {
       email:email,
       password:password
     }).pipe(
-      tap(res => {
+      tap((res:{token:string;}) => {
         let token:string = res.token;
         console.log(res);
         localStorage.setItem("access_token", token);
