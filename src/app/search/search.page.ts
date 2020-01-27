@@ -6,10 +6,6 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./search.page.scss"]
 })
 export class SearchPage implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-
   star = "star";
   star_out = "star-outline";
   stars_name: Array<string> = [
@@ -19,15 +15,18 @@ export class SearchPage implements OnInit {
     "star-outline",
     "star-outline"
   ];
-
   rangeValue: { lower: number; upper: number } = { lower: 20, upper: 100 };
 
+  constructor() {}
+
+  ngOnInit() {}
+
   clickOnStar(position: number) {
-    for (let number of [0, 1, 2, 3, 4]) {
-      if (position > number) {
-        this.stars_name[number] = "star";
+    for (const num of [0, 1, 2, 3, 4]) {
+      if (position > num) {
+        this.stars_name[num] = "star";
       } else {
-        this.stars_name[number] = "star-outline";
+        this.stars_name[num] = "star-outline";
       }
     }
   }
@@ -35,4 +34,6 @@ export class SearchPage implements OnInit {
   changeValue(value: { lower: number; upper: number }) {
     this.rangeValue = value;
   }
+
+  addIngredient() {}
 }
