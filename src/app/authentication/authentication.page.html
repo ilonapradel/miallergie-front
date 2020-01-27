@@ -5,12 +5,13 @@
         <form onsubmit="processForm(event)">
           <ion-list>
             <ion-item>
-              <ion-label position="stacked">Adresse mail</ion-label>
-              <ion-input class="input" type="text"></ion-input>
+              <ion-label                 
+              position="stacked">Adresse mail</ion-label>
+              <ion-input class="input" type="text" name="email" [(ngModel)]="email"></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label position="stacked">Mot de passe</ion-label>
-              <ion-input class="input" type="password"></ion-input>
+              <ion-label position="stacked" >Mot de passe</ion-label>
+              <ion-input  class="input" type="password" name="password" [(ngModel)]="password"></ion-input>
             </ion-item>
           </ion-list>
         </form>
@@ -18,7 +19,7 @@
     </ion-row>
     <ion-row center>
       <ion-col text-center ion-align-items-center>
-        <ion-button color="tertiary">Valider</ion-button>
+        <ion-button color="tertiary" (click)="connect(email,password)">Valider</ion-button>
       </ion-col>
     </ion-row>
     <ion-row center>

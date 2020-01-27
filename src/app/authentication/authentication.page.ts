@@ -1,5 +1,6 @@
+import { UsersService } from './../services/users.service';
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-authentication",
@@ -7,11 +8,18 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
   styleUrls: ["./authentication.page.scss"]
 })
 export class AuthenticationPage implements OnInit {
-  constructor() {}
-  username: Text;
-  password: Text;
+
+  email: string;
+  password: string;
+
+  constructor(private api:UsersService,private router:Router) {}
 
   ngOnInit() {}
 
-  processForm() {}
+  connect(email:string,password:string){
+    console.log(email,password);
+    this.api.login(email,password).then((user)=>{
+      this.router.navigate(['/home']);
+    })
+  } 
 }
