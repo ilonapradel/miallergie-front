@@ -1,39 +1,40 @@
 <ion-content>
   <ion-grid>
-    <ion-row>
+    <ion-row ion-align-items-center>
       <ion-title text-center>Je cherche</ion-title>
       <ion-searchbar placeholder="Une recette"></ion-searchbar>
     </ion-row>
     <ion-row>
-      <ion-col
-        ><ion-item-divider color="secondary"> </ion-item-divider
+      <ion-col ion-align-items-center
+        ><ion-item-divider> </ion-item-divider
       ></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col> <ion-title>Des idées</ion-title></ion-col>
+      <ion-col>
+        <ion-title text-center>
+          Des idées
+        </ion-title>
+      </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label>
-            Entrée
-          </ion-label>
-          <ion-checkbox> </ion-checkbox>
-        </ion-item>
-      </ion-col>
-
-      <ion-col>
-        <ion-item>
-          <ion-label>Plat</ion-label>
-          <ion-checkbox> </ion-checkbox>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-label>Dessert</ion-label>
-          <ion-checkbox></ion-checkbox>
-        </ion-item>
+      <ion-col ion-align-items-center>
+        <ion-list>
+          <ion-item>
+            <ion-label>
+              Entrée
+            </ion-label>
+            <ion-checkbox> </ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>Plat</ion-label>
+            <ion-checkbox> </ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>Dessert</ion-label>
+            <ion-checkbox></ion-checkbox>
+          </ion-item>
+        </ion-list>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -59,28 +60,59 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-label>
-          Durée
-        </ion-label>
-        <ion-range dualKnobs="true" min="20" max="80" step="2" pin="true">
+        <ion-text
+          >Durée de la recette : de {{rangeValue.lower}} à {{rangeValue.upper}}
+          minutes {{rangeValue.upper===120? "ou plus":""}}</ion-text
+        >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-range
+          debounce="100"
+          (ionChange)="changeValue($event.detail.value)"
+          [value]="rangeValue"
+          dualKnobs="true"
+          min="5"
+          max="120"
+          step="5"
+          pin="true"
+        >
           <ion-icon size="small" slot="start" name="time"></ion-icon>
           <ion-icon slot="end" name="time"></ion-icon>
         </ion-range>
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col>
-        <ion-text>Display value to do</ion-text>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-icon name="star-outline"></ion-icon>
-        <ion-icon name="star-outline"></ion-icon>
-        <ion-icon name="star-outline"></ion-icon>
-        <ion-icon name="star-outline"></ion-icon>
-        <ion-icon name="star"></ion-icon>
-        Difficulté
+        <ion-label>Difficulté</ion-label>
+
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[0]"
+          (click)="clickOnStar(1)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[1]"
+          (click)="clickOnStar(2)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[2]"
+          (click)="clickOnStar(3)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[3]"
+          (click)="clickOnStar(4)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[4]"
+          (click)="clickOnStar(5)"
+        ></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
