@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
-import { timingSafeEqual } from "crypto";
 
 @Component({
   selector: "app-search",
