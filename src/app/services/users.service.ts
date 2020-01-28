@@ -8,6 +8,7 @@ import { tap } from "rxjs/operators";
 export class UsersService {
 
   private url:string = "http://miallergie.freeboxos.fr:8080/";
+  public isAuth:boolean = false;
 
   constructor(private http:HttpClient) { 
   }
@@ -29,6 +30,7 @@ export class UsersService {
         let token:string = res.token;
         console.log(res);
         localStorage.setItem("access_token", token);
+        this.isAuth = true;
       })
     ).toPromise();
   }

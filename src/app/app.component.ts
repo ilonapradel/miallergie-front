@@ -1,3 +1,4 @@
+import { UsersService } from './services/users.service';
 import { AuthenticationPage } from "./authentication/authentication.page";
 import { Component } from "@angular/core";
 
@@ -23,7 +24,8 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private api:UsersService
   ) {
     this.initializeApp();
   }

@@ -9,5 +9,5 @@
   <ion-content>
     <ion-router-outlet> </ion-router-outlet>
   </ion-content>
-  <app-menu></app-menu>
+  <app-menu *ngIf="api.isAuth"></app-menu>
 </ion-app>
