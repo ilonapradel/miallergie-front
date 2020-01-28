@@ -1,0 +1,8 @@
+node_modules
+.vscode
+platforms
+npm-debug.log
+/dist
+# Cache used by TypeScript's incremental build
+*.tsbuildinfo
+*.keystore
