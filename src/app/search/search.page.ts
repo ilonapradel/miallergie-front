@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
+import { timingSafeEqual } from "crypto";
 
 @Component({
   selector: "app-search",
@@ -16,18 +17,26 @@ export class SearchPage implements OnInit {
     "star-outline",
     "star-outline"
   ];
+
+  @ViewChild("ingredientComponent", { static: false })
+  ingredientComponent: IonicSelectableComponent;
+
   rangeValue: { lower: number; upper: number } = { lower: 20, upper: 100 };
 
-  ports: Port[];
-  port: Port;
+  ings: Ingredient[];
+  selectedIngs: Ingredient[] = [];
+
+  selectableComponent: IonicSelectableComponent;
 
   constructor() {
-    this.ports = [
-      { id: 1, name: "Tokai" },
-      { id: 2, name: "Vladivostok" },
-      { id: 3, name: "Navlakhi" }
+    this.ings = [
+      { id: 1, name: "Tomate" },
+      { id: 2, name: "Oignon" },
+      { id: 3, name: "Ananas" }
     ];
   }
+
+  // TODO : Use async search for ingredientComponent https://stackblitz.com/edit/ionic-selectable-on-search?file=pages%2Fhome%2Fhome.ts
 
   ngOnInit() {}
 
@@ -45,14 +54,21 @@ export class SearchPage implements OnInit {
     this.rangeValue = value;
   }
 
-  portChange(event: { component: IonicSelectableComponent; value: any }) {
-    console.log("port:", event.value);
+  onIngredientChange(event: {
+    component: IonicSelectableComponent;
+    value: any;
+  }) {
+    this.selectedIngs = event.value;
   }
 
-  addIngredient() {}
+  deleteIngredient(ingredient: Ingredient) {
+    this.selectedIngs.splice(this.selectedIngs.indexOf(ingredient), 1);
+    console.log(this.selectedIngs);
+    this.ingredientComponent.confirm();
+  }
 }
 
-class Port {
+export class Ingredient {
   public id: number;
   public name: string;
 }
