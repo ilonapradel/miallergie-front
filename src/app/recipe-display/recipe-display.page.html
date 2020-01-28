@@ -1,0 +1,77 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-title text-center>
+          {{veloute.name}}
+        </ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img [src]="veloute.image" />
+      </ion-col>
+      <ion-grid>
+        <ion-grid class="headerGrid">
+          <ion-row>
+            <ion-col align-self-center class="ion-text-center">
+              <ion-text>
+                {{veloute.diet}}
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col align-self-end class="ion-text-center">
+              <ion-text>
+                {{veloute.duration}} minutes
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="ion-text-center">
+              <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" [name]="veloute.difficulty>num?'star':'star-outline'">
+              </ion-icon>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="ion-text-center">
+              <ion-text>
+                {{veloute.numberOfPeople}} personnes
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-grid>
+    </ion-row>
+    <ion-item-divider> </ion-item-divider>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-list-header>
+            <ion-title>Ingrédients</ion-title>
+          </ion-list-header>
+          <ion-item *ngFor="let ingredient of veloute.ings">
+            <ion-label>{{ingredient.name}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-item-divider> </ion-item-divider>
+    <ion-row>
+      <ion-col>
+        <ion-title>Préparation</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let stage of veloute.stages">
+      <ion-col>
+        <p>
+          <ion-text color="secondary">{{veloute.stages.indexOf(stage)+1}}. </ion-text>
+          <ion-text>
+            {{stage}}
+          </ion-text>
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

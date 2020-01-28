@@ -68,7 +68,7 @@ export class SearchPage implements OnInit {
   }
 }
 
-class Ingredient {
+export class Ingredient {
   public id: number;
   public name: string;
 }
