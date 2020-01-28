@@ -25,7 +25,7 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private api:UsersService
+    public api:UsersService
   ) {
     this.initializeApp();
   }
