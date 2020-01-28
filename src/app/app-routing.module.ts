@@ -31,6 +31,10 @@ const routes: Routes = [
   {
     path: 'recipe-display',
     loadChildren: () => import('./recipe-display/recipe-display.module').then( m => m.RecipeDisplayPageModule)
+  },
+  {
+    path: 'change-username',
+    loadChildren: () => import('./change-username/change-username.module').then( m => m.ChangeUsernamePageModule)
   }
 ];
 
