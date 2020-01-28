@@ -9,7 +9,7 @@
       <ion-item-divider> </ion-item-divider>
     </ion-row>
     <ion-row>
-      <ion-col align-self-end>
+      <ion-col align-self-end class="paddingTop">
         <ion-title text-center>
           Des idées
         </ion-title>
@@ -52,6 +52,7 @@
         <ion-item>
           <ion-label>Ingrédient</ion-label>
           <ionic-selectable
+            #ingredientComponent
             [(ngModel)]="selectedIngs"
             [items]="ings"
             itemValueField="id"
@@ -157,7 +158,9 @@
         </ion-list>
       </ion-col>
     </ion-row>
-    <ion-row><ion-col></ion-col> </ion-row>
+    <ion-row>
+      <ion-col style="height: 50px;"></ion-col>
+    </ion-row>
   </ion-grid>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
