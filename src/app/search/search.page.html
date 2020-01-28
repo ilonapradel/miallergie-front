@@ -43,7 +43,9 @@
             <ion-label>Régime alimentaire</ion-label>
             <ion-select value="omnivore" okText="Ok" cancelText="Annuler">
               <ion-select-option value="omnivore">Omnivore</ion-select-option>
-              <ion-select-option value="végétarien">Végétarien</ion-select-option>
+              <ion-select-option value="végétarien"
+                >Végétarien</ion-select-option
+              >
               <ion-select-option value="vegan">Vegan</ion-select-option>
               <ion-select-option value="keto">Keto</ion-select-option>
             </ion-select>
@@ -59,17 +61,40 @@
         <ion-label>Ajouter</ion-label>
         <ion-icon name="add" (click)="addIngredient()"></ion-icon>
       </ion-chip>
+      <ion-item>
+        <ion-label>Port</ion-label>
+        <ionic-selectable
+          item-content
+          [(ngModel)]="port"
+          [items]="ports"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          (onChange)="portChange($event)"
+        >
+        </ionic-selectable>
+      </ion-item>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-text>Durée de la recette : de {{rangeValue.lower}} à {{rangeValue.upper}}
-          minutes {{rangeValue.upper===120? "ou plus":""}}</ion-text>
+        <ion-text
+          >Durée de la recette : de {{rangeValue.lower}} à {{rangeValue.upper}}
+          minutes {{rangeValue.upper===120? "ou plus":""}}</ion-text
+        >
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-range debounce="100" (ionChange)="changeValue($event.detail.value)" [value]="rangeValue" dualKnobs="true"
-          min="5" max="120" step="5" pin="true">
+        <ion-range
+          debounce="100"
+          (ionChange)="changeValue($event.detail.value)"
+          [value]="rangeValue"
+          dualKnobs="true"
+          min="5"
+          max="120"
+          step="5"
+          pin="true"
+        >
           <ion-icon size="small" slot="start" name="time"></ion-icon>
           <ion-icon slot="end" name="time"></ion-icon>
         </ion-range>
@@ -81,11 +106,31 @@
         <ion-label>Difficulté</ion-label>
       </ion-col>
       <ion-col ion-align-items-center text-center>
-        <ion-icon size="large" [(name)]="stars_name[0]" (click)="clickOnStar(1)"></ion-icon>
-        <ion-icon size="large" [(name)]="stars_name[1]" (click)="clickOnStar(2)"></ion-icon>
-        <ion-icon size="large" [(name)]="stars_name[2]" (click)="clickOnStar(3)"></ion-icon>
-        <ion-icon size="large" [(name)]="stars_name[3]" (click)="clickOnStar(4)"></ion-icon>
-        <ion-icon size="large" [(name)]="stars_name[4]" (click)="clickOnStar(5)"></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[0]"
+          (click)="clickOnStar(1)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[1]"
+          (click)="clickOnStar(2)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[2]"
+          (click)="clickOnStar(3)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[3]"
+          (click)="clickOnStar(4)"
+        ></ion-icon>
+        <ion-icon
+          size="large"
+          [(name)]="stars_name[4]"
+          (click)="clickOnStar(5)"
+        ></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>

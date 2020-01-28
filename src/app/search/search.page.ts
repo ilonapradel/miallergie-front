@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { IonicSelectableComponent } from "ionic-selectable";
 
 @Component({
   selector: "app-search",
@@ -17,7 +18,16 @@ export class SearchPage implements OnInit {
   ];
   rangeValue: { lower: number; upper: number } = { lower: 20, upper: 100 };
 
-  constructor() {}
+  ports: Port[];
+  port: Port;
+
+  constructor() {
+    this.ports = [
+      { id: 1, name: "Tokai" },
+      { id: 2, name: "Vladivostok" },
+      { id: 3, name: "Navlakhi" }
+    ];
+  }
 
   ngOnInit() {}
 
@@ -35,5 +45,14 @@ export class SearchPage implements OnInit {
     this.rangeValue = value;
   }
 
+  portChange(event: { component: IonicSelectableComponent; value: any }) {
+    console.log("port:", event.value);
+  }
+
   addIngredient() {}
+}
+
+class Port {
+  public id: number;
+  public name: string;
 }

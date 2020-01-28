@@ -12,6 +12,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { RouterModule } from "@angular/router";
 
 import { HttpClientModule } from "@angular/common/http";
+import { IonicSelectableModule } from "ionic-selectable";
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
@@ -20,7 +21,8 @@ import { HttpClientModule } from "@angular/common/http";
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    IonicSelectableModule
   ],
   providers: [
     StatusBar,
