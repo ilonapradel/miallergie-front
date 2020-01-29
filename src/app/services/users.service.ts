@@ -40,5 +40,11 @@ export class UsersService {
       .toPromise();
   }
 
-  public changeUsername(newUsername: string) {}
+  public changeUsername(newUsername: string) {
+    return this.http
+      .put(this.url + "users/" + this.id, {
+        username: newUsername
+      })
+      .toPromise();
+  }
 }

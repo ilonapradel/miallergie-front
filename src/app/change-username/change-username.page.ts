@@ -1,5 +1,7 @@
+import { UtilitiesClass } from "./../utilities-class";
 import { Component, OnInit } from "@angular/core";
 import { UsersService } from "../services/users.service";
+import { User } from "../utilities-class";
 
 @Component({
   selector: "app-change-username",
@@ -7,19 +9,20 @@ import { UsersService } from "../services/users.service";
   styleUrls: ["./change-username.page.scss"]
 })
 export class ChangeUsernamePage implements OnInit {
-  oldUsername: string = "test";
+  user: User;
   newUsername: string;
 
   ngOnInit() {}
 
-  constructor(private api: UsersService) {}
+  constructor(private api: UsersService, private utilities: UtilitiesClass) {}
 
   changeUsername() {
-    console.log(this.oldUsername, this.newUsername);
-    // TODO : faire le lien avec l'API
-    // if (this.oldUsername === this.newUsername)
-    // this.api.register(this.username, this.email, this.password).then(res => {
-    //   console.log({ resWs: res });
-    // });
+    console.log(this.user.username, this.newUsername);
+    if (this.user.username !== this.newUsername) {
+      this.api.changeUsername(this.newUsername).then(res => {
+        this.utilities.showToastModification();
+        this.utilities.redirectToProfile();
+      });
+    }
   }
 }
