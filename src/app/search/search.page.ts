@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
-import { timingSafeEqual } from "crypto";
+import { Ingredient } from "../utilities-class";
 
 @Component({
   selector: "app-search",
@@ -32,6 +32,7 @@ export class SearchPage implements OnInit {
     this.ings = [
       { id: 1, name: "Tomate" },
       { id: 2, name: "Oignon" },
+      // tslint:disable-next-line: quotemark
       { id: 3, name: "Ananas" }
     ];
   }
@@ -66,9 +67,4 @@ export class SearchPage implements OnInit {
     console.log(this.selectedIngs);
     this.ingredientComponent.confirm();
   }
-}
-
-export class Ingredient {
-  public id: number;
-  public name: string;
 }

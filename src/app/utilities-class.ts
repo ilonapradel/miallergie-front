@@ -3,11 +3,9 @@ import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 
 export class UtilitiesClass {
-  constructor(
-    private api: UsersService,
-    public toastController: ToastController,
-    private router: Router
-  ) {}
+  private api: UsersService;
+  public toastController: ToastController;
+  private router: Router;
   showToastModification() {
     this.toastController
       .create({
