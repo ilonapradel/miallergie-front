@@ -4,8 +4,11 @@ import { Router } from "@angular/router";
 
 export class UtilitiesClass {
   private api: UsersService;
-  public toastController: ToastController;
+  // public toastController: ToastController;
   private router: Router;
+
+  constructor(public toastController: ToastController) {}
+
   showToastModification() {
     this.toastController
       .create({
@@ -52,7 +55,7 @@ export class Recipe {
 
 export class User {
   public username: string;
-  public password: string;
+  public password?: string;
   public email: string;
   public id: string;
 }

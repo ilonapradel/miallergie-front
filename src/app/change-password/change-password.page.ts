@@ -1,17 +1,18 @@
-import { UtilitiesClass } from "./../utilities-class";
 import { Component, OnInit } from "@angular/core";
 import { UsersService } from "../services/users.service";
-import { User } from "../utilities-class";
+import { User, UtilitiesClass } from "../utilities-class";
 import { ToastController } from "@ionic/angular";
 
 @Component({
-  selector: "app-change-username",
-  templateUrl: "./change-username.page.html",
-  styleUrls: ["./change-username.page.scss"]
+  selector: "app-change-password",
+  templateUrl: "./change-password.page.html",
+  styleUrls: ["./change-password.page.scss"]
 })
-export class ChangeUsernamePage implements OnInit {
+export class ChangePasswordPage implements OnInit {
   user: User;
-  newUsername: string;
+  newPassword: string;
+  newPasswordConfirm: string;
+  oldPassword: string;
   utilities: UtilitiesClass;
 
   ngOnInit() {
@@ -22,10 +23,9 @@ export class ChangeUsernamePage implements OnInit {
     this.utilities = new UtilitiesClass(toast);
   }
 
-  changeUsername() {
-    console.log(this.user.username, this.newUsername);
-    if (this.user.username !== this.newUsername) {
-      this.api.changeUsername(this.newUsername).then(res => {
+  changePassword() {
+    if (this.newPassword === this.newPasswordConfirm) {
+      this.api.changePassword(this.newPassword, this.oldPassword).then(res => {
         this.utilities.showToastModification();
         this.utilities.redirectToProfile();
       });
