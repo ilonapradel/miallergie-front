@@ -1,5 +1,5 @@
-import { Ingredient } from "./../search/search.page";
 import { Component, OnInit } from "@angular/core";
+import { Recipe } from "../utilities-class";
 
 @Component({
   selector: "app-recipe-display",
@@ -24,7 +24,7 @@ export class RecipeDisplayPage implements OnInit {
   };
 
   stars_name: Array<string> = [
-    "star",
+    "flame",
     "star-outline",
     "star-outline",
     "star-outline",
@@ -34,28 +34,12 @@ export class RecipeDisplayPage implements OnInit {
   constructor() {}
 
   ngOnInit() {
-
-  for (const num of [0, 1, 2, 3, 4]) {
+    for (const num of [0, 1, 2, 3, 4]) {
       if (this.veloute.difficulty > num) {
-        this.stars_name[num] = "star";
+        this.stars_name[num] = "flame";
       } else {
         this.stars_name[num] = "star-outline";
       }
     }
   }
-
-
-
-}
-
-class Recipe {
-  public id: number;
-  public name: string;
-  public ings: Ingredient[];
-  public difficulty: number;
-  public diet: string;
-  public duration: number;
-  public image: string;
-  public numberOfPeople: number;
-  public stages: string[];
 }
