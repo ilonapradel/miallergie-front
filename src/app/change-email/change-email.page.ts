@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { ToastController } from "@ionic/angular";
 import { Component, OnInit } from "@angular/core";
 import { UtilitiesClass, User } from "../utilities-class";
@@ -17,8 +18,12 @@ export class ChangeEmailPage implements OnInit {
     this.user = this.api.getUser();
   }
 
-  constructor(private api: UsersService, private toast: ToastController) {
-    this.utilities = new UtilitiesClass(toast);
+  constructor(
+    private api: UsersService,
+    private toast: ToastController,
+    private router: Router
+  ) {
+    this.utilities = new UtilitiesClass(toast, router);
   }
 
   changeEmail() {

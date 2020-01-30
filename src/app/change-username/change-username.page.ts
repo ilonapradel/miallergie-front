@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { UtilitiesClass } from "./../utilities-class";
 import { Component, OnInit } from "@angular/core";
 import { UsersService } from "../services/users.service";
@@ -18,8 +19,12 @@ export class ChangeUsernamePage implements OnInit {
     this.user = this.api.getUser();
   }
 
-  constructor(private api: UsersService, private toast: ToastController) {
-    this.utilities = new UtilitiesClass(toast);
+  constructor(
+    private api: UsersService,
+    private toast: ToastController,
+    private router: Router
+  ) {
+    this.utilities = new UtilitiesClass(toast, router);
   }
 
   changeUsername() {

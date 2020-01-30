@@ -4,10 +4,8 @@ import { Router } from "@angular/router";
 
 export class UtilitiesClass {
   private api: UsersService;
-  // public toastController: ToastController;
-  private router: Router;
 
-  constructor(public toastController: ToastController) {}
+  constructor(public toastController: ToastController, public router: Router) {}
 
   showToastModification() {
     this.toastController
@@ -31,7 +29,7 @@ export class UtilitiesClass {
 
   redirectToProfile() {
     setTimeout(() => {
-      this.router.navigate(["/authentication"]);
+      this.router.navigate(["/profile"]);
     }, 2000);
   }
 }
