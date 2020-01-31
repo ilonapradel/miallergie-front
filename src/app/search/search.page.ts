@@ -26,13 +26,10 @@ export class SearchPage implements OnInit {
   ings: Ingredient[];
   selectedIngs: Ingredient[] = [];
 
-  selectableComponent: IonicSelectableComponent;
-
   constructor() {
     this.ings = [
       { id: 1, name: "Tomate" },
       { id: 2, name: "Oignon" },
-      // tslint:disable-next-line: quotemark
       { id: 3, name: "Ananas" }
     ];
   }

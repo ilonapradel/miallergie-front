@@ -1,3 +1,4 @@
+import { Preferences } from "./../utilities-class";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/operators";
@@ -11,6 +12,16 @@ export class UsersService {
   public isAuth: boolean = false;
   private id: string;
   private myUser: User;
+  private myUserPreferences = {
+    user: this.myUser,
+    diet: "omnivore",
+    allergy: [
+      { id: 1, name: "Tomate" },
+      { id: 2, name: "Oignon" },
+      { id: 3, name: "Ananas" }
+    ],
+    intolerance: ["gluten", "lactose"]
+  };
 
   constructor(private http: HttpClient) {}
 
@@ -103,5 +114,13 @@ export class UsersService {
 
   private setEmail(newEmail: string) {
     this.myUser.email = newEmail;
+  }
+
+  public getUserPreferences(): Preferences {
+    return this.myUserPreferences;
+  }
+
+  public changeUserPreferences(newPreferences: Preferences) {
+    this.myUserPreferences = newPreferences;
   }
 }

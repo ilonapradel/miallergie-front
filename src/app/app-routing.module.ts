@@ -43,6 +43,10 @@ const routes: Routes = [
   {
     path: 'change-email',
     loadChildren: () => import('./change-email/change-email.module').then( m => m.ChangeEmailPageModule)
+  },
+  {
+    path: 'change-preferences',
+    loadChildren: () => import('./change-preferences/change-preferences.module').then( m => m.ChangePreferencesPageModule)
   }
 ];
 

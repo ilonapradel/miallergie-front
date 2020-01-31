@@ -1,0 +1,62 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-title>Préférences alimentaires</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Régime alimentaire</ion-label>
+          <ion-select [(ngModel)]="userPreferences.diet" okText="Ok" cancelText="Annuler">
+            <ion-select-option value="omnivore">Omnivore</ion-select-option>
+            <ion-select-option value="végétarien">Végétarien</ion-select-option>
+            <ion-select-option value="vegan">Vegan</ion-select-option>
+            <ion-select-option value="keto">Keto</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Allergies alimentaires</ion-label>
+          <ionic-selectable #allergyComponent [(ngModel)]="userPreferences.allergy" [items]="possibleAllergies"
+            itemValueField="id" itemTextField="name" [canSearch]="true" [isMultiple]="true"
+            (onChange)="onAllergyChange($event)">
+          </ionic-selectable>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="userPreferences.allergy.length!==0">
+      <ion-chip *ngFor="let allergy of userPreferences.allergy" outline color="secondary">
+        <ion-label>{{allergy.name}}</ion-label>
+        <ion-icon name="close" (click)="deleteAllergy(allergy)"></ion-icon>
+      </ion-chip>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Intolérances alimentaires</ion-label>
+          <ionic-selectable #intoleranceComponent [(ngModel)]="userPreferences.intolerance"
+            [items]="possibleIntolerances" [canSearch]="true" [isMultiple]="true"
+            (onChange)="onIntoleranceChange($event)">
+          </ionic-selectable>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="userPreferences.intolerance.length!==0">
+      <ion-chip *ngFor="let intol of userPreferences.intolerance" outline color="tertiary">
+        <ion-label>{{intol}}</ion-label>
+        <ion-icon name="close" (click)="deleteIntolerance(intol)"></ion-icon>
+      </ion-chip>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="savePreferences()">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

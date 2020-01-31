@@ -57,3 +57,10 @@ export class User {
   public email: string;
   public id: string;
 }
+
+export class Preferences {
+  public user: User;
+  public diet: string;
+  public allergy: Ingredient[];
+  public intolerance: string[];
+}
