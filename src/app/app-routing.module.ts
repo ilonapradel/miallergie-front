@@ -47,6 +47,10 @@ const routes: Routes = [
   {
     path: 'change-preferences',
     loadChildren: () => import('./change-preferences/change-preferences.module').then( m => m.ChangePreferencesPageModule)
+  },
+  {
+    path: 'add-recipe',
+    loadChildren: () => import('./add-recipe/add-recipe.module').then( m => m.AddRecipePageModule)
   }
 ];
 

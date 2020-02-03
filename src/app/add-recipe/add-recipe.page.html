@@ -1,0 +1,61 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-title>Nouvelle recette</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+      </ion-thumbnail>
+    </ion-col>
+    <ion-col>
+      <ion-list>
+        <ion-item>
+          <ion-select></ion-select>
+          <ion-input>Durée en minutes</ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      Ingrédients
+    </ion-col>
+    <ion-col>
+      <ionic-selectable #ingredientComponent [(ngModel)]="selectedIngs" [items]="ings" itemValueField="id"
+        itemTextField="name" [canSearch]="true" [isMultiple]="true" (onChange)="onIngredientChange($event)">
+      </ionic-selectable>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-grid>
+        <ion-row style="border-bottom: groove;">
+          <ion-col>
+            <ion-label>Ingrédients</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>Quantité</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>Unité</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let ing of selectedIngs">
+          <ion-col>{{ing.name}}</ion-col>
+          <ion-col>Input pour saisir la quantité</ion-col>
+          <ion-col>Combobox pour saisir l'unité</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      Rédaction des étapes
+    </ion-col>
+  </ion-row>
+</ion-content>
