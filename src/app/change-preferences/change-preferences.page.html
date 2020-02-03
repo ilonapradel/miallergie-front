@@ -30,7 +30,7 @@
       </ion-col>
     </ion-row>
     <ion-row *ngIf="userPreferences.allergy.length!==0">
-      <ion-chip *ngFor="let allergy of userPreferences.allergy" outline color="secondary">
+      <ion-chip *ngFor="let allergy of userPreferences.allergy" outline color="danger">
         <ion-label>{{allergy.name}}</ion-label>
         <ion-icon name="close" (click)="deleteAllergy(allergy)"></ion-icon>
       </ion-chip>
