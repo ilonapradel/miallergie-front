@@ -13,7 +13,6 @@ export class UsersService {
   private id: string;
   private myUser: User;
   private myUserPreferences = {
-    user: this.myUser,
     diet: "omnivore",
     allergy: [
       { id: 1, name: "Tomate" },
@@ -104,7 +103,8 @@ export class UsersService {
     this.myUser = {
       email: email,
       username: username,
-      id: id
+      id: id,
+      preferences: this.myUserPreferences
     };
   }
 

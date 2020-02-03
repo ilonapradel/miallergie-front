@@ -56,10 +56,10 @@ export class User {
   public password?: string;
   public email: string;
   public id: string;
+  public preferences: Preferences;
 }
 
 export class Preferences {
-  public user: User;
   public diet: string;
   public allergy: Ingredient[];
   public intolerance: string[];
