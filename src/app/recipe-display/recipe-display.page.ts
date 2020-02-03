@@ -23,12 +23,12 @@ export class RecipeDisplayPage implements OnInit {
     stages: ["étape 1", "étape 2"]
   };
 
-  stars_name: Array<string> = [
-    "flame",
-    "star-outline",
-    "star-outline",
-    "star-outline",
-    "star-outline"
+  difficulty_color: Array<string> = [
+    "warning",
+    "light",
+    "light",
+    "light",
+    "light"
   ];
 
   constructor() {}
@@ -36,9 +36,9 @@ export class RecipeDisplayPage implements OnInit {
   ngOnInit() {
     for (const num of [0, 1, 2, 3, 4]) {
       if (this.veloute.difficulty > num) {
-        this.stars_name[num] = "flame";
+        this.difficulty_color[num] = "warning";
       } else {
-        this.stars_name[num] = "star-outline";
+        this.difficulty_color[num] = "light";
       }
     }
   }

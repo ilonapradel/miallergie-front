@@ -38,7 +38,7 @@ export class Ingredient {
   public id: number;
   public name: string;
   public quantity?: number;
-  public unity?: string;
+  public unit?: string;
 }
 
 export class Recipe {

@@ -29,7 +29,8 @@
           </ion-row>
           <ion-row>
             <ion-col class="ion-text-center">
-              <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" [name]="veloute.difficulty>num?'star':'star-outline'">
+              <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" name="trophy"
+                [color]="veloute.difficulty>num?'warning':'light'">
               </ion-icon>
             </ion-col>
           </ion-row>

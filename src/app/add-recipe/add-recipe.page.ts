@@ -41,7 +41,7 @@ export class AddRecipePage implements OnInit {
     this.selectedIngs = event.value;
   }
 
-  clickOnStar(position: number) {
+  clickOnDifficulty(position: number) {
     for (const num of [0, 1, 2, 3, 4]) {
       if (position >= num) {
         this.diff_name[num] = "warning";
