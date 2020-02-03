@@ -51,6 +51,14 @@ const routes: Routes = [
   {
     path: 'add-recipe',
     loadChildren: () => import('./add-recipe/add-recipe.module').then( m => m.AddRecipePageModule)
+  },
+  {
+    path: 'friend',
+    loadChildren: () => import('./friend/friend.module').then( m => m.FriendPageModule)
+  },
+  {
+    path: 'add-friend',
+    loadChildren: () => import('./add-friend/add-friend.module').then( m => m.AddFriendPageModule)
   }
 ];
 

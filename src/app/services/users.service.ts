@@ -12,7 +12,7 @@ export class UsersService {
   public isAuth: boolean = false;
   private id: string;
   private myUser: User;
-  private myUserPreferences = {
+  private myUserPreferences: Preferences = {
     diet: "omnivore",
     allergy: [
       { id: 1, name: "Tomate" },
@@ -101,10 +101,34 @@ export class UsersService {
 
   private setUser(email: string, username: string, id: string) {
     this.myUser = {
-      email: email,
-      username: username,
-      id: id,
-      preferences: this.myUserPreferences
+      email,
+      username,
+      id,
+      preferences: this.myUserPreferences,
+      nonRegisteredFriends: [
+        {
+          surname: "test",
+          preferences: {
+            diet: "paleo"
+          }
+        }
+      ],
+      registeredFriends: [
+        {
+          email: "coucou",
+          username: "Lucas",
+          preferences: {
+            diet: "Vegan"
+          }
+        },
+        {
+          email: "blabla",
+          username: "Adrien",
+          preferences: {
+            diet: "Omnivore"
+          }
+        }
+      ]
     };
   }
 
