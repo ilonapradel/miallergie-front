@@ -1,4 +1,4 @@
-import { Preferences } from "./../utilities-class";
+import { Preferences, Friend } from "./../utilities-class";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/operators";
@@ -11,7 +11,7 @@ export class UsersService {
   private url: string = "http://miallergie.freeboxos.fr:8080/";
   public isAuth: boolean = false;
   private id: string;
-  private myUser: User;
+  private myUser: User = new User();
   private myUserPreferences: Preferences = {
     diet: "omnivore",
     allergy: [
@@ -23,6 +23,35 @@ export class UsersService {
   };
 
   constructor(private http: HttpClient) {}
+
+  public init() {
+    this.myUser.nonRegisteredFriends = [
+      {
+        surname: "test",
+        preferences: {
+          diet: "paleo"
+        }
+      }
+    ];
+
+    this.myUser.preferences = this.myUserPreferences;
+    this.myUser.registeredFriends = [
+      {
+        email: "coucou",
+        username: "Lucas",
+        preferences: {
+          diet: "Vegan"
+        }
+      },
+      {
+        email: "blabla",
+        username: "Adrien",
+        preferences: {
+          diet: "Omnivore"
+        }
+      }
+    ];
+  }
 
   public register(username: string, email: string, password: string) {
     return this.http
@@ -96,40 +125,14 @@ export class UsersService {
   }
 
   public getUser(): User {
+    this.init();
     return this.myUser;
   }
 
   private setUser(email: string, username: string, id: string) {
-    this.myUser = {
-      email,
-      username,
-      id,
-      preferences: this.myUserPreferences,
-      nonRegisteredFriends: [
-        {
-          surname: "test",
-          preferences: {
-            diet: "paleo"
-          }
-        }
-      ],
-      registeredFriends: [
-        {
-          email: "coucou",
-          username: "Lucas",
-          preferences: {
-            diet: "Vegan"
-          }
-        },
-        {
-          email: "blabla",
-          username: "Adrien",
-          preferences: {
-            diet: "Omnivore"
-          }
-        }
-      ]
-    };
+    this.myUser.email = email;
+    this.myUser.username = username;
+    this.myUser.id = id;
   }
 
   private setUsername(newUsername: string) {
@@ -146,5 +149,13 @@ export class UsersService {
 
   public changeUserPreferences(newPreferences: Preferences) {
     this.myUserPreferences = newPreferences;
+  }
+
+  public addRegisteredFriend(newFriend: User) {
+    this.myUser.registeredFriends.push(newFriend);
+  }
+
+  public addNonRegisteredFriend(newFriend: Friend) {
+    this.myUser.nonRegisteredFriends.push(newFriend);
   }
 }

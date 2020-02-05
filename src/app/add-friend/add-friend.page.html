@@ -3,14 +3,36 @@
     <ion-row>
       <ion-col>
         Utilisateur de Miallergie ?
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Email de votre ami</ion-label>
+          <ion-input [(ngModel)]="newUserFriend.email" type="text" min="3"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="saveNewUserFriend()">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
         <ion-item-divider></ion-item-divider>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Sans compte sur Miallergie ?
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-item>
           <ion-label position="floating">Surnom de votre ami</ion-label>
-          <ion-input type="text" min="3"></ion-input>
+          <ion-input [(ngModel)]="newFriend.surname" type="text" min="3"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -66,8 +88,8 @@
       </ion-chip>
     </ion-row>
     <ion-row>
-      <ion-col>
-        <ion-button (click)="savePreferences()">Valider</ion-button>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="saveNewFriend()">Valider</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

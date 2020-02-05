@@ -1,3 +1,4 @@
+import { Friend, User } from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient, Preferences } from "../utilities-class";
@@ -19,7 +20,10 @@ export class AddFriendPage implements OnInit {
   possibleAllergies: Ingredient[];
 
   possibleIntolerances: string[];
-  preferences: Preferences;
+  preferences: Preferences = new Preferences();
+
+  newFriend: Friend = new Friend();
+  newUserFriend: User = new User();
 
   constructor(private api: UsersService, public router: Router) {
     this.possibleAllergies = [
@@ -30,6 +34,16 @@ export class AddFriendPage implements OnInit {
     ];
 
     this.possibleIntolerances = ["glucose", "gluten", "lactose", "fructose"];
+
+    this.preferences = {
+      diet: "vegan",
+      allergy: [
+        { id: 1, name: "Soja" },
+        { id: 2, name: "Oeuf" },
+        { id: 3, name: "Ananas" }
+      ],
+      intolerance: ["lucas", "lactose"]
+    };
   }
 
   ngOnInit() {}
@@ -63,9 +77,14 @@ export class AddFriendPage implements OnInit {
     this.intoleranceComponent.confirm();
   }
 
-  savePreferences() {
-    //On renvoie vers l'api & le back (TODO)
-    this.api.changeUserPreferences(this.preferences);
+  saveNewUserFriend() {
+    this.api.addRegisteredFriend(this.newUserFriend);
+    this.router.navigate(["/friend"]);
+  }
+
+  saveNewFriend() {
+    this.newFriend.preferences = this.preferences;
+    this.api.addNonRegisteredFriend(this.newFriend);
     this.router.navigate(["/friend"]);
   }
 }
