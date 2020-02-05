@@ -12,9 +12,16 @@ export class FriendPage implements OnInit {
   myRegFriends: User[];
 
   constructor(private api: UsersService) {
-    this.myNonRegFriends = api.getUser().nonRegisteredFriends;
-    this.myRegFriends = api.getUser().registeredFriends;
+    api.init();
   }
 
   ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.myNonRegFriends = this.api.getUser().nonRegisteredFriends;
+    this.myRegFriends = this.api.getUser().registeredFriends;
+
+    console.log(this.myNonRegFriends);
+    console.log(this.myRegFriends);
+  }
 }

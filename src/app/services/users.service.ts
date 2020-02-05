@@ -125,7 +125,6 @@ export class UsersService {
   }
 
   public getUser(): User {
-    this.init();
     return this.myUser;
   }
 
@@ -153,9 +152,11 @@ export class UsersService {
 
   public addRegisteredFriend(newFriend: User) {
     this.myUser.registeredFriends.push(newFriend);
+    console.log("addRegF", this.myUser.registeredFriends);
   }
 
   public addNonRegisteredFriend(newFriend: Friend) {
     this.myUser.nonRegisteredFriends.push(newFriend);
+    console.log("addNonRegF", this.myUser.nonRegisteredFriends);
   }
 }

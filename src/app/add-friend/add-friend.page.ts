@@ -84,6 +84,7 @@ export class AddFriendPage implements OnInit {
 
   saveNewFriend() {
     this.newFriend.preferences = this.preferences;
+
     this.api.addNonRegisteredFriend(this.newFriend);
     this.router.navigate(["/friend"]);
   }
