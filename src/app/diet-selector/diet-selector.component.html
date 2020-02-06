@@ -1,6 +1,6 @@
  <ion-item>
    <ion-label>Régime alimentaire</ion-label>
-   <ion-select [(ngModel)]="userPreferences.diet" okText="Ok" cancelText="Annuler">
+   <ion-select [disabled]="disabled" [(ngModel)]="userPreferences.diet" okText="Ok" cancelText="Annuler">
      <ion-select-option *ngFor="let reg of regimesAlimentaire">{{reg}}</ion-select-option>
    </ion-select>
  </ion-item>

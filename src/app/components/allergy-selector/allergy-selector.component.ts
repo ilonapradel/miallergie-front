@@ -14,6 +14,9 @@ export class AllergySelectorComponent implements OnInit {
   @Input("preferences")
   userPreferences: Preferences;
 
+  @Input("enabled")
+  enabled: boolean;
+
   @ViewChild("allergyComponent", { static: false })
   allergyComponent: IonicSelectableComponent;
 

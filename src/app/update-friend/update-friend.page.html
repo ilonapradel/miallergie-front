@@ -6,13 +6,15 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <app-diet-selector style="width: 100%;" [preferences]="userPref"></app-diet-selector>
+      <app-diet-selector style="width: 100%;" [preferences]="userPref" [disabled]="!amAFriend"></app-diet-selector>
     </ion-row>
     <ion-row>
-      <app-allergy-selector style="width: 100%;" [preferences]="userPref"></app-allergy-selector>
+      <app-allergy-selector style="width: 100%;" [preferences]="userPref" [enabled]="amAFriend">
+      </app-allergy-selector>
     </ion-row>
     <ion-row>
-      <app-intolerance-selector style="width: 100%;" [preferences]="userPref"></app-intolerance-selector>
+      <app-intolerance-selector style="width: 100%;" [preferences]="userPref" [enabled]="amAFriend">
+      </app-intolerance-selector>
     </ion-row>
     <ion-row>
       <ion-col>

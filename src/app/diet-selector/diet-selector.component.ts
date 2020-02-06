@@ -12,6 +12,9 @@ export class DietSelectorComponent implements OnInit {
   @Input("preferences")
   userPreferences: Preferences;
 
+  @Input("disabled")
+  disabled: boolean;
+
   constructor() {
     this.regimesAlimentaire = ["Végétarien", "Vegan", "Omnivore"];
   }
