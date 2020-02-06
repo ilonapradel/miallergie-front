@@ -4,7 +4,7 @@
       Mes amis
     </ion-list-header>
 
-    <ion-item *ngFor="let nrFriend of myNonRegFriends">
+    <ion-item *ngFor="let nrFriend of myNonRegFriends" (click)="goToUpdateFriend(nrFriend)">
       <ion-avatar slot="start">
         <img src="./assets/img/user.png">
       </ion-avatar>
@@ -13,7 +13,7 @@
         <h3>{{nrFriend.preferences.diet}}</h3>
       </ion-label>
     </ion-item>
-    <ion-item *ngFor="let rFriend of myRegFriends">
+    <ion-item *ngFor="let rFriend of myRegFriends" (click)="goToSeeUser(rFriend)">
       <ion-avatar slot="start">
         <img src="./assets/img/user.png">
       </ion-avatar>

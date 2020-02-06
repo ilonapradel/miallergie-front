@@ -1,6 +1,7 @@
 import { UsersService } from "./../services/users.service";
 import { Component, OnInit } from "@angular/core";
 import { Friend, User } from "../utilities-class";
+import { Router, NavigationExtras } from "@angular/router";
 
 @Component({
   selector: "app-friend",
@@ -11,7 +12,7 @@ export class FriendPage implements OnInit {
   myNonRegFriends: Friend[];
   myRegFriends: User[];
 
-  constructor(private api: UsersService) {
+  constructor(private api: UsersService, private router: Router) {
     api.init();
   }
 
@@ -23,5 +24,25 @@ export class FriendPage implements OnInit {
 
     console.log(this.myNonRegFriends);
     console.log(this.myRegFriends);
+  }
+
+  goToUpdateFriend(friend: Friend) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        friend: friend
+      }
+    };
+    console.log(navigationExtras);
+    this.router.navigate(["update-friend"], navigationExtras);
+  }
+
+  goToSeeUser(user: User) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        user: user
+      }
+    };
+    console.log(navigationExtras);
+    this.router.navigate(["update-friend"], navigationExtras);
   }
 }
