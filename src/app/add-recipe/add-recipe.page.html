@@ -27,7 +27,7 @@
         <ion-item>
           <ion-label>Difficulté</ion-label>
           <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" size="large" name="trophy" [(color)]="diff_name[num]"
-            (click)="clickOnStar(num)">
+            (click)="clickOnDifficulty(num)">
           </ion-icon>
         </ion-item>
         <ion-item>
@@ -65,7 +65,7 @@
             <ion-input [(ngModel)]="ing.quantity" type="number" inputmode="decimal" min="0"></ion-input>
           </ion-col>
           <ion-col>
-            <ion-select [(ngModel)]="ing.unity" okText="Valider" cancelText="Annuler">
+            <ion-select [(ngModel)]="ing.unit" okText="Valider" cancelText="Annuler">
               <ion-select-option *ngFor="let unite of unites">{{unite}}</ion-select-option>
             </ion-select>
           </ion-col>

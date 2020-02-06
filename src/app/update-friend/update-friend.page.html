@@ -1,0 +1,23 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-title>Préférences alimentaires de {{name}}</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <app-diet-selector style="width: 100%;" [preferences]="userPref"></app-diet-selector>
+    </ion-row>
+    <ion-row>
+      <app-allergy-selector style="width: 100%;" [preferences]="userPref"></app-allergy-selector>
+    </ion-row>
+    <ion-row>
+      <app-intolerance-selector style="width: 100%;" [preferences]="userPref"></app-intolerance-selector>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="savePreferences()">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

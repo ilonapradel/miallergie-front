@@ -1,0 +1,97 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        Utilisateur de Miallergie ?
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Email de votre ami</ion-label>
+          <ion-input [(ngModel)]="newUserFriend.email" type="text" min="3"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="saveNewUserFriend()">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item-divider></ion-item-divider>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Sans compte sur Miallergie ?
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Surnom de votre ami</ion-label>
+          <ion-input [(ngModel)]="newFriend.surname" type="text" min="3"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-title>Préférences alimentaires</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Régime alimentaire</ion-label>
+          <ion-select [(ngModel)]="preferences.diet" okText="Ok" cancelText="Annuler">
+            <ion-select-option value="omnivore">Omnivore</ion-select-option>
+            <ion-select-option value="végétarien">Végétarien</ion-select-option>
+            <ion-select-option value="vegan">Vegan</ion-select-option>
+            <ion-select-option value="keto">Keto</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Allergies alimentaires</ion-label>
+          <ionic-selectable #allergyComponent [(ngModel)]="preferences.allergy" [items]="possibleAllergies"
+            itemValueField="id" itemTextField="name" [canSearch]="true" [isMultiple]="true"
+            (onChange)="onAllergyChange($event)">
+          </ionic-selectable>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="preferences.allergy.length!==0">
+      <ion-chip *ngFor="let allergy of preferences.allergy" outline color="danger">
+        <ion-label>{{allergy.name}}</ion-label>
+        <ion-icon name="close" (click)="deleteAllergy(allergy)"></ion-icon>
+      </ion-chip>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Intolérances alimentaires</ion-label>
+          <ionic-selectable #intoleranceComponent [(ngModel)]="preferences.intolerance" [items]="possibleIntolerances"
+            [canSearch]="true" [isMultiple]="true" (onChange)="onIntoleranceChange($event)">
+          </ionic-selectable>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="preferences.intolerance.length!==0">
+      <ion-chip *ngFor="let intol of preferences.intolerance" outline color="tertiary">
+        <ion-label>{{intol}}</ion-label>
+        <ion-icon name="close" (click)="deleteIntolerance(intol)"></ion-icon>
+      </ion-chip>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="saveNewFriend()">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

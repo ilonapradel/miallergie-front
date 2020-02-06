@@ -8,14 +8,12 @@ import { Ingredient } from "../utilities-class";
   styleUrls: ["./search.page.scss"]
 })
 export class SearchPage implements OnInit {
-  star = "star";
-  star_out = "star-outline";
-  stars_name: Array<string> = [
-    "star",
-    "star-outline",
-    "star-outline",
-    "star-outline",
-    "star-outline"
+  difficulty_color: Array<string> = [
+    "warning",
+    "light",
+    "light",
+    "light",
+    "light"
   ];
 
   @ViewChild("ingredientComponent", { static: false })
@@ -38,12 +36,12 @@ export class SearchPage implements OnInit {
 
   ngOnInit() {}
 
-  clickOnStar(position: number) {
+  clickOnDiff(position: number) {
     for (const num of [0, 1, 2, 3, 4]) {
-      if (position > num) {
-        this.stars_name[num] = "star";
+      if (position >= num) {
+        this.difficulty_color[num] = "warning";
       } else {
-        this.stars_name[num] = "star-outline";
+        this.difficulty_color[num] = "light";
       }
     }
   }

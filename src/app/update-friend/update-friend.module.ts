@@ -5,18 +5,18 @@ import { FormsModule } from "@angular/forms";
 
 import { IonicModule } from "@ionic/angular";
 
-import { ChangePreferencesPageRoutingModule } from "./change-preferences-routing.module";
+import { UpdateFriendPageRoutingModule } from "./update-friend-routing.module";
 
-import { ChangePreferencesPage } from "./change-preferences.page";
+import { UpdateFriendPage } from "./update-friend.page";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChangePreferencesPageRoutingModule,
+    UpdateFriendPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [ChangePreferencesPage]
+  declarations: [UpdateFriendPage]
 })
-export class ChangePreferencesPageModule {}
+export class UpdateFriendPageModule {}

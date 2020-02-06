@@ -38,7 +38,7 @@ export class Ingredient {
   public id: number;
   public name: string;
   public quantity?: number;
-  public unity?: string;
+  public unit?: string;
 }
 
 export class Recipe {
@@ -57,12 +57,19 @@ export class User {
   public username: string;
   public password?: string;
   public email: string;
-  public id: string;
+  public id?: string;
   public preferences: Preferences;
+  public nonRegisteredFriends?: Friend[];
+  public registeredFriends?: User[];
 }
 
 export class Preferences {
   public diet: string;
-  public allergy: Ingredient[];
-  public intolerance: string[];
+  public allergy?: Ingredient[];
+  public intolerance?: string[];
+}
+
+export class Friend {
+  public preferences: Preferences;
+  public surname: string;
 }
