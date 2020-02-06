@@ -6,43 +6,18 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>
-        <!-- <ion-item>
-          <ion-label>Régime alimentaire</ion-label>
-          <ion-select [disabled]="" [(ngModel)]="userPreferences.diet" okText="Ok" cancelText="Annuler">
-            <ion-select-option value="omnivore">Omnivore</ion-select-option>
-            <ion-select-option value="végétarien">Végétarien</ion-select-option>
-            <ion-select-option value="vegan">Vegan</ion-select-option>
-            <ion-select-option value="keto">Keto</ion-select-option>
-          </ion-select>
-        </ion-item> -->
-      </ion-col>
+      <app-diet-selector style="width: 100%;" [preferences]="userPref"></app-diet-selector>
     </ion-row>
     <ion-row>
-      <app-allergy-selector [preferences]="userPref"></app-allergy-selector>
+      <app-allergy-selector style="width: 100%;" [preferences]="userPref"></app-allergy-selector>
     </ion-row>
     <ion-row>
-      <!-- IntoleranceSelector -->
+      <app-intolerance-selector style="width: 100%;" [preferences]="userPref"></app-intolerance-selector>
     </ion-row>
     <ion-row>
       <ion-col>
-        <!-- <ion-button (click)="savePreferences()">Valider</ion-button> -->
+        <ion-button (click)="savePreferences()">Valider</ion-button>
       </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-grid>
-    <ion-row *ngIf="amAFriend">
-      <ion-col>
-        {{friend.surname}}
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="amAUser">
-      <ion-col>
-        {{user.username}}
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col> </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

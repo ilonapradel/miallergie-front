@@ -43,4 +43,9 @@ export class UpdateFriendPage implements OnInit {
       this.userPref = this.friend.preferences;
     }
   }
+
+  savePreferences() {
+    console.log(this.userPref);
+    this.router.navigate(["/friend"]);
+  }
 }
