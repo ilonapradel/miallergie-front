@@ -1,3 +1,4 @@
+import { Preferences } from "./../utilities-class";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { Friend, User } from "../utilities-class";
@@ -12,6 +13,8 @@ export class UpdateFriendPage implements OnInit {
   public user: User;
   public amAFriend: boolean = false;
   public amAUser: boolean = false;
+  public name: string;
+  public userPref: Preferences;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -31,5 +34,13 @@ export class UpdateFriendPage implements OnInit {
         console.log(this.amAFriend);
       }
     });
+
+    if (this.amAUser) {
+      this.name = this.user.username;
+      this.userPref = this.user.preferences;
+    } else if (this.amAFriend) {
+      this.name = this.friend.surname;
+      this.userPref = this.friend.preferences;
+    }
   }
 }

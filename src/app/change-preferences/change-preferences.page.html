@@ -18,24 +18,8 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label>Allergies alimentaires</ion-label>
-          <ionic-selectable #allergyComponent [(ngModel)]="userPreferences.allergy" [items]="possibleAllergies"
-            itemValueField="id" itemTextField="name" [canSearch]="true" [isMultiple]="true"
-            (onChange)="onAllergyChange($event)">
-          </ionic-selectable>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="userPreferences.allergy.length!==0">
-      <ion-chip *ngFor="let allergy of userPreferences.allergy" outline color="danger">
-        <ion-label>{{allergy.name}}</ion-label>
-        <ion-icon name="close" (click)="deleteAllergy(allergy)"></ion-icon>
-      </ion-chip>
-    </ion-row>
-    <ion-row>
+    <app-allergy-selector [preferences]="userPreferences"></app-allergy-selector>
+    <!-- <ion-row>
       <ion-col>
         <ion-item>
           <ion-label>Intolérances alimentaires</ion-label>
@@ -51,7 +35,7 @@
         <ion-label>{{intol}}</ion-label>
         <ion-icon name="close" (click)="deleteIntolerance(intol)"></ion-icon>
       </ion-chip>
-    </ion-row>
+    </ion-row> -->
     <ion-row>
       <ion-col>
         <ion-button (click)="savePreferences()">Valider</ion-button>

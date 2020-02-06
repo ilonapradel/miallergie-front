@@ -1,5 +1,6 @@
+import { ComponentsModule } from "./components/components.module";
 import { MenuComponent } from "./menu/menu.component";
-import { NgModule } from "@angular/core";
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
 
@@ -22,7 +23,8 @@ import { IonicSelectableModule } from "ionic-selectable";
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    ComponentsModule
   ],
   providers: [
     StatusBar,
