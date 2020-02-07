@@ -85,7 +85,6 @@ export class AddRecipePage implements OnInit {
     this.recipeService
       .addRecipe(recipe)
       .then((savedRecipe: ApiRecipe) => {
-        console.log(savedRecipe);
         let saveIngrediants: Promise<ApiIngredient>[] = [];
         for (const ingrediant of this.recipe.ingrediants) {
           saveIngrediants.push(
@@ -93,9 +92,7 @@ export class AddRecipePage implements OnInit {
           );
         }
 
-        Promise.all(saveIngrediants)
-          .then(savedIngrediants => console.log("End Saving", saveIngrediants))
-          .catch(err => console.error(err));
+        Promise.all(saveIngrediants).catch(err => console.error(err));
       })
       .catch(err => {
         console.error(err);

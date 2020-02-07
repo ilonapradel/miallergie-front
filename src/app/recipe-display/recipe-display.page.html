@@ -32,7 +32,7 @@
               <ion-icon
                 *ngFor="let num of [0, 1, 2, 3, 4]"
                 name="trophy"
-                [color]="recipe.difficulty>num?'warning':'light'"
+                [color]="recipe.difficulty>=num?'warning':'light'"
               >
               </ion-icon>
             </ion-col>
