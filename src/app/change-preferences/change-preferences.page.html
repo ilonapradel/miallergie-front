@@ -5,9 +5,10 @@
         <ion-title>Préférences alimentaires</ion-title>
       </ion-col>
     </ion-row>
-    <app-diet-selector style="width: 100%;" [preferences]="userPreferences"></app-diet-selector>
-    <app-allergy-selector style="width: 100%;" [preferences]="userPreferences"></app-allergy-selector>
-    <app-intolerance-selector style="width: 100%;" [preferences]="userPreferences"></app-intolerance-selector>
+    <app-diet-selector style="width: 100%;" [preferences]="userPreferences" [disabled]="false"></app-diet-selector>
+    <app-allergy-selector style="width: 100%;" [preferences]="userPreferences" [enabled]="true"></app-allergy-selector>
+    <app-intolerance-selector style="width: 100%;" [preferences]="userPreferences" [enabled]="true">
+    </app-intolerance-selector>
     <ion-row>
       <ion-col>
         <ion-button (click)="savePreferences()">Valider</ion-button>

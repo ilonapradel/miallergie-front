@@ -2,8 +2,8 @@
   <ion-col>
     <ion-item>
       <ion-label>Intolérances alimentaires</ion-label>
-      <ionic-selectable #intoleranceComponent [(ngModel)]="userPreferences.intolerance" [items]="possibleIntolerances"
-        [canSearch]="true" [isMultiple]="true" (onChange)="onIntoleranceChange($event)">
+      <ionic-selectable #intoleranceComponent [isEnabled]="enabled" [(ngModel)]="userPreferences.intolerance"
+        [items]="possibleIntolerances" [canSearch]="true" [isMultiple]="true" (onChange)="onIntoleranceChange($event)">
       </ionic-selectable>
     </ion-item>
   </ion-col>
