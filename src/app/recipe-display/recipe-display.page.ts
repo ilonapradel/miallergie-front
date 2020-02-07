@@ -10,13 +10,9 @@ export class RecipeDisplayPage implements OnInit {
   veloute: Recipe = {
     id: 1,
     name: "Velouté de poireaux",
-    ings: [
-      { id: 1, name: "Tomate" },
-      { id: 2, name: "Oignon" },
-      { id: 3, name: "Ananas" }
-    ],
+    ingrediants: [],
     difficulty: 2,
-    diet: "végétarien",
+    diet: { id: "", name: "végétarien" },
     duration: 20,
     image: "assets/img/veloute.jpg",
     numberOfPeople: 2,

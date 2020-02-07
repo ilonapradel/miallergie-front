@@ -21,10 +21,7 @@ export class AllergySelectorComponent implements OnInit {
 
   constructor() {
     this.possibleAllergies = [
-      { id: 1, name: "Tomate" },
-      { id: 2, name: "Oignon" },
-      { id: 3, name: "Ananas" },
-      { id: 4, name: "Oeufs" }
+     
     ];
   }
 
