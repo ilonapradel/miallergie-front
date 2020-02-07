@@ -15,9 +15,7 @@ export class UsersService {
   private myUserPreferences: Preferences = {
     diet: "omnivore",
     allergy: [
-      { id: 1, name: "Tomate" },
-      { id: 2, name: "Oignon" },
-      { id: 3, name: "Ananas" }
+     
     ],
     intolerance: ["gluten", "lactose"]
   };
