@@ -12,7 +12,6 @@ export class UpdateFriendPage implements OnInit {
   public friend: Friend;
   public user: User;
   public amAFriend: boolean = false;
-  public amAUser: boolean = false;
   public name: string;
   public userPref: Preferences;
 
@@ -27,20 +26,17 @@ export class UpdateFriendPage implements OnInit {
         }
         if (this.router.getCurrentNavigation().extras.state.user) {
           this.user = this.router.getCurrentNavigation().extras.state.user;
-          this.amAUser = true;
         }
         console.log(this.router.getCurrentNavigation().extras.state);
-        console.log(this.amAUser);
-        console.log(this.amAFriend);
       }
     });
 
-    if (this.amAUser) {
-      this.name = this.user.username;
-      this.userPref = this.user.preferences;
-    } else if (this.amAFriend) {
+    if (this.amAFriend) {
       this.name = this.friend.surname;
       this.userPref = this.friend.preferences;
+    } else {
+      this.name = this.user.username;
+      this.userPref = this.user.preferences;
     }
   }
 

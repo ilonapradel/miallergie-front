@@ -13,6 +13,9 @@ export class IntoleranceSelectorComponent implements OnInit {
   @Input("preferences")
   userPreferences: Preferences;
 
+  @Input("enabled")
+  enabled: boolean;
+
   @ViewChild("intoleranceComponent", { static: false })
   intoleranceComponent: IonicSelectableComponent;
 

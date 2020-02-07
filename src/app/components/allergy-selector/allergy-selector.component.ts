@@ -1,9 +1,6 @@
 import { Preferences, Ingredient } from "../../utilities-class";
 import { Component, OnInit, Input, ViewChild, NgModule } from "@angular/core";
-import {
-  IonicSelectableComponent,
-  IonicSelectableModule
-} from "ionic-selectable";
+import { IonicSelectableComponent } from "ionic-selectable";
 
 @Component({
   selector: "app-allergy-selector",
@@ -13,6 +10,9 @@ import {
 export class AllergySelectorComponent implements OnInit {
   @Input("preferences")
   userPreferences: Preferences;
+
+  @Input("enabled")
+  enabled: boolean;
 
   @ViewChild("allergyComponent", { static: false })
   allergyComponent: IonicSelectableComponent;

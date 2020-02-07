@@ -12,9 +12,19 @@ export class DietSelectorComponent implements OnInit {
   @Input("preferences")
   userPreferences: Preferences;
 
+  @Input("disabled")
+  disabled: boolean;
+
   constructor() {
     this.regimesAlimentaire = ["Végétarien", "Vegan", "Omnivore"];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.userPreferences);
+  }
+
+  onSelectChange(event: any) {
+    console.log("Selected", event);
+    this.userPreferences.diet = event.detail.value;
+  }
 }
