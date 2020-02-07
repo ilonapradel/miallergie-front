@@ -36,21 +36,31 @@ export class UtilitiesClass {
 
 export class Ingredient {
   public id: number;
-  public name: string;
-  public quantity?: number;
-  public unit?: string;
+  public food?: Food;
+  public quantity?: number = 1;
+  public unit?: string = "g";
+}
+
+export class Food {
+  id: string;
+  name: string;
 }
 
 export class Recipe {
   public id: number;
-  public name: string;
-  public ings: Ingredient[];
-  public difficulty: number;
-  public diet: string;
-  public duration: number;
+  public name: string = "";
+  public ingrediants: Ingredient[] = [];
+  public difficulty: number = 3;
+  public diet?: Diet = new Diet();
+  public duration: number = 15;
   public image: string;
-  public numberOfPeople: number;
-  public stages: string[];
+  public numberOfPeople: number = 1;
+  public stages: string[] = ["", "", "", "", ""];
+}
+
+export class Diet {
+  id: string;
+  name: string;
 }
 
 export class User {
