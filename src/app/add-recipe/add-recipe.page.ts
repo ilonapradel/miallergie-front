@@ -18,7 +18,7 @@ import { Ingredient } from "../utilities-class";
 export class AddRecipePage implements OnInit {
   //const
   unites: string[] = ["Cuillère à soupe", "g", "cL", "pincées"];
-  recipe: Recipe = new Recipe();
+  recipe: Recipe = new Recipe(null);
   dietOptions: Diet[] = [];
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
@@ -59,7 +59,7 @@ export class AddRecipePage implements OnInit {
     value: Food[];
   }) {
     for (const food of event.value) {
-      let ingredient = new Ingredient();
+      let ingredient = new Ingredient(null);
       ingredient.food = food;
       this.recipe.ingrediants.push(ingredient);
     }

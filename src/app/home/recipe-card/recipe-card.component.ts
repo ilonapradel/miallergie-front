@@ -1,4 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { NavigationExtras } from "@angular/router";
+import { Recipe } from "./../../utilities-class";
+import { Component, OnInit, Input } from "@angular/core";
 
 @Component({
   selector: "app-recipe-card",
@@ -6,7 +9,20 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./recipe-card.component.scss"]
 })
 export class RecipeCardComponent implements OnInit {
-  constructor() {}
+  @Input("recipe")
+  recipe: Recipe;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  onClickRecipe() {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        recipe: this.recipe
+      }
+    };
+    console.log(navigationExtras);
+    this.router.navigate(["recipe-display"], navigationExtras);
+  }
 }

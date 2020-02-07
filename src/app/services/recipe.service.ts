@@ -9,11 +9,23 @@ export class RecipeService {
   private url: string = "http://miallergie.freeboxos.fr:8080/";
   constructor(private http: HttpClient) {}
 
+  public getRecipes(): Promise<ApiRecipe[]> {
+    return this.http
+      .get<ApiRecipe[]>(this.url + "recipes/")
+      .toPromise<ApiRecipe[]>();
+  }
+
   public addRecipe(recipe: Recipe): Promise<ApiRecipe> {
     let toSave: ApiRecipe = new ApiRecipe(recipe);
     return this.http
       .post<ApiRecipe>(this.url + "recipes/", toSave)
       .toPromise<ApiRecipe>();
+  }
+
+  public getIngrediantFromRecipe(recipe: Recipe): Promise<ApiIngredient[]> {
+    return this.http
+      .get<ApiIngredient[]>(this.url + "recipes/" + recipe.id + "/ingrediants")
+      .toPromise<ApiIngredient[]>();
   }
 
   public addIngrediantToRecipe(
