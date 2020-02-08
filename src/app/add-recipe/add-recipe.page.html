@@ -22,6 +22,12 @@
       <ion-col>
         <ion-list>
           <ion-item>
+            <ion-label position="floating">Type de plat</ion-label>
+            <ion-select okText="Valider" name="typeSelected" cancelText="Annuler" [(ngModel)]="recipe.type">
+              <ion-select-option *ngFor="let type of typeOptions" [value]="type">{{type}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
             <ion-label position="floating">Régime alimentaire</ion-label>
             <ion-select okText="Valider" name="dietSelected" cancelText="Annuler" [(ngModel)]="recipe.diet">
               <ion-select-option *ngFor="let diet of dietOptions" [value]="diet">{{diet.name}}</ion-select-option>

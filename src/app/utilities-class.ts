@@ -73,6 +73,7 @@ export class Recipe {
   public image: string;
   public numberOfPeople: number = 1;
   public stages: string[] = ["", "", "", "", ""];
+  public type: string;
 
   constructor(recipe: ApiRecipe | null) {
     if (recipe) {
@@ -83,6 +84,7 @@ export class Recipe {
       this.duration = recipe.duration;
       this.numberOfPeople = recipe.numberOfPeople;
       this.stages = recipe.stages;
+      this.type = recipe.type;
     }
   }
 }

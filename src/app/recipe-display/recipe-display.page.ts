@@ -72,6 +72,10 @@ export class RecipeDisplayPage implements OnInit {
       }
     });
 
+    this.displayDifficulty();
+  }
+
+  displayDifficulty() {
     for (const num of [0, 1, 2, 3, 4]) {
       if (this.recipe.difficulty > num) {
         this.difficulty_color[num] = "warning";

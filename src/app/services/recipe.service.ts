@@ -50,6 +50,7 @@ export class ApiRecipe {
   public duration: number = 15;
   public numberOfPeople: number = 1;
   public stages: string[] = [];
+  public type: string;
 
   constructor(recipe: Recipe) {
     this.dietId = recipe.diet.id;
@@ -58,6 +59,7 @@ export class ApiRecipe {
     this.name = recipe.name;
     this.numberOfPeople = recipe.numberOfPeople;
     this.stages = recipe.stages;
+    this.type = recipe.type;
   }
 }
 

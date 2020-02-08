@@ -22,6 +22,7 @@ export class AddRecipePage implements OnInit {
   dietOptions: Diet[] = [];
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
+  typeOptions: string[] = ["Entrée", "Plat", "Dessert"];
 
   @ViewChild("ingredientComponent", { static: false })
   ingredientComponent: IonicSelectableComponent;
@@ -81,7 +82,6 @@ export class AddRecipePage implements OnInit {
 
   clickOnAdd(recipe: Recipe) {
     console.log({ recipe });
-    // recipe.name = "test"; //TODO: add input to change the recipe name
     this.recipeService
       .addRecipe(recipe)
       .then((savedRecipe: ApiRecipe) => {
