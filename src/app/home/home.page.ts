@@ -13,7 +13,7 @@ export class HomePage {
 
   constructor(private recipeService: RecipeService) {
     this.recipeService
-      .getRecipes()
+      .getRecipes("filter[order]=createAt DESC")
       .then(recipes => {
         for (const recipe of recipes) {
           this.recipes.push(new Recipe(recipe));
