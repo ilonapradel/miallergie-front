@@ -81,7 +81,7 @@ export class AddRecipePage implements OnInit {
 
   clickOnAdd(recipe: Recipe) {
     console.log({ recipe });
-    recipe.name = "test"; //TODO: add input to change the recipe name
+    // recipe.name = "test"; //TODO: add input to change the recipe name
     this.recipeService
       .addRecipe(recipe)
       .then((savedRecipe: ApiRecipe) => {
