@@ -85,7 +85,15 @@ const routes: Routes = [
       import("./update-friend/update-friend.module").then(
         m => m.UpdateFriendPageModule
       )
+  },  {
+    path: 'user-recipes',
+    loadChildren: () => import('./user-recipes/user-recipes.module').then( m => m.UserRecipesPageModule)
+  },
+  {
+    path: 'edit-recipe',
+    loadChildren: () => import('./edit-recipe/edit-recipe.module').then( m => m.EditRecipePageModule)
   }
+
 ];
 
 @NgModule({
