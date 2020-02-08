@@ -47,6 +47,7 @@ export class RecipeDisplayPage implements OnInit {
             let ingredients = await this.recipeService.getIngredientFromRecipe(
               this.recipe
             );
+            this.recipe.ingredients = [];
             for (const ingredient of ingredients) {
               let newIngredient = new Ingredient(ingredient);
               let newFood = new Food(null);
