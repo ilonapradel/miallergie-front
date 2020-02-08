@@ -3,41 +3,41 @@
     <ion-row>
       <ion-col>
         <ion-title text-center>
-          {{veloute.name}}
+          {{recipe.name}}
         </ion-title>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img [src]="veloute.image" />
+        <img [src]="recipe.image" />
       </ion-col>
       <ion-grid>
         <ion-grid class="headerGrid">
           <ion-row>
             <ion-col align-self-center class="ion-text-center">
               <ion-text>
-                {{veloute.diet}}
+                {{recipe.diet.name}}
               </ion-text>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col align-self-end class="ion-text-center">
               <ion-text>
-                {{veloute.duration}} minutes
+                {{recipe.duration}} minutes
               </ion-text>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col class="ion-text-center">
               <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" name="trophy"
-                [color]="veloute.difficulty>num?'warning':'light'">
+                [color]="recipe.difficulty>num?'warning':'light'">
               </ion-icon>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col class="ion-text-center">
               <ion-text>
-                {{veloute.numberOfPeople}} personnes
+                {{recipe.numberOfPeople}} personnes
               </ion-text>
             </ion-col>
           </ion-row>
@@ -51,8 +51,9 @@
           <ion-list-header>
             <ion-title>Ingrédients</ion-title>
           </ion-list-header>
-          <ion-item *ngFor="let ingredient of veloute.ings">
-            <ion-label>{{ingredient.name}}</ion-label>
+          <ion-item *ngFor="let ingredient of recipe.ingrediants">
+            <b>{{ingredient.quantity}} {{ingredient.unit}} de
+              {{ingredient.food.name}}</b>
           </ion-item>
         </ion-list>
       </ion-col>
@@ -63,10 +64,11 @@
         <ion-title>Préparation</ion-title>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let stage of veloute.stages">
+    <ion-row *ngFor="let stage of recipe.stages">
       <ion-col>
         <p>
-          <ion-text color="secondary">{{veloute.stages.indexOf(stage)+1}}. </ion-text>
+          <ion-text color="secondary">{{recipe.stages.indexOf(stage)+1}}.
+          </ion-text>
           <ion-text>
             {{stage}}
           </ion-text>

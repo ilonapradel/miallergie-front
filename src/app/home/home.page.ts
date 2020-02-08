@@ -1,3 +1,6 @@
+import { NavigationExtras } from "@angular/router";
+import { RecipeService } from "./../services/recipe.service";
+import { Recipe } from "./../utilities-class";
 import { Component } from "@angular/core";
 
 @Component({
@@ -6,5 +9,16 @@ import { Component } from "@angular/core";
   styleUrls: ["home.page.scss"]
 })
 export class HomePage {
-  constructor() {}
+  recipes: Recipe[] = [];
+
+  constructor(private recipeService: RecipeService) {
+    this.recipeService
+      .getRecipes()
+      .then(recipes => {
+        for (const recipe of recipes) {
+          this.recipes.push(new Recipe(recipe));
+        }
+      })
+      .catch(err => console.error(err));
+  }
 }

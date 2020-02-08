@@ -26,9 +26,6 @@ export class SearchPage implements OnInit {
 
   constructor() {
     this.ings = [
-      { id: 1, name: "Tomate" },
-      { id: 2, name: "Oignon" },
-      { id: 3, name: "Ananas" }
     ];
   }
 

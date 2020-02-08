@@ -1,10 +1,16 @@
 <ion-content>
-  <app-recipe-card *ngFor="let number of [0,1,2,3,4]"></app-recipe-card>
-  <div style="height: 50px;">
-  </div>
+  <app-recipe-card
+    *ngFor="let recipe of recipes"
+    [recipe]="recipe"
+  ></app-recipe-card>
+  <div style="height: 50px;"></div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
-      <ion-icon name="add" routerLink="/add-recipe" routerDirection="forward"></ion-icon>
+      <ion-icon
+        name="add"
+        routerLink="/add-recipe"
+        routerDirection="forward"
+      ></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

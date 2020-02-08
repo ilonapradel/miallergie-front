@@ -27,10 +27,7 @@ export class AddFriendPage implements OnInit {
 
   constructor(private api: UsersService, public router: Router) {
     this.possibleAllergies = [
-      { id: 1, name: "Tomate" },
-      { id: 2, name: "Oignon" },
-      { id: 3, name: "Ananas" },
-      { id: 4, name: "Oeufs" }
+     
     ];
 
     this.possibleIntolerances = ["glucose", "gluten", "lactose", "fructose"];
@@ -38,9 +35,7 @@ export class AddFriendPage implements OnInit {
     this.preferences = {
       diet: "vegan",
       allergy: [
-        { id: 1, name: "Soja" },
-        { id: 2, name: "Oeuf" },
-        { id: 3, name: "Ananas" }
+        
       ],
       intolerance: ["lucas", "lactose"]
     };
