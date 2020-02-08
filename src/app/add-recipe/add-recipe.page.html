@@ -66,13 +66,13 @@
               <ion-label>Unité</ion-label>
             </ion-col>
           </ion-row>
-          <ion-row *ngFor="let ingrediant of recipe.ingrediants">
-            <ion-col>{{ingrediant.food.name}}</ion-col>
+          <ion-row *ngFor="let ingredient of recipe.ingredients">
+            <ion-col>{{ingredient.food.name}}</ion-col>
             <ion-col>
-              <ion-input [(ngModel)]="ingrediant.quantity" type="number" inputmode="decimal" min="0"></ion-input>
+              <ion-input [(ngModel)]="ingredient.quantity" type="number" inputmode="decimal" min="0"></ion-input>
             </ion-col>
             <ion-col>
-              <ion-select [(ngModel)]="ingrediant.unit" okText="Valider" cancelText="Annuler">
+              <ion-select [(ngModel)]="ingredient.unit" okText="Valider" cancelText="Annuler">
                 <ion-select-option *ngFor="let unite of unites">{{unite}}</ion-select-option>
               </ion-select>
             </ion-col>

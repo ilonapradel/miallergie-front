@@ -1,4 +1,4 @@
-import { ApiFood } from "./services/ingrediant.service";
+import { ApiFood } from "./services/ingredient.service";
 import { ApiRecipe, ApiIngredient } from "./services/recipe.service";
 import { UsersService } from "./services/users.service";
 import { ToastController } from "@ionic/angular";
@@ -42,11 +42,11 @@ export class Ingredient {
   public quantity?: number = 1;
   public unit?: string = "g";
 
-  constructor(ingrediant: ApiIngredient | null) {
-    if (ingrediant) {
-      this.id = ingrediant.id;
-      this.quantity = ingrediant.quantity;
-      this.unit = ingrediant.unit;
+  constructor(ingredient: ApiIngredient | null) {
+    if (ingredient) {
+      this.id = ingredient.id;
+      this.quantity = ingredient.quantity;
+      this.unit = ingredient.unit;
     }
   }
 }
@@ -66,7 +66,7 @@ export class Food {
 export class Recipe {
   public id: string;
   public name: string = "";
-  public ingrediants: Ingredient[] = [];
+  public ingredients: Ingredient[] = [];
   public difficulty: number = 3;
   public diet?: Diet = new Diet();
   public duration: number = 15;

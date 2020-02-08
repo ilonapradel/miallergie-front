@@ -61,7 +61,7 @@ export class AddRecipePage implements OnInit {
     for (const food of event.value) {
       let ingredient = new Ingredient(null);
       ingredient.food = food;
-      this.recipe.ingrediants.push(ingredient);
+      this.recipe.ingredients.push(ingredient);
     }
   }
 
@@ -85,14 +85,14 @@ export class AddRecipePage implements OnInit {
     this.recipeService
       .addRecipe(recipe)
       .then((savedRecipe: ApiRecipe) => {
-        let saveIngrediants: Promise<ApiIngredient>[] = [];
-        for (const ingrediant of this.recipe.ingrediants) {
-          saveIngrediants.push(
-            this.recipeService.addIngrediantToRecipe(savedRecipe, ingrediant)
+        let savedIngredients: Promise<ApiIngredient>[] = [];
+        for (const ingredient of this.recipe.ingredients) {
+          savedIngredients.push(
+            this.recipeService.addIngredientToRecipe(savedRecipe, ingredient)
           );
         }
 
-        Promise.all(saveIngrediants).catch(err => console.error(err));
+        Promise.all(savedIngredients).catch(err => console.error(err));
       })
       .catch(err => {
         console.error(err);

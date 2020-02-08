@@ -1,4 +1,4 @@
-import { IngrediantService } from "./../services/ingrediant.service";
+import { IngredientService } from "./../services/ingredient.service";
 import { FoodService } from "./../services/food.service";
 import { Food } from "./../utilities-class";
 import { RecipeService } from "./../services/recipe.service";
@@ -27,7 +27,7 @@ export class RecipeDisplayPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private recipeService: RecipeService,
-    private ingrediantService: IngrediantService
+    private ingredientService: IngredientService
   ) {}
 
   ngOnInit() {
@@ -37,35 +37,35 @@ export class RecipeDisplayPage implements OnInit {
           this.recipe = this.router.getCurrentNavigation().extras.state.recipe;
 
           try {
-            let ingrediants = await this.recipeService.getIngrediantFromRecipe(
+            let ingredients = await this.recipeService.getIngredientFromRecipe(
               this.recipe
             );
-            for (const ingrediant of ingrediants) {
-              let newIngrediant = new Ingredient(ingrediant);
+            for (const ingredient of ingredients) {
+              let newIngredient = new Ingredient(ingredient);
               let newFood = new Food(null);
               try {
                 newFood = new Food(
-                  await this.ingrediantService.getFoodOfIngrediant(
-                    newIngrediant
+                  await this.ingredientService.getFoodOfIngredient(
+                    newIngredient
                   )
                 );
               } catch (error) {
                 console.error(error);
               }
-              newIngrediant.food = newFood;
-              this.recipe.ingrediants.push(newIngrediant);
+              newIngredient.food = newFood;
+              this.recipe.ingredients.push(newIngredient);
             }
           } catch (error) {
             console.error(error);
           }
 
           /* this.recipeService
-            .getIngrediantFromRecipe(this.recipe)
-            .then(ingrediants => {
-              console.log(ingrediants);
-              for (const ingrediant of ingrediants) {     
-                let newIngrediant = new Ingredient(ingrediant);
-                this.recipe.ingrediants.push(new Ingredient(ingrediant));
+            .getIngredientFromRecipe(this.recipe)
+            .then(ingredients => {
+              console.log(ingredients);
+              for (const ingredient of ingredients) {     
+                let newIngredient = new Ingredient(ingredient);
+                this.recipe.ingredients.push(new Ingredient(ingredient));
               }
             }); */
         }
