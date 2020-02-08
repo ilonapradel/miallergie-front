@@ -22,20 +22,20 @@ export class RecipeService {
       .toPromise<ApiRecipe>();
   }
 
-  public getIngrediantFromRecipe(recipe: Recipe): Promise<ApiIngredient[]> {
+  public getIngredientFromRecipe(recipe: Recipe): Promise<ApiIngredient[]> {
     return this.http
-      .get<ApiIngredient[]>(this.url + "recipes/" + recipe.id + "/ingrediants")
+      .get<ApiIngredient[]>(this.url + "recipes/" + recipe.id + "/ingredients")
       .toPromise<ApiIngredient[]>();
   }
 
-  public addIngrediantToRecipe(
+  public addIngredientToRecipe(
     recipe: ApiRecipe,
     ingredient: Ingredient
   ): Promise<ApiIngredient> {
     let toSave: ApiIngredient = new ApiIngredient(ingredient);
     return this.http
       .post<ApiIngredient>(
-        this.url + "recipes/" + recipe.id + "/ingrediants/",
+        this.url + "recipes/" + recipe.id + "/ingredients/",
         toSave
       )
       .toPromise<ApiIngredient>();
@@ -50,6 +50,7 @@ export class ApiRecipe {
   public duration: number = 15;
   public numberOfPeople: number = 1;
   public stages: string[] = [];
+  public type: string;
 
   constructor(recipe: Recipe) {
     this.dietId = recipe.diet.id;
@@ -58,6 +59,7 @@ export class ApiRecipe {
     this.name = recipe.name;
     this.numberOfPeople = recipe.numberOfPeople;
     this.stages = recipe.stages;
+    this.type = recipe.type;
   }
 }
 
@@ -68,9 +70,9 @@ export class ApiIngredient {
   public quantity?: number = 1;
   public unit?: string = "g";
 
-  constructor(ingrediant: Ingredient) {
-    this.quantity = ingrediant.quantity;
-    this.unit = ingrediant.unit;
-    this.foodId = ingrediant.food.id;
+  constructor(ingredient: Ingredient) {
+    this.quantity = ingredient.quantity;
+    this.unit = ingredient.unit;
+    this.foodId = ingredient.food.id;
   }
 }
