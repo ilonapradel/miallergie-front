@@ -9,9 +9,9 @@ export class RecipeService {
   private url: string = "http://miallergie.freeboxos.fr:8080/";
   constructor(private http: HttpClient) {}
 
-  public getRecipes(): Promise<ApiRecipe[]> {
+  public getRecipes(filter?: string): Promise<ApiRecipe[]> {
     return this.http
-      .get<ApiRecipe[]>(this.url + "recipes/")
+      .get<ApiRecipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""))
       .toPromise<ApiRecipe[]>();
   }
 
