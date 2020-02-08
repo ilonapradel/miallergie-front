@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Recipe, Ingredient } from "../utilities-class";
+import { Recipe, Ingredient, Diet } from "../utilities-class";
 
 @Injectable({
   providedIn: "root"
@@ -26,6 +26,12 @@ export class RecipeService {
     return this.http
       .get<ApiIngredient[]>(this.url + "recipes/" + recipe.id + "/ingredients")
       .toPromise<ApiIngredient[]>();
+  }
+
+  public getDietFromRecipe(recipe: Recipe): Promise<Diet> {
+    return this.http
+      .get<Diet>(this.url + "recipes/" + recipe.id + "/diet")
+      .toPromise<Diet>();
   }
 
   public addIngredientToRecipe(

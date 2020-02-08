@@ -36,6 +36,13 @@ export class RecipeDisplayPage implements OnInit {
         if (this.router.getCurrentNavigation().extras.state.recipe) {
           this.recipe = this.router.getCurrentNavigation().extras.state.recipe;
 
+          //getting diet
+          this.recipeService
+            .getDietFromRecipe(this.recipe)
+            .then(diet => (this.recipe.diet = diet))
+            .catch(err => console.error(err));
+
+          //getting ingrediants with their food
           try {
             let ingredients = await this.recipeService.getIngredientFromRecipe(
               this.recipe
@@ -58,16 +65,6 @@ export class RecipeDisplayPage implements OnInit {
           } catch (error) {
             console.error(error);
           }
-
-          /* this.recipeService
-            .getIngredientFromRecipe(this.recipe)
-            .then(ingredients => {
-              console.log(ingredients);
-              for (const ingredient of ingredients) {     
-                let newIngredient = new Ingredient(ingredient);
-                this.recipe.ingredients.push(new Ingredient(ingredient));
-              }
-            }); */
         }
       }
     });
