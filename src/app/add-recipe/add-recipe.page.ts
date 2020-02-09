@@ -117,24 +117,22 @@ export class AddRecipePage implements OnInit {
 
         console.log("Sauvagarde de ", this.currentName, this.correctPath);
 
-        this.file
-          .readAsArrayBuffer(this.correctPath, this.currentName)
-          .then((buffer: ArrayBuffer) => {
-            let data = new Blob([buffer], { type: "image/jpeg" });
-            this.recipeService
-              .addImageToRecipe(new Recipe(savedRecipe), data, this.currentName)
-              .then(res => console.log(res))
-              .catch(err => console.error(err));
-          });
-
-        this.recipeService
-          .addImageToRecipe(
-            new Recipe(savedRecipe),
-            savedRecipe.id,
-            this.correctPath + this.currentName
-          )
-          .then(res => console.log(res))
-          .catch(err => console.error(err));
+        if (this.correctPath && this.currentName) {
+          //save image if needed
+          this.file
+            .readAsArrayBuffer(this.correctPath, this.currentName)
+            .then((buffer: ArrayBuffer) => {
+              let data = new Blob([buffer], { type: "image/jpeg" });
+              this.recipeService
+                .addImageToRecipe(
+                  new Recipe(savedRecipe),
+                  data,
+                  this.currentName
+                )
+                .then(res => console.log(res))
+                .catch(err => console.error(err));
+            });
+        }
 
         Promise.all(savedIngredients).catch(err => console.error(err));
       })
