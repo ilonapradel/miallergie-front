@@ -1,3 +1,11 @@
+import { WebView } from "@ionic-native/ionic-webview/ngx";
+import { FilePath } from "@ionic-native/file-path/ngx";
+import { File } from "@ionic-native/file/ngx";
+import {
+  Platform,
+  LoadingController,
+  ActionSheetController
+} from "@ionic/angular";
 import { FoodService } from "./../services/food.service";
 import { DietService } from "./../services/diet.service";
 import { Recipe, Diet, Food } from "./../utilities-class";
@@ -6,9 +14,14 @@ import {
   ApiRecipe,
   ApiIngredient
 } from "./../services/recipe.service";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient } from "../utilities-class";
+import {
+  PictureSourceType,
+  CameraOptions,
+  Camera
+} from "@ionic-native/camera/ngx";
 
 @Component({
   selector: "app-add-recipe",
@@ -23,6 +36,8 @@ export class AddRecipePage implements OnInit {
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
   typeOptions: string[] = ["Entrée", "Plat", "Dessert"];
+  correctPath: string;
+  currentName: string;
 
   @ViewChild("ingredientComponent", { static: false })
   ingredientComponent: IonicSelectableComponent;
@@ -38,7 +53,15 @@ export class AddRecipePage implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private dietService: DietService,
-    private foodService: FoodService
+    private foodService: FoodService,
+    private camera: Camera,
+    private file: File,
+    private webview: WebView,
+    private actionSheetController: ActionSheetController,
+    private plt: Platform,
+    private loadingController: LoadingController,
+    private ref: ChangeDetectorRef,
+    private filePath: FilePath
   ) {
     this.dietService
       .getDiets()
@@ -92,6 +115,27 @@ export class AddRecipePage implements OnInit {
           );
         }
 
+        console.log("Sauvagarde de ", this.currentName, this.correctPath);
+
+        this.file
+          .readAsArrayBuffer(this.correctPath, this.currentName)
+          .then((buffer: ArrayBuffer) => {
+            let data = new Blob([buffer], { type: "image/jpeg" });
+            this.recipeService
+              .addImageToRecipe(new Recipe(savedRecipe), data, this.currentName)
+              .then(res => console.log(res))
+              .catch(err => console.error(err));
+          });
+
+        this.recipeService
+          .addImageToRecipe(
+            new Recipe(savedRecipe),
+            savedRecipe.id,
+            this.correctPath + this.currentName
+          )
+          .then(res => console.log(res))
+          .catch(err => console.error(err));
+
         Promise.all(savedIngredients).catch(err => console.error(err));
       })
       .catch(err => {
@@ -111,5 +155,67 @@ export class AddRecipePage implements OnInit {
         this.recipe.stages = this.recipe.stages.slice(0, event.detail.value);
       }
     }
+  }
+
+  async selectImage() {
+    const actionSheet = await this.actionSheetController.create({
+      header: "Select Image source",
+      buttons: [
+        {
+          text: "Load from Library",
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+        },
+        {
+          text: "Use Camera",
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.CAMERA);
+          }
+        },
+        {
+          text: "Cancel",
+          role: "cancel"
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  takePicture(sourceType: PictureSourceType) {
+    var options: CameraOptions = {
+      quality: 100,
+      sourceType: sourceType,
+      saveToPhotoAlbum: false,
+      correctOrientation: true
+    };
+
+    this.camera.getPicture(options).then(imagePath => {
+      if (
+        this.plt.is("android") &&
+        sourceType === this.camera.PictureSourceType.PHOTOLIBRARY
+      ) {
+        this.filePath.resolveNativePath(imagePath).then(filePath => {
+          this.correctPath = filePath.substr(0, filePath.lastIndexOf("/") + 1);
+          this.currentName = imagePath.substring(
+            imagePath.lastIndexOf("/") + 1,
+            imagePath.lastIndexOf("?")
+          );
+          /* this.copyFileToLocalDir(
+            correctPath,
+            currentName,
+            this.createFileName()
+          ); */
+        });
+      } else {
+        this.currentName = imagePath.substr(imagePath.lastIndexOf("/") + 1);
+        this.correctPath = imagePath.substr(0, imagePath.lastIndexOf("/") + 1);
+        /* this.copyFileToLocalDir(
+          correctPath,
+          currentName,
+          this.createFileName()
+        ); */
+      }
+    });
   }
 }

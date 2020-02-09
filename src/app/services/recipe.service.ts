@@ -18,6 +18,7 @@ export class RecipeService {
 
   public addRecipe(recipe: Recipe): Promise<ApiRecipe> {
     let toSave: ApiRecipe = new ApiRecipe(recipe);
+    toSave.imageId = undefined;
     return this.http
       .post<ApiRecipe>(this.url + "recipes/", toSave)
       .toPromise<ApiRecipe>();
@@ -46,6 +47,14 @@ export class RecipeService {
         toSave
       )
       .toPromise<ApiIngredient>();
+  }
+
+  public addImageToRecipe(recipe: Recipe, data: Blob, originalName: string) {
+    const formData: FormData = new FormData();
+    formData.append(recipe.id, data, originalName);
+    return this.http
+      .post(this.url + "recipes/" + recipe.id + "/uploadImage", formData)
+      .toPromise();
   }
 }
 
