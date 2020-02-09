@@ -18,7 +18,7 @@ export class HomePage {
       )
       .then(recipes => {
         for (const recipe of recipes) {
-          this.recipes.push(new Recipe(recipe));
+          this.recipes.push(recipe);
         }
       })
       .catch(err => console.error(err));

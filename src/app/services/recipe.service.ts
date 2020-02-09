@@ -11,24 +11,28 @@ export class RecipeService {
   private url: string = ApiUrl;
   constructor(private http: HttpClient) {}
 
-  public getRecipes(filter?: string): Promise<ApiRecipe[]> {
+  public getRecipes(filter?: string): Promise<Recipe[]> {
     return this.http
-      .get<ApiRecipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""))
-      .toPromise<ApiRecipe[]>();
+      .get<Recipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""))
+      .toPromise<Recipe[]>();
   }
 
-  public addRecipe(recipe: Recipe): Promise<ApiRecipe> {
-    let toSave: ApiRecipe = new ApiRecipe(recipe);
+  public addRecipe(recipe: Recipe): Promise<Recipe> {
+    let toSave: Recipe = JSON.parse(JSON.stringify(recipe));
     toSave.imageId = undefined;
+    toSave.image = undefined;
+    toSave.dietId = recipe.diet.id;
+    toSave.diet = undefined;
+    toSave.ingredients = undefined;
     return this.http
-      .post<ApiRecipe>(this.url + "recipes/", toSave)
-      .toPromise<ApiRecipe>();
+      .post<Recipe>(this.url + "recipes/", toSave)
+      .toPromise<Recipe>();
   }
 
-  public getIngredientFromRecipe(recipe: Recipe): Promise<ApiIngredient[]> {
+  public getIngredientFromRecipe(recipe: Recipe): Promise<Ingredient[]> {
     return this.http
-      .get<ApiIngredient[]>(this.url + "recipes/" + recipe.id + "/ingredients")
-      .toPromise<ApiIngredient[]>();
+      .get<Ingredient[]>(this.url + "recipes/" + recipe.id + "/ingredients")
+      .toPromise<Ingredient[]>();
   }
 
   public getDietFromRecipe(recipe: Recipe): Promise<Diet> {
@@ -38,16 +42,19 @@ export class RecipeService {
   }
 
   public addIngredientToRecipe(
-    recipe: ApiRecipe,
+    recipe: Recipe,
     ingredient: Ingredient
-  ): Promise<ApiIngredient> {
-    let toSave: ApiIngredient = new ApiIngredient(ingredient);
+  ): Promise<Ingredient> {
+    let toSave: Ingredient = JSON.parse(JSON.stringify(ingredient));
+    toSave.food = undefined;
+    toSave.foodId = ingredient.food.id;
+
     return this.http
-      .post<ApiIngredient>(
+      .post<Ingredient>(
         this.url + "recipes/" + recipe.id + "/ingredients/",
         toSave
       )
-      .toPromise<ApiIngredient>();
+      .toPromise<Ingredient>();
   }
 
   public addImageToRecipe(recipe: Recipe, data: Blob, originalName: string) {
@@ -59,7 +66,7 @@ export class RecipeService {
   }
 }
 
-export class ApiRecipe {
+/* export class ApiRecipe {
   public id?: string;
   public name: string = "";
   public difficulty: number = 3;
@@ -96,4 +103,4 @@ export class ApiIngredient {
     this.unit = ingredient.unit;
     this.foodId = ingredient.food.id;
   }
-}
+} */

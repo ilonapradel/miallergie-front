@@ -9,14 +9,14 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <img [src]="server + recipe.image.path" />
+        <img [src]="server + recipe?.image?.path" />
       </ion-col>
       <ion-grid>
         <ion-grid class="headerGrid">
           <ion-row>
             <ion-col align-self-center class="ion-text-center">
               <ion-text>
-                {{recipe.diet.name}}
+                {{recipe?.diet?.name}}
               </ion-text>
             </ion-col>
           </ion-row>

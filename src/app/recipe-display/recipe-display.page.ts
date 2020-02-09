@@ -14,7 +14,7 @@ import { ApiUrl } from "../utilities-class";
   styleUrls: ["./recipe-display.page.scss"]
 })
 export class RecipeDisplayPage implements OnInit {
-  recipe: Recipe = new Recipe(null);
+  recipe: Recipe = new Recipe();
   server: string = ApiUrl;
 
   difficulty_color: Array<string> = [
@@ -51,19 +51,16 @@ export class RecipeDisplayPage implements OnInit {
             );
             this.recipe.ingredients = [];
             for (const ingredient of ingredients) {
-              let newIngredient = new Ingredient(ingredient);
-              let newFood = new Food(null);
+              let newFood = new Food();
               try {
-                newFood = new Food(
-                  await this.ingredientService.getFoodOfIngredient(
-                    newIngredient
-                  )
+                newFood = await this.ingredientService.getFoodOfIngredient(
+                  ingredient
                 );
               } catch (error) {
                 console.error(error);
               }
-              newIngredient.food = newFood;
-              this.recipe.ingredients.push(newIngredient);
+              ingredient.food = newFood;
+              this.recipe.ingredients.push(ingredient);
             }
           } catch (error) {
             console.error(error);

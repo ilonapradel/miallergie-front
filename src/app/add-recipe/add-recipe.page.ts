@@ -9,11 +9,7 @@ import {
 import { FoodService } from "./../services/food.service";
 import { DietService } from "./../services/diet.service";
 import { Recipe, Diet, Food } from "./../utilities-class";
-import {
-  RecipeService,
-  ApiRecipe,
-  ApiIngredient
-} from "./../services/recipe.service";
+import { RecipeService } from "./../services/recipe.service";
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient } from "../utilities-class";
@@ -31,7 +27,7 @@ import {
 export class AddRecipePage implements OnInit {
   //const
   unites: string[] = ["Cuillère à soupe", "g", "cL", "pincées"];
-  recipe: Recipe = new Recipe(null);
+  recipe: Recipe = new Recipe();
   dietOptions: Diet[] = [];
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
@@ -83,7 +79,7 @@ export class AddRecipePage implements OnInit {
     value: Food[];
   }) {
     for (const food of event.value) {
-      let ingredient = new Ingredient(null);
+      let ingredient = new Ingredient();
       ingredient.food = food;
       this.recipe.ingredients.push(ingredient);
     }
@@ -107,8 +103,8 @@ export class AddRecipePage implements OnInit {
     console.log({ recipe });
     this.recipeService
       .addRecipe(recipe)
-      .then((savedRecipe: ApiRecipe) => {
-        let savedIngredients: Promise<ApiIngredient>[] = [];
+      .then((savedRecipe: Recipe) => {
+        let savedIngredients: Promise<Ingredient>[] = [];
         for (const ingredient of this.recipe.ingredients) {
           savedIngredients.push(
             this.recipeService.addIngredientToRecipe(savedRecipe, ingredient)
@@ -124,11 +120,7 @@ export class AddRecipePage implements OnInit {
             .then((buffer: ArrayBuffer) => {
               let data = new Blob([buffer], { type: "image/jpeg" });
               this.recipeService
-                .addImageToRecipe(
-                  new Recipe(savedRecipe),
-                  data,
-                  this.currentName
-                )
+                .addImageToRecipe(savedRecipe, data, this.currentName)
                 .then(res => console.log(res))
                 .catch(err => console.error(err));
             });
