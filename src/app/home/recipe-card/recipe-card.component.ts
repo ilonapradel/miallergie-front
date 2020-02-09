@@ -12,6 +12,8 @@ export class RecipeCardComponent implements OnInit {
   @Input("recipe")
   recipe: Recipe;
 
+  server: string = "http://miallergie.freeboxos.fr:8080/";
+
   constructor(private router: Router) {}
 
   ngOnInit() {}

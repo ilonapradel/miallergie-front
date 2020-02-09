@@ -1,3 +1,4 @@
+import { File } from "./../utilities-class";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Recipe, Ingredient, Diet } from "../utilities-class";
@@ -53,10 +54,13 @@ export class ApiRecipe {
   public name: string = "";
   public difficulty: number = 3;
   public dietId: string = "";
+  public diet?: Diet;
   public duration: number = 15;
   public numberOfPeople: number = 1;
   public stages: string[] = [];
   public type: string;
+  public imageId?: string = "";
+  public image?: File;
 
   constructor(recipe: Recipe) {
     this.dietId = recipe.diet.id;
@@ -66,6 +70,7 @@ export class ApiRecipe {
     this.numberOfPeople = recipe.numberOfPeople;
     this.stages = recipe.stages;
     this.type = recipe.type;
+    this.imageId = recipe.image.id ? recipe.image.id : "";
   }
 }
 

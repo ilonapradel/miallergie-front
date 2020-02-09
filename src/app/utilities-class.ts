@@ -70,7 +70,7 @@ export class Recipe {
   public difficulty: number = 3;
   public diet?: Diet = new Diet();
   public duration: number = 15;
-  public image: string;
+  public image?: File = new File();
   public numberOfPeople: number = 1;
   public stages: string[] = ["", "", "", "", ""];
   public type: string;
@@ -85,8 +85,16 @@ export class Recipe {
       this.numberOfPeople = recipe.numberOfPeople;
       this.stages = recipe.stages;
       this.type = recipe.type;
+      this.image = recipe.image ? recipe.image : new File();
     }
   }
+}
+
+export class File {
+  public id?: string;
+  public name: string = "";
+  public type: string = "";
+  public path: string = "";
 }
 
 export class Diet {
