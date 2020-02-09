@@ -8,8 +8,8 @@ import { Router } from "@angular/router";
   styleUrls: ["./authentication.page.scss"]
 })
 export class AuthenticationPage implements OnInit {
-  email: string = "admin1@admin.fr";
-  password: string = "admin1";
+  email: string;
+  password: string;
 
   constructor(private api: UsersService, private router: Router) {}
 

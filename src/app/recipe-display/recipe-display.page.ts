@@ -14,6 +14,7 @@ import { Recipe, Ingredient } from "../utilities-class";
 })
 export class RecipeDisplayPage implements OnInit {
   recipe: Recipe = new Recipe(null);
+  server: string = "http://miallergie.freeboxos.fr:8080/";
 
   difficulty_color: Array<string> = [
     "warning",
