@@ -122,3 +122,5 @@ export class Friend {
   public preferences: Preferences;
   public surname: string;
 }
+
+export const ApiUrl: string = "http://miallergie.freeboxos.fr:8080/";

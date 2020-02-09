@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { Recipe, Ingredient } from "../utilities-class";
+import { ApiUrl } from "../utilities-class";
 
 @Component({
   selector: "app-recipe-display",
@@ -14,7 +15,7 @@ import { Recipe, Ingredient } from "../utilities-class";
 })
 export class RecipeDisplayPage implements OnInit {
   recipe: Recipe = new Recipe(null);
-  server: string = "http://miallergie.freeboxos.fr:8080/";
+  server: string = ApiUrl;
 
   difficulty_color: Array<string> = [
     "warning",

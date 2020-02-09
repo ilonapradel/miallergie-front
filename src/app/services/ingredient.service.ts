@@ -1,12 +1,14 @@
+import { ApiUrl } from "./../utilities-class";
 import { Ingredient, Recipe, Food } from "../utilities-class";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { ApiUrl } from "../utilities-class";
 
 @Injectable({
   providedIn: "root"
 })
 export class IngredientService {
-  private url: string = "http://miallergie.freeboxos.fr:8080/";
+  private url: string = ApiUrl;
 
   constructor(private http: HttpClient) {}
 

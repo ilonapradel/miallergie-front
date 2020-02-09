@@ -2,21 +2,18 @@ import { Preferences, Friend } from "./../utilities-class";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/operators";
-import { User } from "../utilities-class";
-
+import { User, ApiUrl } from "../utilities-class";
 @Injectable({
   providedIn: "root"
 })
 export class UsersService {
-  private url: string = "http://miallergie.freeboxos.fr:8080/";
+  private url: string = ApiUrl;
   public isAuth: boolean = false;
   private id: string;
   private myUser: User = new User();
   private myUserPreferences: Preferences = {
     diet: "omnivore",
-    allergy: [
-     
-    ],
+    allergy: [],
     intolerance: ["gluten", "lactose"]
   };
 
