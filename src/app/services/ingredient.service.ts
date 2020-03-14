@@ -13,7 +13,11 @@ export class IngredientService {
 
   public getFoodOfIngredient(ingredient: Ingredient): Promise<Food> {
     return this.http
-      .get<Food>(this.url + "ingredients/" + ingredient.id + "/food")
+      .get<Food>(this.url + "ingredients/" + ingredient.id + "/food", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .toPromise<Food>();
   }
 }

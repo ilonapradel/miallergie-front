@@ -11,6 +11,12 @@ export class FoodService {
   constructor(private http: HttpClient) {}
 
   public getFoods(): Promise<Food[]> {
-    return this.http.get<Food[]>(this.url + "foods").toPromise<Food[]>();
+    return this.http
+      .get<Food[]>(this.url + "foods", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+      .toPromise<Food[]>();
   }
 }

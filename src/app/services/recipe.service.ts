@@ -13,7 +13,11 @@ export class RecipeService {
 
   public getRecipes(filter?: string): Promise<Recipe[]> {
     return this.http
-      .get<Recipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""))
+      .get<Recipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""), {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .toPromise<Recipe[]>();
   }
 
@@ -25,19 +29,31 @@ export class RecipeService {
     toSave.diet = undefined;
     toSave.ingredients = undefined;
     return this.http
-      .post<Recipe>(this.url + "recipes/", toSave)
+      .post<Recipe>(this.url + "recipes/", toSave, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .toPromise<Recipe>();
   }
 
   public getIngredientFromRecipe(recipe: Recipe): Promise<Ingredient[]> {
     return this.http
-      .get<Ingredient[]>(this.url + "recipes/" + recipe.id + "/ingredients")
+      .get<Ingredient[]>(this.url + "recipes/" + recipe.id + "/ingredients", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .toPromise<Ingredient[]>();
   }
 
   public getDietFromRecipe(recipe: Recipe): Promise<Diet> {
     return this.http
-      .get<Diet>(this.url + "recipes/" + recipe.id + "/diet")
+      .get<Diet>(this.url + "recipes/" + recipe.id + "/diet", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .toPromise<Diet>();
   }
 
@@ -52,7 +68,12 @@ export class RecipeService {
     return this.http
       .post<Ingredient>(
         this.url + "recipes/" + recipe.id + "/ingredients/",
-        toSave
+        toSave,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        }
       )
       .toPromise<Ingredient>();
   }
@@ -61,7 +82,11 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append(recipe.id, data, originalName);
     return this.http
-      .post(this.url + "recipes/" + recipe.id + "/uploadImage", formData)
+      .post(this.url + "recipes/" + recipe.id + "/uploadImage", formData, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .toPromise();
   }
 }

@@ -12,6 +12,12 @@ export class DietService {
   constructor(private http: HttpClient) {}
 
   public getDiets(): Promise<Diet[]> {
-    return this.http.get<Diet[]>(this.url + "diets").toPromise<Diet[]>();
+    return this.http
+      .get<Diet[]>(this.url + "diets", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+      .toPromise<Diet[]>();
   }
 }

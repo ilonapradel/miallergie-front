@@ -86,9 +86,17 @@ export class UsersService {
 
   public changeUsername(newUsername: string) {
     return this.http
-      .put(this.url + "users/" + this.id, {
-        username: newUsername
-      })
+      .put(
+        this.url + "users/" + this.id,
+        {
+          username: newUsername
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        }
+      )
       .pipe(
         tap(() => {
           this.setUsername(newUsername);
@@ -99,9 +107,17 @@ export class UsersService {
 
   public changeEmail(newEmail: string) {
     return this.http
-      .put(this.url + "users/" + this.id, {
-        email: newEmail
-      })
+      .put(
+        this.url + "users/" + this.id,
+        {
+          email: newEmail
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        }
+      )
       .pipe(
         tap(() => {
           this.setEmail(newEmail);
@@ -112,10 +128,18 @@ export class UsersService {
 
   public changePassword(newPassword: string, oldPassword: string) {
     return this.http
-      .put(this.url + "users/" + this.id, {
-        newPassword: newPassword,
-        oldPassword: oldPassword
-      })
+      .put(
+        this.url + "users/" + this.id,
+        {
+          newPassword: newPassword,
+          oldPassword: oldPassword
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        }
+      )
       .toPromise();
   }
 
