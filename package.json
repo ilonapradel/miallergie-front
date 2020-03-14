@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:web": "ionic build --prod",
-    "start:android": "ionic cordova run android -l -c --device --verbose --no-native-run",
+    "start:android": "ionic cordova run android --device -l -c -s --debug",
     "build:android": "ionic cordova build android --release",
     "signing_apk": "jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore ./platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk alias_name",
     "generate_keystore": "keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000"
@@ -25,14 +25,19 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/pwa": "^0.803.23",
     "@angular/router": "~8.1.2",
+    "@ionic-native/camera": "^5.18.1-beta.5",
     "@ionic-native/core": "^5.0.0",
-    "@ionic-native/ionic-webview": "^5.20.0",
+    "@ionic-native/file": "^5.18.1-beta.5",
+    "@ionic-native/file-path": "^5.18.1-beta.5",
+    "@ionic-native/ionic-webview": "^5.18.1-beta.5",
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^4.7.1",
     "@ionic/pwa-elements": "^1.4.1",
     "cordova-android": "8.1.0",
+    "cordova-plugin-filepath": "^1.5.7",
     "cordova-plugin-ionic-webview": "^4.1.3",
+    "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",
     "ionic-selectable": "^4.5.0",
     "rxjs": "^6.5.4",
@@ -79,7 +84,11 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-camera": {},
+      "cordova-plugin-file": {},
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-filepath": {}
     },
     "platforms": [
       "android"

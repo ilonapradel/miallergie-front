@@ -9,14 +9,14 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <img [src]="recipe.image" />
+        <img [src]="server + recipe?.image?.path" />
       </ion-col>
       <ion-grid>
         <ion-grid class="headerGrid">
           <ion-row>
             <ion-col align-self-center class="ion-text-center">
               <ion-text>
-                {{recipe.diet.name}}
+                {{recipe?.diet?.name}}
               </ion-text>
             </ion-col>
           </ion-row>
@@ -36,8 +36,11 @@
           </ion-row>
           <ion-row>
             <ion-col class="ion-text-center">
-              <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" name="trophy"
-                [color]="recipe.difficulty>=num?'warning':'light'">
+              <ion-icon
+                *ngFor="let num of [0, 1, 2, 3, 4]"
+                name="trophy"
+                [color]="recipe.difficulty>=num?'warning':'light'"
+              >
               </ion-icon>
             </ion-col>
           </ion-row>
@@ -59,8 +62,10 @@
             <ion-title>Ingrédients</ion-title>
           </ion-list-header>
           <ion-item *ngFor="let ingredient of recipe.ingredients">
-            <b>{{ingredient.quantity}} {{ingredient.unit}} de
-              {{ingredient.food.name}}</b>
+            <b
+              >{{ingredient.quantity}} {{ingredient.unit}} de
+              {{ingredient.food.name}}</b
+            >
           </ion-item>
         </ion-list>
       </ion-col>
@@ -74,7 +79,8 @@
     <ion-row *ngFor="let stage of recipe.stages">
       <ion-col>
         <p>
-          <ion-text color="secondary">{{recipe.stages.indexOf(stage)+1}}.
+          <ion-text color="secondary"
+            >{{recipe.stages.indexOf(stage)+1}}.
           </ion-text>
           <ion-text>
             {{stage}}

@@ -1,6 +1,6 @@
-import { UsersService } from './../services/users.service';
+import { UsersService } from "./../services/users.service";
 import { Component, OnInit } from "@angular/core";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-authentication",
@@ -8,18 +8,17 @@ import { Router } from '@angular/router';
   styleUrls: ["./authentication.page.scss"]
 })
 export class AuthenticationPage implements OnInit {
-
   email: string;
   password: string;
 
-  constructor(private api:UsersService,private router:Router) {}
+  constructor(private api: UsersService, private router: Router) {}
 
   ngOnInit() {}
 
-  connect(email:string,password:string){
-    console.log(email,password);
-    this.api.login(email,password).then((user)=>{
-      this.router.navigate(['/home']);
-    })
-  } 
+  connect(email: string, password: string) {
+    console.log(email, password);
+    this.api.login(email, password).then(user => {
+      this.router.navigate(["/home"]);
+    });
+  }
 }
