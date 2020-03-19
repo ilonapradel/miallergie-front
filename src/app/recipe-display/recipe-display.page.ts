@@ -1,4 +1,4 @@
-import { IngrediantService } from "./../services/ingrediant.service";
+import { IngredientService } from "./../services/ingredient.service";
 import { FoodService } from "./../services/food.service";
 import { Food } from "./../utilities-class";
 import { RecipeService } from "./../services/recipe.service";
@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { Recipe, Ingredient } from "../utilities-class";
+import { ApiUrl } from "../utilities-class";
 
 @Component({
   selector: "app-recipe-display",
@@ -13,7 +14,8 @@ import { Recipe, Ingredient } from "../utilities-class";
   styleUrls: ["./recipe-display.page.scss"]
 })
 export class RecipeDisplayPage implements OnInit {
-  recipe: Recipe = new Recipe(null);
+  recipe: Recipe = new Recipe();
+  server: string = ApiUrl;
 
   difficulty_color: Array<string> = [
     "warning",
@@ -27,7 +29,7 @@ export class RecipeDisplayPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private recipeService: RecipeService,
-    private ingrediantService: IngrediantService
+    private ingredientService: IngredientService
   ) {}
 
   ngOnInit() {
@@ -36,42 +38,41 @@ export class RecipeDisplayPage implements OnInit {
         if (this.router.getCurrentNavigation().extras.state.recipe) {
           this.recipe = this.router.getCurrentNavigation().extras.state.recipe;
 
+          //getting diet
+          this.recipeService
+            .getDietFromRecipe(this.recipe)
+            .then(diet => (this.recipe.diet = diet))
+            .catch(err => console.error(err));
+
+          //getting ingrediants with their food
           try {
-            let ingrediants = await this.recipeService.getIngrediantFromRecipe(
+            let ingredients = await this.recipeService.getIngredientFromRecipe(
               this.recipe
             );
-            for (const ingrediant of ingrediants) {
-              let newIngrediant = new Ingredient(ingrediant);
-              let newFood = new Food(null);
+            this.recipe.ingredients = [];
+            for (const ingredient of ingredients) {
+              let newFood = new Food();
               try {
-                newFood = new Food(
-                  await this.ingrediantService.getFoodOfIngrediant(
-                    newIngrediant
-                  )
+                newFood = await this.ingredientService.getFoodOfIngredient(
+                  ingredient
                 );
               } catch (error) {
                 console.error(error);
               }
-              newIngrediant.food = newFood;
-              this.recipe.ingrediants.push(newIngrediant);
+              ingredient.food = newFood;
+              this.recipe.ingredients.push(ingredient);
             }
           } catch (error) {
             console.error(error);
           }
-
-          /* this.recipeService
-            .getIngrediantFromRecipe(this.recipe)
-            .then(ingrediants => {
-              console.log(ingrediants);
-              for (const ingrediant of ingrediants) {     
-                let newIngrediant = new Ingredient(ingrediant);
-                this.recipe.ingrediants.push(new Ingredient(ingrediant));
-              }
-            }); */
         }
       }
     });
 
+    this.displayDifficulty();
+  }
+
+  displayDifficulty() {
     for (const num of [0, 1, 2, 3, 4]) {
       if (this.recipe.difficulty > num) {
         this.difficulty_color[num] = "warning";

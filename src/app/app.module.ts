@@ -15,6 +15,10 @@ import { RouterModule } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
 import { IonicSelectableModule } from "ionic-selectable";
 
+import { Camera } from "@ionic-native/camera/ngx";
+import { File } from "@ionic-native/file/ngx";
+import { WebView } from "@ionic-native/ionic-webview/ngx";
+import { FilePath } from "@ionic-native/file-path/ngx";
 @NgModule({
   declarations: [AppComponent, MenuComponent],
   entryComponents: [],
@@ -29,7 +33,11 @@ import { IonicSelectableModule } from "ionic-selectable";
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Camera,
+    File,
+    WebView,
+    FilePath
   ],
 
   bootstrap: [AppComponent]

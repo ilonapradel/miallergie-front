@@ -9,14 +9,21 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <img [src]="recipe.image" />
+        <img [src]="server + recipe?.image?.path" />
       </ion-col>
       <ion-grid>
         <ion-grid class="headerGrid">
           <ion-row>
             <ion-col align-self-center class="ion-text-center">
               <ion-text>
-                {{recipe.diet.name}}
+                {{recipe?.diet?.name}}
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col align-self-center class="ion-text-center">
+              <ion-text>
+                {{recipe.type}}
               </ion-text>
             </ion-col>
           </ion-row>
@@ -51,7 +58,7 @@
           <ion-list-header>
             <ion-title>Ingrédients</ion-title>
           </ion-list-header>
-          <ion-item *ngFor="let ingredient of recipe.ingrediants">
+          <ion-item *ngFor="let ingredient of recipe.ingredients">
             <b>{{ingredient.quantity}} {{ingredient.unit}} de
               {{ingredient.food.name}}</b>
           </ion-item>
