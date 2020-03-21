@@ -3,8 +3,6 @@ import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 
 export class UtilitiesClass {
-  private api: UsersService;
-
   constructor(public toastController: ToastController, public router: Router) {}
 
   showToastModification() {
@@ -21,6 +19,18 @@ export class UtilitiesClass {
             }
           }
         ]
+      })
+      .then(toast => {
+        toast.present();
+      });
+  }
+
+  showToastSimple(text: string, duration: number, collor: string) {
+    this.toastController
+      .create({
+        message: text,
+        duration: duration,
+        color: collor
       })
       .then(toast => {
         toast.present();
