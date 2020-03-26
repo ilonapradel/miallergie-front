@@ -20,9 +20,7 @@ export class AllergySelectorComponent implements OnInit {
   possibleAllergies: Ingredient[];
 
   constructor() {
-    this.possibleAllergies = [
-     
-    ];
+    this.possibleAllergies = [];
   }
 
   ngOnInit() {}

@@ -41,7 +41,7 @@
         <ion-title>Préférences alimentaires</ion-title>
       </ion-col>
     </ion-row>
-    <app-diet-selector style="width: 100%;" [preferences]="preferences" [disabled]="false"></app-diet-selector>
+    <app-diet-selector style="width: 100%;" [diets]="preferences.diet" [disabled]="false"></app-diet-selector>
     <app-allergy-selector style="width: 100%;" [preferences]="preferences" [enabled]="true">
     </app-allergy-selector>
     <app-intolerance-selector style="width: 100%;" [preferences]="preferences" [enabled]="true">

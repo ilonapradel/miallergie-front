@@ -25,8 +25,7 @@ export class RecipeService {
     let toSave: Recipe = JSON.parse(JSON.stringify(recipe));
     toSave.imageId = undefined;
     toSave.image = undefined;
-    toSave.dietId = recipe.diet.id;
-    toSave.diet = undefined;
+    toSave.diets = undefined;
     toSave.ingredients = undefined;
     return this.http
       .post<Recipe>(this.url + "recipes/", toSave, {
@@ -47,14 +46,14 @@ export class RecipeService {
       .toPromise<Ingredient[]>();
   }
 
-  public getDietFromRecipe(recipe: Recipe): Promise<Diet> {
+  public getDietFromRecipe(recipe: Recipe): Promise<Diet[]> {
     return this.http
-      .get<Diet>(this.url + "recipes/" + recipe.id + "/diet", {
+      .get<Diet[]>(this.url + "recipes/" + recipe.id + "/diet", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
-      .toPromise<Diet>();
+      .toPromise<Diet[]>();
   }
 
   public addIngredientToRecipe(

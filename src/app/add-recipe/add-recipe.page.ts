@@ -28,7 +28,6 @@ export class AddRecipePage implements OnInit {
   //const
   unites: string[] = ["Cuillère à soupe", "g", "cL", "pincées"];
   recipe: Recipe = new Recipe();
-  dietOptions: Diet[] = [];
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
   typeOptions: string[] = ["Entrée", "Plat", "Dessert"];
@@ -37,6 +36,9 @@ export class AddRecipePage implements OnInit {
 
   @ViewChild("ingredientComponent", { static: false })
   ingredientComponent: IonicSelectableComponent;
+
+  @ViewChild("dietComponent", { static: false })
+  dietComponent: IonicSelectableComponent;
 
   diff_name: Array<string> = [
     "warning",
@@ -48,7 +50,6 @@ export class AddRecipePage implements OnInit {
 
   constructor(
     private recipeService: RecipeService,
-    private dietService: DietService,
     private foodService: FoodService,
     private camera: Camera,
     private file: File,
@@ -59,13 +60,6 @@ export class AddRecipePage implements OnInit {
     private ref: ChangeDetectorRef,
     private filePath: FilePath
   ) {
-    this.dietService
-      .getDiets()
-      .then((diets: Diet[]) => {
-        this.dietOptions = diets;
-      })
-      .catch(err => console.log(err));
-
     this.foodService
       .getFoods()
       .then(foods => (this.foodOptions = foods))

@@ -41,7 +41,7 @@ export class RecipeDisplayPage implements OnInit {
           //getting diet
           this.recipeService
             .getDietFromRecipe(this.recipe)
-            .then(diet => (this.recipe.diet = diet))
+            .then(diets => (this.recipe.diets = diets))
             .catch(err => console.error(err));
 
           //getting ingrediants with their food

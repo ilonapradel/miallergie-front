@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Preferences } from "../utilities-class";
+import { Preferences, Diet } from "../utilities-class";
+import { DietService } from "../services/diet.service";
 
 @Component({
   selector: "app-diet-selector",
@@ -7,24 +8,33 @@ import { Preferences } from "../utilities-class";
   styleUrls: ["./diet-selector.component.scss"]
 })
 export class DietSelectorComponent implements OnInit {
-  regimesAlimentaire: string[];
+  dietOptions: Diet[] = [];
 
-  @Input("preferences")
-  userPreferences: Preferences;
+  @Input("diets")
+  diets: Diet[];
 
   @Input("disabled")
   disabled: boolean;
 
-  constructor() {
-    this.regimesAlimentaire = ["Végétarien", "Vegan", "Omnivore"];
+  @Input("multiple")
+  multiple: boolean;
+
+  constructor(private dietService: DietService) {
+    this.dietService
+      .getDiets()
+      .then((d: Diet[]) => {
+        this.dietOptions = d;
+      })
+      .catch(err => console.log(err));
+    console.log(this.dietOptions);
   }
 
   ngOnInit() {
-    console.log(this.userPreferences);
+    console.log(this.diets);
   }
 
   onSelectChange(event: any) {
     console.log("Selected", event);
-    this.userPreferences.diet = event.detail.value;
+    this.diets = event.detail.value;
   }
 }

@@ -12,7 +12,7 @@ export class UsersService {
   private id: string;
   private myUser: User = new User();
   private myUserPreferences: Preferences = {
-    diet: "omnivore",
+    diet: [],
     allergy: [],
     intolerance: ["gluten", "lactose"]
   };
@@ -23,9 +23,7 @@ export class UsersService {
     this.myUser.nonRegisteredFriends = [
       {
         surname: "test",
-        preferences: {
-          diet: "paleo"
-        }
+        preferences: {}
       }
     ];
 
@@ -34,16 +32,12 @@ export class UsersService {
       {
         email: "coucou",
         username: "Lucas",
-        preferences: {
-          diet: "Vegan"
-        }
+        preferences: {}
       },
       {
         email: "blabla",
         username: "Adrien",
-        preferences: {
-          diet: "Omnivore"
-        }
+        preferences: {}
       }
     ];
   }
