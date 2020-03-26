@@ -37,8 +37,7 @@ export class RecipeService {
     let toSave: Recipe = JSON.parse(JSON.stringify(recipe));
     toSave.imageId = undefined;
     toSave.image = undefined;
-    toSave.dietId = recipe.diet.id;
-    toSave.diet = undefined;
+    toSave.diets = undefined;
     toSave.ingredients = undefined;
     return this.http
       .post<Recipe>(this.url + "recipes/", toSave, {
@@ -75,9 +74,9 @@ export class RecipeService {
       .toPromise<Ingredient[]>();
   }
 
-  public getDietFromRecipe(recipe: Recipe): Promise<Diet> {
+  public getDietFromRecipe(recipe: Recipe): Promise<Diet[]> {
     return this.http
-      .get<Diet>(this.url + "recipes/" + recipe.id + "/diet", {
+      .get<Diet[]>(this.url + "recipes/" + recipe.id + "/diet", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
@@ -142,42 +141,3 @@ export class RecipeService {
       .toPromise();
   }
 }
-
-/* export class ApiRecipe {
-  public id?: string;
-  public name: string = "";
-  public difficulty: number = 3;
-  public dietId: string = "";
-  public diet?: Diet;
-  public duration: number = 15;
-  public numberOfPeople: number = 1;
-  public stages: string[] = [];
-  public type: string;
-  public imageId?: string = "";
-  public image?: File;
-
-  constructor(recipe: Recipe) {
-    this.dietId = recipe.diet.id;
-    this.difficulty = recipe.difficulty;
-    this.duration = recipe.duration;
-    this.name = recipe.name;
-    this.numberOfPeople = recipe.numberOfPeople;
-    this.stages = recipe.stages;
-    this.type = recipe.type;
-    this.imageId = recipe.image.id ? recipe.image.id : "";
-  }
-}
-
-export class ApiIngredient {
-  public id: number;
-  public foodId?: string;
-  public recipeId?: string;
-  public quantity?: number = 1;
-  public unit?: string = "g";
-
-  constructor(ingredient: Ingredient) {
-    this.quantity = ingredient.quantity;
-    this.unit = ingredient.unit;
-    this.foodId = ingredient.food.id;
-  }
-} */

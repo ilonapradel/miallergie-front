@@ -69,8 +69,7 @@ export class Recipe {
   public name: string;
   public ingredients: Ingredient[] = [];
   public difficulty: number = 3;
-  public dietId?: string;
-  public diet?: Diet;
+  public diets?: Diet[];
   public duration: number = 15;
   public imageId?: string;
   public image?: File = new File();
@@ -102,7 +101,7 @@ export class User {
 }
 
 export class Preferences {
-  public diet: string;
+  public diet?: Diet[];
   public allergy?: Ingredient[];
   public intolerance?: string[];
 }

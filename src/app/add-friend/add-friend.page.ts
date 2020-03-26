@@ -26,17 +26,13 @@ export class AddFriendPage implements OnInit {
   newUserFriend: User = new User();
 
   constructor(private api: UsersService, public router: Router) {
-    this.possibleAllergies = [
-     
-    ];
+    this.possibleAllergies = [];
 
     this.possibleIntolerances = ["glucose", "gluten", "lactose", "fructose"];
 
     this.preferences = {
-      diet: "vegan",
-      allergy: [
-        
-      ],
+      diet: [],
+      allergy: [],
       intolerance: ["lucas", "lactose"]
     };
   }

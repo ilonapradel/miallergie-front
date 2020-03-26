@@ -1,0 +1,7 @@
+ <ion-item>
+   <ion-label>Régime alimentaire</ion-label>
+   <ion-select [isEnabled]="disabled" (ionChange)="onSelectChange($event)" [value]="diets" [(ngModel)]="diets"
+     [items]="dietOptions" okText="Ok" [isMultiple]="multiple" itemValueField="id" itemTextField="name"
+     cancelText="Annuler">
+   </ion-select>
+ </ion-item>

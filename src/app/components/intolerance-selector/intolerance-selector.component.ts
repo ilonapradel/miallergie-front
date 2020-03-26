@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
-import { Preferences } from "../utilities-class";
+import { Preferences } from "../../utilities-class";
 
 @Component({
   selector: "app-intolerance-selector",

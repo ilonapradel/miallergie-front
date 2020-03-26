@@ -8,6 +8,7 @@ import { AddRecipePageRoutingModule } from "./add-recipe-routing.module";
 
 import { AddRecipePage } from "./add-recipe.page";
 import { IonicSelectableModule } from "ionic-selectable";
+import { ComponentsModule } from "../components/components.module";
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { IonicSelectableModule } from "ionic-selectable";
     FormsModule,
     IonicModule,
     AddRecipePageRoutingModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    ComponentsModule
   ],
   declarations: [AddRecipePage]
 })
