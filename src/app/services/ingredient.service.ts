@@ -1,4 +1,8 @@
-import { ApiUrl } from "./../utilities-class";
+import { ToastController } from "@ionic/angular";
+import { Router } from "@angular/router";
+import { Observable } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { ApiUrl, UtilitiesClass } from "./../utilities-class";
 import { Ingredient, Recipe, Food } from "../utilities-class";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -9,7 +13,14 @@ import { Injectable } from "@angular/core";
 export class IngredientService {
   private url: string = ApiUrl;
 
-  constructor(private http: HttpClient) {}
+  private utilities: UtilitiesClass;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toastController: ToastController
+  ) {
+    this.utilities = new UtilitiesClass(toastController, router);
+  }
 
   public getFoodOfIngredient(ingredient: Ingredient): Promise<Food> {
     return this.http
@@ -18,6 +29,14 @@ export class IngredientService {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
+      .pipe<Food>(
+        catchError<Food, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
+        })
+      )
       .toPromise<Food>();
   }
 }

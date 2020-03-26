@@ -1,7 +1,10 @@
-import { Preferences, Friend } from "./../utilities-class";
+import { UtilitiesClass, Preferences, Friend } from "./../utilities-class";
+import { ToastController } from "@ionic/angular";
+import { Router } from "@angular/router";
+import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { tap } from "rxjs/operators";
+import { tap, catchError } from "rxjs/operators";
 import { User, ApiUrl } from "../utilities-class";
 @Injectable({
   providedIn: "root"
@@ -17,7 +20,14 @@ export class UsersService {
     intolerance: ["gluten", "lactose"]
   };
 
-  constructor(private http: HttpClient) {}
+  private utilities: UtilitiesClass;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toastController: ToastController
+  ) {
+    this.utilities = new UtilitiesClass(toastController, router);
+  }
 
   public init() {
     this.myUser.nonRegisteredFriends = [
@@ -100,6 +110,14 @@ export class UsersService {
       .pipe(
         tap(() => {
           this.setUsername(newUsername);
+        })
+      )
+      .pipe(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
         })
       )
       .toPromise();

@@ -1,4 +1,8 @@
-import { File } from "./../utilities-class";
+import { Observable } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { UtilitiesClass } from "./../utilities-class";
+import { ToastController } from "@ionic/angular";
+import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Recipe, Ingredient, Diet } from "../utilities-class";
@@ -9,7 +13,15 @@ import { ApiUrl } from "../utilities-class";
 })
 export class RecipeService {
   private url: string = ApiUrl;
-  constructor(private http: HttpClient) {}
+
+  private utilities: UtilitiesClass;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toastController: ToastController
+  ) {
+    this.utilities = new UtilitiesClass(toastController, router);
+  }
 
   public getRecipes(filter?: string): Promise<Recipe[]> {
     return this.http
@@ -34,6 +46,14 @@ export class RecipeService {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
+      .pipe<Recipe>(
+        catchError<Recipe, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
+        })
+      )
       .toPromise<Recipe>();
   }
 
@@ -44,6 +64,14 @@ export class RecipeService {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
+      .pipe<Ingredient[]>(
+        catchError<Ingredient[], Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
+        })
+      )
       .toPromise<Ingredient[]>();
   }
 
@@ -54,6 +82,14 @@ export class RecipeService {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
+      .pipe<Diet>(
+        catchError<Diet, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
+        })
+      )
       .toPromise<Diet>();
   }
 
@@ -75,6 +111,14 @@ export class RecipeService {
           }
         }
       )
+      .pipe<Ingredient>(
+        catchError<Ingredient, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
+        })
+      )
       .toPromise<Ingredient>();
   }
 
@@ -87,6 +131,14 @@ export class RecipeService {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
+      .pipe<Recipe>(
+        catchError<Recipe, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return Observable.throw(err.statusText);
+        })
+      )
       .toPromise();
   }
 }
