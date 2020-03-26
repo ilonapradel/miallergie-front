@@ -111,5 +111,4 @@ export class Friend {
   public surname: string;
 }
 
-export const ApiUrl: string = "http://localhost:3000/";
-//export const ApiUrl: string = "http://miallergie.freeboxos.fr:8080/";
+export const ApiUrl: string = "http://miallergie.freeboxos.fr:8080/";
