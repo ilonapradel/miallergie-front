@@ -74,22 +74,22 @@ export class RecipeService {
       .toPromise<Ingredient[]>();
   }
 
-  public getDietFromRecipe(recipe: Recipe): Promise<Diet[]> {
+  public getDietsFromRecipe(recipe: Recipe): Promise<Diet[]> {
     return this.http
-      .get<Diet[]>(this.url + "recipes/" + recipe.id + "/diet", {
+      .get<Diet[]>(this.url + "recipes/" + recipe.id + "/recipe-diets", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token")
         }
       })
-      .pipe<Diet>(
-        catchError<Diet, Observable<never>>((err: any) => {
+      .pipe<Diet[]>(
+        catchError<Diet[], Observable<never>>((err: any) => {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
           return Observable.throw(err.statusText);
         })
       )
-      .toPromise<Diet>();
+      .toPromise<Diet[]>();
   }
 
   public addIngredientToRecipe(

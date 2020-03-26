@@ -40,7 +40,7 @@ export class RecipeDisplayPage implements OnInit {
 
           //getting diet
           this.recipeService
-            .getDietFromRecipe(this.recipe)
+            .getDietsFromRecipe(this.recipe)
             .then(diets => (this.recipe.diets = diets))
             .catch(err => console.error(err));
 
