@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Preferences, Diet } from "../utilities-class";
-import { DietService } from "../services/diet.service";
+import { Preferences, Diet } from "../../utilities-class";
+import { DietService } from "../../services/diet.service";
 
 @Component({
   selector: "app-diet-selector",

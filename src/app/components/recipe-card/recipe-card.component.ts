@@ -1,6 +1,6 @@
 import { Router } from "@angular/router";
 import { NavigationExtras } from "@angular/router";
-import { Recipe } from "./../../utilities-class";
+import { Recipe } from "../../utilities-class";
 import { Component, OnInit, Input } from "@angular/core";
 import { ApiUrl } from "../../utilities-class";
 @Component({

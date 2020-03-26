@@ -1,4 +1,4 @@
-import { RecipeCardComponent } from "./recipe-card/recipe-card.component";
+import { ComponentsModule } from "./../components/components.module";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IonicModule } from "@ionic/angular";
@@ -12,6 +12,7 @@ import { HomePage } from "./home.page";
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     RouterModule.forChild([
       {
         path: "",
@@ -19,6 +20,6 @@ import { HomePage } from "./home.page";
       }
     ])
   ],
-  declarations: [HomePage, RecipeCardComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule {}
