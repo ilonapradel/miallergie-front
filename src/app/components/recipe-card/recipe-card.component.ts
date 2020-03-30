@@ -14,17 +14,7 @@ export class RecipeCardComponent implements OnInit {
 
   server: string = ApiUrl;
 
-  constructor(private router: Router) {}
+  constructor() {}
 
   ngOnInit() {}
-
-  onClickRecipe() {
-    let navigationExtras: NavigationExtras = {
-      state: {
-        recipe: this.recipe
-      }
-    };
-    console.log(navigationExtras);
-    this.router.navigate(["recipe-display"], navigationExtras);
-  }
 }

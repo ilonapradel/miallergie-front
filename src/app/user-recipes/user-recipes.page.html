@@ -1,3 +1,4 @@
 <ion-content>
-  <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+  <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (click)="handleClickOnRecipe(recipe)">
+  </app-recipe-card>
 </ion-content>

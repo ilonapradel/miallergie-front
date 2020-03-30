@@ -140,4 +140,43 @@ export class RecipeService {
       )
       .toPromise();
   }
+
+  public deleteRecipe(recipe: Recipe) {
+    return this.http
+      .delete(
+        this.url +
+          "recipes/" +
+          recipe.id +
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token")
+            }
+          }
+      )
+      .pipe<Recipe>(
+        catchError<Recipe, Observable<never>>((err: any) => {
+          this.catchErrorOnDelete(err);
+          return Observable.throw(err.statusText);
+        })
+      )
+      .toPromise();
+  }
+
+  catchErrorOnDelete(err: any) {
+    if (err.status === 401) {
+      this.utilities.disconnect();
+    } else if (err.status === 403) {
+      this.utilities.showToastSimple(
+        "Une erreur s'est produite : mauvais utilisateur",
+        2000,
+        "danger"
+      );
+    } else if (err.status === 204) {
+      this.utilities.showToastSimple(
+        "La recette a été supprimée avec succès",
+        2000,
+        "success"
+      );
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { NavigationExtras } from "@angular/router";
+import { NavigationExtras, Router } from "@angular/router";
 import { RecipeService } from "./../services/recipe.service";
 import { Recipe } from "./../utilities-class";
 import { Component } from "@angular/core";
@@ -11,7 +11,7 @@ import { Component } from "@angular/core";
 export class HomePage {
   recipes: Recipe[] = [];
 
-  constructor(private recipeService: RecipeService) {
+  constructor(private recipeService: RecipeService, private router: Router) {
     this.recipeService
       .getRecipes(
         "filter[order]=createAt DESC&filter[include][0][relation]=image"
@@ -22,5 +22,15 @@ export class HomePage {
         }
       })
       .catch(err => console.error(err));
+  }
+
+  onClickRecipe(recipe: Recipe) {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        recipe
+      }
+    };
+    console.log(navigationExtras);
+    this.router.navigate(["recipe-display"], navigationExtras);
   }
 }

@@ -25,12 +25,12 @@ export class UtilitiesClass {
       });
   }
 
-  showToastSimple(text: string, duration: number, collor: string) {
+  showToastSimple(text: string, duration: number, color: string) {
     this.toastController
       .create({
         message: text,
-        duration: duration,
-        color: collor
+        duration,
+        color
       })
       .then(toast => {
         toast.present();
