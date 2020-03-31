@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ApiUrl } from "../utilities-class";
 import { catchError } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -34,7 +34,7 @@ export class DietService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Diet[]>();

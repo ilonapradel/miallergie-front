@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
@@ -34,7 +34,7 @@ export class FoodService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Food[]>();

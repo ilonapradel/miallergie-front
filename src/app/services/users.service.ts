@@ -1,7 +1,7 @@
 import { UtilitiesClass, Preferences, Friend } from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap, catchError } from "rxjs/operators";
@@ -111,7 +111,7 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise();

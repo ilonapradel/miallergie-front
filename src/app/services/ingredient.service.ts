@@ -1,6 +1,6 @@
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { ApiUrl, UtilitiesClass } from "./../utilities-class";
 import { Ingredient, Recipe, Food } from "../utilities-class";
@@ -34,7 +34,7 @@ export class IngredientService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Food>();
