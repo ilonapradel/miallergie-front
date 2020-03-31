@@ -34,8 +34,15 @@ export class AuthenticationPage implements OnInit {
         this.router.navigate(["/home"]);
       })
       .catch(err => {
-        console.error(err);
-        this.utilities.showToastSimple(err.error.error.message, 2000, "danger");
+        let err_msg = "Error";
+        try {
+          err_msg = err.message;
+        } catch {}
+        try {
+          err_msg = err.error.error.message;
+        } catch {}
+
+        this.utilities.showToastSimple(err_msg, 2000, "danger");
       });
   }
 }
