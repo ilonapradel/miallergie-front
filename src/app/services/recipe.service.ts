@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { UtilitiesClass } from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
@@ -50,7 +50,7 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Recipe>();
@@ -68,7 +68,7 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Ingredient[]>();
@@ -86,7 +86,7 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Diet[]>();
@@ -115,7 +115,7 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise<Ingredient>();
@@ -135,31 +135,26 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
       .toPromise();
   }
 
-  public deleteRecipe(recipe: Recipe) {
+  public deleteRecipe(recipe: Recipe): Promise<Recipe> {
     return this.http
-      .delete(
-        this.url +
-          "recipes/" +
-          recipe.id +
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token")
-            }
-          }
-      )
+      .delete(this.url + "recipes/" + recipe.id, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
       .pipe<Recipe>(
         catchError<Recipe, Observable<never>>((err: any) => {
           this.catchErrorOnDelete(err);
-          return Observable.throw(err.statusText);
+          return throwError(err);
         })
       )
-      .toPromise();
+      .toPromise<Recipe>();
   }
 
   catchErrorOnDelete(err: any) {
