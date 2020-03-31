@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { Preferences, Diet } from "../../utilities-class";
-import { DietService } from "../../services/diet.service";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import { Diet } from "src/app/utilities-class";
+import { IonicSelectableComponent } from "ionic-selectable";
+import { DietService } from "src/app/services/diet.service";
 
 @Component({
   selector: "app-diet-selector",
@@ -13,11 +14,11 @@ export class DietSelectorComponent implements OnInit {
   @Input("diets")
   diets: Diet[];
 
-  @Input("disabled")
-  disabled: boolean;
+  @Input("enabled")
+  enabled: boolean;
 
-  @Input("multiple")
-  multiple: boolean;
+  @ViewChild("dietComponent", { static: false })
+  dietComponent: IonicSelectableComponent;
 
   constructor(private dietService: DietService) {
     this.dietService
@@ -26,15 +27,16 @@ export class DietSelectorComponent implements OnInit {
         this.dietOptions = d;
       })
       .catch(err => console.log(err));
-    console.log(this.dietOptions);
   }
 
-  ngOnInit() {
-    console.log(this.diets);
+  ngOnInit() {}
+
+  onSelectChange(event: { component: IonicSelectableComponent; value: any }) {
+    this.diets = event.value;
   }
 
-  onSelectChange(event: any) {
-    console.log("Selected", event);
-    this.diets = event.detail.value;
+  deleteDiet(diet: Diet) {
+    this.diets.splice(this.diets.indexOf(diet), 1);
+    this.dietComponent.confirm();
   }
 }

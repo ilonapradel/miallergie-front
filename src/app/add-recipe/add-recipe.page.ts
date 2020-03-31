@@ -71,6 +71,8 @@ export class AddRecipePage implements OnInit {
       .getFoods()
       .then(foods => (this.foodOptions = foods))
       .catch(err => console.error(err));
+
+    this.recipe.diets = [];
   }
 
   ngOnInit() {}
@@ -141,7 +143,7 @@ export class AddRecipePage implements OnInit {
         Promise.all(savedIngredients)
           .then(() => {
             this.utilities.showToastSimple(
-              "Recette sauvegardé !",
+              "Recette sauvegardée !",
               1000,
               "success"
             );

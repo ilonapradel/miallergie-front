@@ -1,3 +1,4 @@
+import { ComponentsModule } from "./../components/components.module";
 import { Preferences, UtilitiesClass } from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
@@ -11,12 +12,6 @@ import { Router } from "@angular/router";
   styleUrls: ["./change-preferences.page.scss"]
 })
 export class ChangePreferencesPage implements OnInit {
-  @ViewChild("allergyComponent", { static: false })
-  allergyComponent: IonicSelectableComponent;
-
-  @ViewChild("intoleranceComponent", { static: false })
-  intoleranceComponent: IonicSelectableComponent;
-
   userPreferences: Preferences;
 
   constructor(private api: UsersService, public router: Router) {

@@ -1,7 +1,29 @@
- <ion-item>
-   <ion-label>Régime alimentaire</ion-label>
-   <ion-select [isEnabled]="disabled" (ionChange)="onSelectChange($event)" [value]="diets" [(ngModel)]="diets"
-     [items]="dietOptions" okText="Ok" [isMultiple]="multiple" itemValueField="id" itemTextField="name"
-     cancelText="Annuler">
-   </ion-select>
- </ion-item>
+<ion-row>
+  <ion-col>
+    <ion-item>
+      <ion-label>Régimes alimentaires</ion-label>
+      <ionic-selectable
+        #dietComponent
+        [isEnabled]="enabled"
+        [(ngModel)]="diets"
+        [items]="dietOptions"
+        itemValueField="id"
+        itemTextField="name"
+        [canSearch]="true"
+        [isMultiple]="true"
+        (onChange)="onSelectChange($event)"
+      >
+      </ionic-selectable>
+    </ion-item>
+  </ion-col>
+</ion-row>
+<ion-row *ngIf="diets.length !== 0">
+  <ion-chip *ngFor="let diet of diets" outline color="secondary">
+    <ion-label>{{ diet.name }}</ion-label>
+    <ion-icon
+      name="close"
+      [disabled]="enabled"
+      (click)="deleteDiet(diet)"
+    ></ion-icon>
+  </ion-chip>
+</ion-row>
