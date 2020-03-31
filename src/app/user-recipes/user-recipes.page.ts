@@ -1,9 +1,10 @@
+import { UtilitiesClass } from "./../utilities-class";
 import { Router, NavigationExtras } from "@angular/router";
 import { UsersService } from "./../services/users.service";
 import { Component, OnInit } from "@angular/core";
 import { Recipe, User } from "../utilities-class";
 import { RecipeService } from "../services/recipe.service";
-import { ActionSheetController } from "@ionic/angular";
+import { ActionSheetController, ToastController } from "@ionic/angular";
 
 @Component({
   selector: "app-user-recipes",
@@ -13,16 +14,24 @@ import { ActionSheetController } from "@ionic/angular";
 export class UserRecipesPage implements OnInit {
   recipes: Recipe[] = [];
   user: User;
+  private utilities: UtilitiesClass;
 
   constructor(
     private recipeService: RecipeService,
     private userService: UsersService,
     private router: Router,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    private toastController: ToastController
   ) {
-    this.user = this.userService.getUser();
+    this.utilities = new UtilitiesClass(toastController, router);
 
-    const filter = "?filter[where][ownerUserId]=" + this.user.id;
+    this.user = this.userService.getUser();
+    console.log({ user: this.user });
+
+    const filter =
+      "filter[where][ownerUserId]=" +
+      this.user.id +
+      "&filter[include][0][relation]=image";
 
     this.recipeService
       .getRecipes(filter)
@@ -56,7 +65,25 @@ export class UserRecipesPage implements OnInit {
           text: "Supprimer",
           role: "destructive",
           handler: () => {
-            this.deleteRecipe(recipe);
+            console.log({ recipe: recipe });
+            this.deleteRecipe(recipe)
+              .then((recipe: Recipe) => {
+                this.utilities.showToastSimple(
+                  "Recette suprimmé !",
+                  1000,
+                  "success"
+                );
+              })
+              .catch(err => {
+                let err_msg = "Error";
+                try {
+                  err_msg = err.message;
+                } catch {}
+                try {
+                  err_msg = err.error.error.message;
+                } catch {}
+                this.utilities.showToastSimple(err_msg, 2000, "danger");
+              });
           }
         },
         {
@@ -89,6 +116,6 @@ export class UserRecipesPage implements OnInit {
   }
 
   deleteRecipe(recipe: Recipe) {
-    this.recipeService.deleteRecipe(recipe);
+    return this.recipeService.deleteRecipe(recipe);
   }
 }
