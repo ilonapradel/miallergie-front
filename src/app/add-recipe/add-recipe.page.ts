@@ -4,11 +4,12 @@ import { File } from "@ionic-native/file/ngx";
 import {
   Platform,
   LoadingController,
-  ActionSheetController
+  ActionSheetController,
+  ToastController
 } from "@ionic/angular";
 import { FoodService } from "./../services/food.service";
 import { DietService } from "./../services/diet.service";
-import { Recipe, Diet, Food } from "./../utilities-class";
+import { Recipe, Diet, Food, UtilitiesClass } from "./../utilities-class";
 import { RecipeService } from "./../services/recipe.service";
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
@@ -18,6 +19,7 @@ import {
   CameraOptions,
   Camera
 } from "@ionic-native/camera/ngx";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-add-recipe",
@@ -33,6 +35,7 @@ export class AddRecipePage implements OnInit {
   typeOptions: string[] = ["Entrée", "Plat", "Dessert"];
   correctPath: string;
   currentName: string;
+  private utilities: UtilitiesClass;
 
   @ViewChild("ingredientComponent", { static: false })
   ingredientComponent: IonicSelectableComponent;
@@ -58,8 +61,12 @@ export class AddRecipePage implements OnInit {
     private plt: Platform,
     private loadingController: LoadingController,
     private ref: ChangeDetectorRef,
-    private filePath: FilePath
+    private filePath: FilePath,
+    private router: Router,
+    private toastController: ToastController
   ) {
+    this.utilities = new UtilitiesClass(toastController, router);
+
     this.foodService
       .getFoods()
       .then(foods => (this.foodOptions = foods))
@@ -117,13 +124,51 @@ export class AddRecipePage implements OnInit {
                 .addImageToRecipe(savedRecipe, data, this.currentName)
                 .then(res => console.log(res))
                 .catch(err => console.error(err));
+            })
+            .catch(err => {
+              let err_msg = "Error lors de la sauvegarde de l'image";
+              try {
+                err_msg = err.message;
+              } catch {}
+              try {
+                err_msg = err.error.error.message;
+              } catch {}
+
+              this.utilities.showToastSimple(err_msg, 2000, "danger");
             });
         }
 
-        Promise.all(savedIngredients).catch(err => console.error(err));
+        Promise.all(savedIngredients)
+          .then(() => {
+            this.utilities.showToastSimple(
+              "Recette sauvegardé !",
+              1000,
+              "success"
+            );
+          })
+          .catch(err => {
+            let err_msg = "Error lors de la sauvegarde des ingrédiants";
+            try {
+              err_msg = err.message;
+            } catch {}
+            try {
+              err_msg = err.error.error.message;
+            } catch {}
+
+            this.utilities.showToastSimple(err_msg, 2000, "danger");
+          });
       })
       .catch(err => {
         console.error(err);
+        let err_msg = "Error lors de la sauvegarde de la recette";
+        try {
+          err_msg = err.message;
+        } catch {}
+        try {
+          err_msg = err.error.error.message;
+        } catch {}
+
+        this.utilities.showToastSimple(err_msg, 2000, "danger");
       });
   }
 
