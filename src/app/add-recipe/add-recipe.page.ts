@@ -147,6 +147,7 @@ export class AddRecipePage implements OnInit {
               1000,
               "success"
             );
+            this.router.navigate(["/home"]);
           })
           .catch(err => {
             let err_msg = "Error lors de la sauvegarde des ingrédiants";
