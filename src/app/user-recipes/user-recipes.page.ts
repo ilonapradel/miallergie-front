@@ -26,21 +26,7 @@ export class UserRecipesPage implements OnInit {
     this.utilities = new UtilitiesClass(toastController, router);
 
     this.user = this.userService.getUser();
-    console.log({ user: this.user });
-
-    const filter =
-      "filter[where][ownerUserId]=" +
-      this.user.id +
-      "&filter[include][0][relation]=image";
-
-    this.recipeService
-      .getRecipes(filter)
-      .then(recipes => {
-        for (const recipe of recipes) {
-          this.recipes.push(recipe);
-        }
-      })
-      .catch(err => console.error(err));
+    this.reload();
   }
 
   ngOnInit(): void {}
@@ -59,6 +45,7 @@ export class UserRecipesPage implements OnInit {
           text: "Modifier",
           handler: () => {
             this.updateRecipe(recipe);
+            this.reload();
           }
         },
         {
@@ -73,6 +60,7 @@ export class UserRecipesPage implements OnInit {
                   1000,
                   "success"
                 );
+                this.reload();
               })
               .catch(err => {
                 let err_msg = "Error";
@@ -117,5 +105,22 @@ export class UserRecipesPage implements OnInit {
 
   deleteRecipe(recipe: Recipe) {
     return this.recipeService.deleteRecipe(recipe);
+  }
+
+  reload() {
+    const filter =
+      "filter[where][ownerUserId]=" +
+      this.user.id +
+      "&filter[include][0][relation]=image";
+
+    this.recipeService
+      .getRecipes(filter)
+      .then(recipes => {
+        this.recipes = [];
+        for (const recipe of recipes) {
+          this.recipes.push(recipe);
+        }
+      })
+      .catch(err => console.error(err));
   }
 }
