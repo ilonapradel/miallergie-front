@@ -16,7 +16,7 @@
           <ion-row>
             <ion-col align-self-center class="ion-text-center">
               <ion-text>
-                {{recipe?.diets}}
+                <div *ngFor="let diet of recipe.diets">{{diet.name}}</div>
               </ion-text>
             </ion-col>
           </ion-row>

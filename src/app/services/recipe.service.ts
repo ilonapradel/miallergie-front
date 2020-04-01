@@ -74,22 +74,54 @@ export class RecipeService {
       .toPromise<Ingredient[]>();
   }
 
-  public getDietsFromRecipe(recipe: Recipe): Promise<Diet[]> {
+  public getDietsFromRecipe(
+    recipe: Recipe
+  ): Promise<[{ id: string; dietId: string; recipeId: string }]> {
     return this.http
-      .get<Diet[]>(this.url + "recipes/" + recipe.id + "/recipe-diets", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
+      .get<[{ id: string; dietId: string; recipeId: string }]>(
+        this.url + "recipes/" + recipe.id + "/recipe-diets",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
         }
-      })
-      .pipe<Diet[]>(
-        catchError<Diet[], Observable<never>>((err: any) => {
+      )
+      .pipe<[{ id: string; dietId: string; recipeId: string }]>(
+        catchError<
+          [{ id: string; dietId: string; recipeId: string }],
+          Observable<never>
+        >((err: any) => {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
           return throwError(err);
         })
       )
-      .toPromise<Diet[]>();
+      .toPromise<[{ id: string; dietId: string; recipeId: string }]>();
+  }
+
+  public addDietToRecipe(recipe: Recipe, diet: Diet): Promise<Diet> {
+    return this.http
+      .post<Diet>(
+        this.url + "recipes/" + recipe.id + "/recipe-diets",
+        {
+          dietId: diet.id
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        }
+      )
+      .pipe<Diet>(
+        catchError<Diet, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<Diet>();
   }
 
   public addIngredientToRecipe(

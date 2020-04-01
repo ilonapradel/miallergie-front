@@ -1,3 +1,4 @@
+import { DietService } from "src/app/services/diet.service";
 import { IngredientService } from "./../services/ingredient.service";
 import { FoodService } from "./../services/food.service";
 import { Food } from "./../utilities-class";
@@ -29,7 +30,8 @@ export class RecipeDisplayPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private recipeService: RecipeService,
-    private ingredientService: IngredientService
+    private ingredientService: IngredientService,
+    private dietService: DietService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,13 @@ export class RecipeDisplayPage implements OnInit {
           //getting diet
           this.recipeService
             .getDietsFromRecipe(this.recipe)
-            .then(diets => (this.recipe.diets = diets))
+            .then(async linkDiets => {
+              this.recipe.diets = [];
+              for (const linkDiet of linkDiets) {
+                let diet = await this.dietService.getDiet(linkDiet.dietId);
+                this.recipe.diets.push(diet);
+              }
+            })
             .catch(err => console.error(err));
 
           //getting ingrediants with their food

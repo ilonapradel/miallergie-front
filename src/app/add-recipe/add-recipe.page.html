@@ -44,6 +44,7 @@
             style="width: 100%;"
             [enabled]="true"
             [diets]="recipe.diets"
+            (result)="onChangeDiets($event)"
           >
           </app-diet-selector>
           <ion-item>

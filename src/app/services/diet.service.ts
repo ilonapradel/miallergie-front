@@ -39,4 +39,22 @@ export class DietService {
       )
       .toPromise<Diet[]>();
   }
+
+  public getDiet(id: string): Promise<Diet> {
+    return this.http
+      .get<Diet>(this.url + "diets/" + id, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+      .pipe<Diet>(
+        catchError<Diet, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<Diet>();
+  }
 }
