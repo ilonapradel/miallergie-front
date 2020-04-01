@@ -107,9 +107,9 @@ export class AddRecipePage implements OnInit {
     this.recipeService
       .addRecipe(recipe)
       .then((savedRecipe: Recipe) => {
-        let savedIngredients: Promise<Ingredient>[] = [];
+        let saveProm: Promise<any>[] = [];
         for (const ingredient of this.recipe.ingredients) {
-          savedIngredients.push(
+          saveProm.push(
             this.recipeService.addIngredientToRecipe(savedRecipe, ingredient)
           );
         }
@@ -122,10 +122,13 @@ export class AddRecipePage implements OnInit {
             .readAsArrayBuffer(this.correctPath, this.currentName)
             .then((buffer: ArrayBuffer) => {
               let data = new Blob([buffer], { type: "image/jpeg" });
-              this.recipeService
-                .addImageToRecipe(savedRecipe, data, this.currentName)
-                .then(res => console.log(res))
-                .catch(err => console.error(err));
+              saveProm.push(
+                this.recipeService.addImageToRecipe(
+                  savedRecipe,
+                  data,
+                  this.currentName
+                )
+              );
             })
             .catch(err => {
               let err_msg = "Error lors de la sauvegarde de l'image";
@@ -140,7 +143,13 @@ export class AddRecipePage implements OnInit {
             });
         }
 
-        Promise.all(savedIngredients)
+        //save diets
+        for (const diet of this.recipe.diets) {
+          let prom = this.recipeService.addDietToRecipe(savedRecipe, diet);
+          saveProm.push(prom);
+        }
+
+        Promise.all(saveProm)
           .then(() => {
             this.utilities.showToastSimple(
               "Recette sauvegardée !",
@@ -150,6 +159,7 @@ export class AddRecipePage implements OnInit {
             this.router.navigate(["/home"]);
           })
           .catch(err => {
+            console.error(err);
             let err_msg = "Error lors de la sauvegarde des ingrédiants";
             try {
               err_msg = err.message;
@@ -249,5 +259,10 @@ export class AddRecipePage implements OnInit {
         ); */
       }
     });
+  }
+
+  onChangeDiets(diets: Diet[]) {
+    this.recipe.diets = diets;
+    console.log(this.recipe);
   }
 }

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  Output,
+  EventEmitter
+} from "@angular/core";
 import { Diet } from "src/app/utilities-class";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { DietService } from "src/app/services/diet.service";
@@ -17,6 +24,8 @@ export class DietSelectorComponent implements OnInit {
   @Input("enabled")
   enabled: boolean;
 
+  @Output() result = new EventEmitter<Diet[]>();
+
   @ViewChild("dietComponent", { static: false })
   dietComponent: IonicSelectableComponent;
 
@@ -33,6 +42,7 @@ export class DietSelectorComponent implements OnInit {
 
   onSelectChange(event: { component: IonicSelectableComponent; value: any }) {
     this.diets = event.value;
+    this.result.emit(this.diets);
   }
 
   deleteDiet(diet: Diet) {
