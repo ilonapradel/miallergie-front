@@ -10,7 +10,12 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button fill="clear" expand="full" color="light" (click)="selectImage()">
+        <ion-button
+          fill="clear"
+          expand="full"
+          color="light"
+          (click)="selectImage()"
+        >
           <ion-icon slot="start" name="camera"></ion-icon>
           Select Image
         </ion-button>
@@ -19,33 +24,67 @@
         <ion-list>
           <ion-item>
             <ion-label position="floating">Type de plat</ion-label>
-            <ion-select okText="Valider" name="typeSelected" cancelText="Annuler" [(ngModel)]="recipe.type">
-              <ion-select-option *ngFor="let type of typeOptions" [value]="type">{{type}}</ion-select-option>
+            <ion-select
+              okText="Valider"
+              name="typeSelected"
+              cancelText="Annuler"
+              [(ngModel)]="recipe.type"
+            >
+              <ion-select-option *ngFor="let type of typeOptions" [value]="type"
+                >{{type}}</ion-select-option
+              >
             </ion-select>
           </ion-item>
-          <app-diet-selector style="width: 100%;" [disabled]="false" [multiple]="true"></app-diet-selector>
+          <app-diet-selector
+            style="width: 100%;"
+            [enabled]="false"
+            [diets]="recipe.diets"
+          ></app-diet-selector>
           <ion-item>
             <ion-label position="floating">Durée en minutes</ion-label>
-            <ion-input type="number" inputmode="numeric" min="0" [(ngModel)]="recipe.duration"></ion-input>
+            <ion-input
+              type="number"
+              inputmode="numeric"
+              min="0"
+              [(ngModel)]="recipe.duration"
+            ></ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Difficulté</ion-label>
-            <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" size="large" name="trophy" [(color)]="diff_name[num]"
-              (click)="clickOnDifficulty(num)">
+            <ion-icon
+              *ngFor="let num of [0, 1, 2, 3, 4]"
+              size="large"
+              name="trophy"
+              [(color)]="diff_name[num]"
+              (click)="clickOnDifficulty(num)"
+            >
             </ion-icon>
           </ion-item>
           <ion-item>
             <ion-label position="floating">Nombre de personnes</ion-label>
-            <ion-input type="number" inputmode="numeric" min="1" [(ngModel)]="recipe.numberOfPeople"></ion-input>
+            <ion-input
+              type="number"
+              inputmode="numeric"
+              min="1"
+              [(ngModel)]="recipe.numberOfPeople"
+            ></ion-input>
           </ion-item>
         </ion-list>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ionic-selectable #ingredientComponent placeholder="Ingrédients" [(ngModel)]="selectedFoodOptions"
-          [items]="foodOptions" itemValueField="id" itemTextField="name" [canSearch]="true" [isMultiple]="true"
-          (onChange)="onIngredientChange($event)">
+        <ionic-selectable
+          #ingredientComponent
+          placeholder="Ingrédients"
+          [(ngModel)]="selectedFoodOptions"
+          [items]="foodOptions"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          [isMultiple]="true"
+          (onChange)="onIngredientChange($event)"
+        >
         </ionic-selectable>
       </ion-col>
     </ion-row>
@@ -66,11 +105,22 @@
           <ion-row *ngFor="let ingredient of recipe.ingredients">
             <ion-col>{{ingredient.food.name}}</ion-col>
             <ion-col>
-              <ion-input [(ngModel)]="ingredient.quantity" type="number" inputmode="decimal" min="0"></ion-input>
+              <ion-input
+                [(ngModel)]="ingredient.quantity"
+                type="number"
+                inputmode="decimal"
+                min="0"
+              ></ion-input>
             </ion-col>
             <ion-col>
-              <ion-select [(ngModel)]="ingredient.unit" okText="Valider" cancelText="Annuler">
-                <ion-select-option *ngFor="let unite of unites">{{unite}}</ion-select-option>
+              <ion-select
+                [(ngModel)]="ingredient.unit"
+                okText="Valider"
+                cancelText="Annuler"
+              >
+                <ion-select-option *ngFor="let unite of unites"
+                  >{{unite}}</ion-select-option
+                >
               </ion-select>
             </ion-col>
           </ion-row>
@@ -87,12 +137,19 @@
       <ion-col>
         <ion-item>
           <ion-label position="floating">Nombre d'étapes</ion-label>
-          <ion-input (ionChange)="onChangeNbStages($event)" [value]="recipe.stages.length" type="number"
-            inputmode="numeric" min="0"></ion-input>
+          <ion-input
+            (ionChange)="onChangeNbStages($event)"
+            [value]="recipe.stages.length"
+            type="number"
+            inputmode="numeric"
+            min="0"
+          ></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let stage of recipe.stages ;let index = index;trackBy:trackByIndex;">
+    <ion-row
+      *ngFor="let stage of recipe.stages ;let index = index;trackBy:trackByIndex;"
+    >
       <ion-col>
         <ion-label>Etape {{index + 1}}</ion-label>
         <ion-input type="text" [(ngModel)]="recipe.stages[index]"></ion-input>

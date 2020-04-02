@@ -101,7 +101,7 @@ export class User {
 }
 
 export class Preferences {
-  public diet?: Diet[];
+  public diets?: Diet[];
   public allergy?: Ingredient[];
   public intolerance?: string[];
 }

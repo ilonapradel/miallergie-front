@@ -9,7 +9,11 @@
       <ion-col>
         <ion-item>
           <ion-label position="floating">Email de votre ami</ion-label>
-          <ion-input [(ngModel)]="newUserFriend.email" type="text" min="3"></ion-input>
+          <ion-input
+            [(ngModel)]="newUserFriend.email"
+            type="text"
+            min="3"
+          ></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -32,7 +36,11 @@
       <ion-col>
         <ion-item>
           <ion-label position="floating">Surnom de votre ami</ion-label>
-          <ion-input [(ngModel)]="newFriend.surname" type="text" min="3"></ion-input>
+          <ion-input
+            [(ngModel)]="newFriend.surname"
+            type="text"
+            min="3"
+          ></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -41,10 +49,22 @@
         <ion-title>Préférences alimentaires</ion-title>
       </ion-col>
     </ion-row>
-    <app-diet-selector style="width: 100%;" [diets]="preferences.diet" [disabled]="false"></app-diet-selector>
-    <app-allergy-selector style="width: 100%;" [preferences]="preferences" [enabled]="true">
+    <app-diet-selector
+      style="width: 100%;"
+      [diets]="preferences.diets"
+      [enabled]="false"
+    ></app-diet-selector>
+    <app-allergy-selector
+      style="width: 100%;"
+      [preferences]="preferences"
+      [enabled]="true"
+    >
     </app-allergy-selector>
-    <app-intolerance-selector style="width: 100%;" [preferences]="preferences" [enabled]="true">
+    <app-intolerance-selector
+      style="width: 100%;"
+      [preferences]="preferences"
+      [enabled]="true"
+    >
     </app-intolerance-selector>
     <ion-row>
       <ion-col class="ion-text-center">
@@ -52,5 +72,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
 </ion-content>

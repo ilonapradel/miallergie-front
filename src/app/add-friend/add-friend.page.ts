@@ -31,7 +31,7 @@ export class AddFriendPage implements OnInit {
     this.possibleIntolerances = ["glucose", "gluten", "lactose", "fructose"];
 
     this.preferences = {
-      diet: [],
+      diets: [],
       allergy: [],
       intolerance: ["lucas", "lactose"]
     };
