@@ -36,11 +36,8 @@
           </ion-row>
           <ion-row>
             <ion-col class="ion-text-center">
-              <ion-icon
-                *ngFor="let num of [0, 1, 2, 3, 4]"
-                name="trophy"
-                [color]="recipe.difficulty>num?'warning':'light'"
-              >
+              <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" name="trophy"
+                [color]="recipe.difficulty>num?'warning':'light'">
               </ion-icon>
             </ion-col>
           </ion-row>
@@ -62,10 +59,8 @@
             <ion-title>Ingrédients</ion-title>
           </ion-list-header>
           <ion-item *ngFor="let ingredient of recipe.ingredients">
-            <b
-              >{{ingredient.quantity}} {{ingredient.unit}} de
-              {{ingredient.food.name}}</b
-            >
+            <b>{{ingredient.quantity}} {{ingredient.unit}} de
+              {{ingredient.food.name}}</b>
           </ion-item>
         </ion-list>
       </ion-col>
@@ -79,8 +74,7 @@
     <ion-row *ngFor="let stage of recipe.stages">
       <ion-col>
         <p>
-          <ion-text color="secondary"
-            >{{recipe.stages.indexOf(stage)+1}}.
+          <ion-text color="secondary">{{recipe.stages.indexOf(stage)+1}}.
           </ion-text>
           <ion-text>
             {{stage}}
@@ -89,13 +83,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon
-        name="pencil-sharp"
-        routerLink="/edit-recipe"
-        routerDirection="forward"
-      ></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
