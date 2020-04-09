@@ -1,3 +1,5 @@
+import { FormsModule } from "@angular/forms";
+import { SetRecipeComponent } from "./set-recipe/set-recipe.component";
 import { DietSelectorComponent } from "./diet-selector/diet-selector.component";
 import { IntoleranceSelectorComponent } from "./intolerance-selector/intolerance-selector.component";
 import { IonicSelectableModule } from "ionic-selectable";
@@ -12,14 +14,16 @@ import { RecipeCardComponent } from "./recipe-card/recipe-card.component";
     AllergySelectorComponent,
     IntoleranceSelectorComponent,
     DietSelectorComponent,
-    RecipeCardComponent
+    RecipeCardComponent,
+    SetRecipeComponent
   ],
-  imports: [CommonModule, IonicModule, IonicSelectableModule],
+  imports: [CommonModule, IonicModule, IonicSelectableModule, FormsModule],
   exports: [
     AllergySelectorComponent,
     IntoleranceSelectorComponent,
     DietSelectorComponent,
-    RecipeCardComponent
+    RecipeCardComponent,
+    SetRecipeComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -2,8 +2,8 @@
   <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (click)="onClickRecipe(recipe)"></app-recipe-card>
   <div style="height: 50px;"></div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="add" routerLink="/add-recipe" routerDirection="forward"></ion-icon>
+    <ion-fab-button routerLink="/add-recipe" routerDirection="forward">
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
