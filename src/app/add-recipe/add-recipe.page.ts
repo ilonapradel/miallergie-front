@@ -32,6 +32,7 @@ export class AddRecipePage implements OnInit {
   recipe: Recipe = new Recipe();
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
+  previouslySelectedFoodOptions: Food[] = [];
   typeOptions: string[] = ["Entrée", "Plat", "Dessert"];
   correctPath: string;
   currentName: string;
@@ -81,11 +82,17 @@ export class AddRecipePage implements OnInit {
     component: IonicSelectableComponent;
     value: Food[];
   }) {
-    for (const food of event.value) {
-      let ingredient = new Ingredient();
-      ingredient.food = food;
-      this.recipe.ingredients.push(ingredient);
+    console.log(this.selectedFoodOptions);
+
+    for (const food of this.selectedFoodOptions) {
+      if (this.previouslySelectedFoodOptions.indexOf(food) === -1) {
+        const ingredient = new Ingredient();
+        ingredient.food = food;
+        this.recipe.ingredients.push(ingredient);
+      }
     }
+
+    this.previouslySelectedFoodOptions = this.selectedFoodOptions;
   }
 
   trackByIndex(index: number, obj: any): any {
@@ -188,7 +195,7 @@ export class AddRecipePage implements OnInit {
   onChangeNbStages(event: { detail: { value: number } }) {
     console.log(event);
     if (event && event.detail && event.detail.value) {
-      let nb = event.detail.value;
+      const nb = event.detail.value;
       if (nb > this.recipe.stages.length) {
         for (let i = this.recipe.stages.length; i < nb; i++) {
           this.recipe.stages.push("");
@@ -264,5 +271,17 @@ export class AddRecipePage implements OnInit {
   onChangeDiets(diets: Diet[]) {
     this.recipe.diets = diets;
     console.log(this.recipe);
+  }
+
+  deleteIngredient(ingredient: Ingredient): void {
+    this.recipe.ingredients.splice(
+      this.recipe.ingredients.indexOf(ingredient),
+      1
+    );
+    this.selectedFoodOptions.splice(
+      this.selectedFoodOptions.indexOf(ingredient.food),
+      1
+    );
+    this.ingredientComponent.confirm();
   }
 }
