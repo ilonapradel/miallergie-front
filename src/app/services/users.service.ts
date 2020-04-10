@@ -1,4 +1,10 @@
-import { UtilitiesClass, Preferences, Friend } from "./../utilities-class";
+import {
+  UtilitiesClass,
+  Preferences,
+  Friend,
+  Diet,
+  Ingredient
+} from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { Observable, throwError } from "rxjs";
@@ -17,7 +23,7 @@ export class UsersService {
   private myUserPreferences: Preferences = {
     diets: [],
     allergy: [],
-    intolerance: ["gluten", "lactose"]
+    intolerance: []
   };
 
   private utilities: UtilitiesClass;
@@ -189,5 +195,47 @@ export class UsersService {
   public addNonRegisteredFriend(newFriend: Friend) {
     this.myUser.nonRegisteredFriends.push(newFriend);
     console.log("addNonRegF", this.myUser.nonRegisteredFriends);
+  }
+
+  public saveUserPreferences(newPreferences: Preferences) {
+    this.saveDiets(newPreferences.diets);
+    this.saveIntolerances(newPreferences.intolerance);
+    this.saveAllergies(newPreferences.allergy);
+  }
+
+  saveDiets(newDiets: Diet[]) {
+    for (const diet of newDiets) {
+      this.http
+        .post(this.url + "users/" + this.id + "user-diets", diet.id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        })
+        .toPromise();
+    }
+  }
+
+  saveIntolerances(newIntolerances: Ingredient[]) {
+    for (const intol of newIntolerances) {
+      this.http
+        .post(this.url + "users/" + this.id + "user-intolerances", intol.id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        })
+        .toPromise();
+    }
+  }
+
+  saveAllergies(newAllergies: Ingredient[]) {
+    for (const allergie of newAllergies) {
+      this.http
+        .post(this.url + "users/" + this.id + "user-allergies", allergie.id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token")
+          }
+        })
+        .toPromise();
+    }
   }
 }

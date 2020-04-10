@@ -103,7 +103,7 @@ export class User {
 export class Preferences {
   public diets?: Diet[];
   public allergy?: Ingredient[];
-  public intolerance?: string[];
+  public intolerance?: Ingredient[];
 }
 
 export class Friend {

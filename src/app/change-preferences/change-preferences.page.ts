@@ -22,7 +22,7 @@ export class ChangePreferencesPage implements OnInit {
 
   savePreferences() {
     //On renvoie vers l'api & le back (TODO)
-    this.api.changeUserPreferences(this.userPreferences);
+    this.api.saveUserPreferences(this.userPreferences);
     this.router.navigate(["/profile"]);
   }
 }
