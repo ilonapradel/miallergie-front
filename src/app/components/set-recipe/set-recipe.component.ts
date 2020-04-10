@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import {
   Recipe,
   Food,
@@ -22,6 +22,8 @@ import {
 import { FilePath } from "@ionic-native/file-path/ngx";
 import { Router } from "@angular/router";
 import { File } from "@ionic-native/file/ngx";
+import { IngredientService } from "src/app/services/ingredient.service";
+import { DietService } from "src/app/services/diet.service";
 
 @Component({
   selector: "app-set-recipe",
@@ -29,11 +31,16 @@ import { File } from "@ionic-native/file/ngx";
   styleUrls: ["./set-recipe.component.scss"]
 })
 export class SetRecipeComponent implements OnInit {
+  @Input()
+  recipe: Recipe;
+
+  @Input()
+  toEdit: boolean;
+
   //const
-  unites: string[] = ["Cuillère à soupe", "g", "cL", "pincées"];
-  recipe: Recipe = new Recipe();
+  unites: string[] = ["Cuillère à soupe", "g", "cL", "pincées"]; // TODO gérer avec le WS
   foodOptions: Food[] = [];
-  selectedFoodOptions: Food[];
+  selectedFoodOptions: Food[] = [];
   previouslySelectedFoodOptions: Food[] = [];
   typeOptions: string[] = ["Entrée", "Plat", "Dessert"];
   correctPath: string;
@@ -62,7 +69,9 @@ export class SetRecipeComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     private plt: Platform,
     private filePath: FilePath,
-    private router: Router
+    private router: Router,
+    private ingredientService: IngredientService,
+    private dietService: DietService
   ) {
     this.utilities = new UtilitiesClass(new ToastController(), router);
 
@@ -70,11 +79,17 @@ export class SetRecipeComponent implements OnInit {
       .getFoods()
       .then(foods => (this.foodOptions = foods))
       .catch(err => console.error(err));
-
-    this.recipe.diets = [];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.recipe);
+    this.recipe.diets = [];
+
+    if (this.toEdit) {
+      this.getIngredientFromRecipe();
+      this.getDietFromRecipe();
+    }
+  }
 
   trackByIndex(index: number, obj: any): any {
     return index;
@@ -96,46 +111,12 @@ export class SetRecipeComponent implements OnInit {
       .addRecipe(this.recipe)
       .then((savedRecipe: Recipe) => {
         const saveProm: Promise<any>[] = [];
-        for (const ingredient of this.recipe.ingredients) {
-          saveProm.push(
-            this.recipeService.addIngredientToRecipe(savedRecipe, ingredient)
-          );
-        }
 
-        console.log("Sauvagarde de ", this.currentName, this.correctPath);
+        console.log("Sauvegarde de ", this.currentName, this.correctPath);
 
-        if (this.correctPath && this.currentName) {
-          //save image if needed
-          this.file
-            .readAsArrayBuffer(this.correctPath, this.currentName)
-            .then((buffer: ArrayBuffer) => {
-              let data = new Blob([buffer], { type: "image/jpeg" });
-              saveProm.push(
-                this.recipeService.addImageToRecipe(
-                  savedRecipe,
-                  data,
-                  this.currentName
-                )
-              );
-            })
-            .catch(err => {
-              let err_msg = "Error lors de la sauvegarde de l'image";
-              try {
-                err_msg = err.message;
-              } catch {}
-              try {
-                err_msg = err.error.error.message;
-              } catch {}
-
-              this.utilities.showToastSimple(err_msg, 2000, "danger");
-            });
-        }
-
-        //save diets
-        for (const diet of this.recipe.diets) {
-          let prom = this.recipeService.addDietToRecipe(savedRecipe, diet);
-          saveProm.push(prom);
-        }
+        this.saveIngredients(saveProm, savedRecipe);
+        this.saveDiets(saveProm, savedRecipe);
+        this.saveImage(saveProm, savedRecipe);
 
         Promise.all(saveProm)
           .then(() => {
@@ -147,30 +128,62 @@ export class SetRecipeComponent implements OnInit {
             this.router.navigate(["/home"]);
           })
           .catch(err => {
-            console.error(err);
-            let err_msg = "Error lors de la sauvegarde des ingrédiants";
-            try {
-              err_msg = err.message;
-            } catch {}
-            try {
-              err_msg = err.error.error.message;
-            } catch {}
-
-            this.utilities.showToastSimple(err_msg, 2000, "danger");
+            this.catchSavingError(err, " des ingrédients");
           });
       })
       .catch(err => {
-        console.error(err);
-        let err_msg = "Error lors de la sauvegarde de la recette";
-        try {
-          err_msg = err.message;
-        } catch {}
-        try {
-          err_msg = err.error.error.message;
-        } catch {}
-
-        this.utilities.showToastSimple(err_msg, 2000, "danger");
+        this.catchSavingError(err, " de la recette");
       });
+  }
+
+  catchSavingError(err: any, message: string) {
+    console.error(err);
+    let errMsg = "Erreur lors de la sauvegarde" + message;
+    try {
+      errMsg = err.message;
+    } catch {}
+    try {
+      errMsg = err.error.error.message;
+    } catch {}
+
+    this.utilities.showToastSimple(errMsg, 2000, "danger");
+  }
+
+  saveDiets(saveProm: Promise<any>[], savedRecipe: Recipe) {
+    //save diets
+    for (const diet of this.recipe.diets) {
+      const prom = this.recipeService.addDietToRecipe(savedRecipe, diet);
+      saveProm.push(prom);
+    }
+  }
+
+  saveIngredients(saveProm: Promise<any>[], savedRecipe: Recipe) {
+    for (const ingredient of this.recipe.ingredients) {
+      saveProm.push(
+        this.recipeService.addIngredientToRecipe(savedRecipe, ingredient)
+      );
+    }
+  }
+
+  saveImage(saveProm: Promise<any>[], savedRecipe: Recipe) {
+    if (this.correctPath && this.currentName) {
+      //save image if needed
+      this.file
+        .readAsArrayBuffer(this.correctPath, this.currentName)
+        .then((buffer: ArrayBuffer) => {
+          const data = new Blob([buffer], { type: "image/jpeg" });
+          saveProm.push(
+            this.recipeService.addImageToRecipe(
+              savedRecipe,
+              data,
+              this.currentName
+            )
+          );
+        })
+        .catch(err => {
+          this.catchSavingError(err, " de l'image");
+        });
+    }
   }
 
   onChangeNbStages(event: { detail: { value: number } }) {
@@ -271,5 +284,63 @@ export class SetRecipeComponent implements OnInit {
       1
     );
     this.ingredientComponent.confirm();
+  }
+
+  async getIngredientFromRecipe() {
+    //getting ingrediants with their food
+    try {
+      const ingredients = await this.recipeService.getIngredientFromRecipe(
+        this.recipe
+      );
+      this.recipe.ingredients = [];
+      console.log(ingredients);
+      for (const ingredient of ingredients) {
+        let newFood = new Food();
+        try {
+          newFood = await this.ingredientService.getFoodOfIngredient(
+            ingredient
+          );
+        } catch (error) {
+          console.error(error);
+        }
+        ingredient.food = newFood;
+        this.recipe.ingredients.push(ingredient);
+        this.selectedFoodOptions.push(newFood);
+        this.previouslySelectedFoodOptions.push(newFood);
+      }
+      console.log("asyn", this.selectedFoodOptions);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getDietFromRecipe() {
+    //getting diet
+    this.recipeService
+      .getDietsFromRecipe(this.recipe)
+      .then(async linkDiets => {
+        this.recipe.diets = [];
+        for (const linkDiet of linkDiets) {
+          const diet = await this.dietService.getDiet(linkDiet.dietId);
+          this.recipe.diets.push(diet);
+        }
+      })
+      .catch(err => console.error(err));
+  }
+
+  clickOnUpdate() {
+    console.log({ global: this.recipe });
+    this.recipeService
+      .updateRecipe(this.recipe)
+      .then((savedRecipe: Recipe) => {
+        const saveProm: Promise<any>[] = [];
+
+        console.log("Modification de ", this.currentName, this.correctPath);
+        this.utilities.showToastSimple("Recette modifiée !", 1000, "success");
+        this.router.navigate(["/home"]);
+      })
+      .catch(err => {
+        this.catchSavingError(err, " de la recette");
+      });
   }
 }

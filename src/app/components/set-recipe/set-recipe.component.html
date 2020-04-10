@@ -121,8 +121,13 @@
     </ion-row>
   </ion-grid>
 </ion-content>
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+<ion-fab *ngIf="!toEdit" vertical="bottom" horizontal="end" slot="fixed">
   <ion-fab-button color="success" (click)="clickOnAdd()">
     <ion-icon name="checkmark"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+<ion-fab *ngIf="toEdit" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="success" (click)="clickOnUpdate()">
+    <ion-icon name="save"></ion-icon>
   </ion-fab-button>
 </ion-fab>

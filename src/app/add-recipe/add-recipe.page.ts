@@ -1,3 +1,4 @@
+import { Recipe } from "./../utilities-class";
 import { Component, OnInit } from "@angular/core";
 
 @Component({
@@ -6,6 +7,8 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./add-recipe.page.scss"]
 })
 export class AddRecipePage implements OnInit {
+  myRecipe: Recipe = new Recipe();
+
   constructor() {}
 
   ngOnInit() {}

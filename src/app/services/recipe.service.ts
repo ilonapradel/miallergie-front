@@ -56,6 +56,29 @@ export class RecipeService {
       .toPromise<Recipe>();
   }
 
+  public updateRecipe(recipe: Recipe): Promise<Recipe> {
+    const toSave: Recipe = JSON.parse(JSON.stringify(recipe));
+    toSave.imageId = recipe.imageId;
+    toSave.image = recipe.image;
+    toSave.diets = recipe.diets;
+    toSave.ingredients = recipe.ingredients;
+    return this.http
+      .patch<Recipe>(this.url + "recipes/" + recipe.id, toSave, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+      .pipe<Recipe>(
+        catchError<Recipe, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<Recipe>();
+  }
+
   public getIngredientFromRecipe(recipe: Recipe): Promise<Ingredient[]> {
     return this.http
       .get<Ingredient[]>(this.url + "recipes/" + recipe.id + "/ingredients", {
