@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
-import { Preferences } from "../../utilities-class";
+import { Preferences, Ingredient } from "../../utilities-class";
 
 @Component({
   selector: "app-intolerance-selector",
@@ -32,7 +32,7 @@ export class IntoleranceSelectorComponent implements OnInit {
     this.userPreferences.intolerance = event.value;
   }
 
-  deleteIntolerance(intolerance: string) {
+  deleteIntolerance(intolerance: Ingredient) {
     this.userPreferences.intolerance.splice(
       this.userPreferences.intolerance.indexOf(intolerance),
       1

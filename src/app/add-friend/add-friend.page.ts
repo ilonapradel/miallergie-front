@@ -28,45 +28,16 @@ export class AddFriendPage implements OnInit {
   constructor(private api: UsersService, public router: Router) {
     this.possibleAllergies = [];
 
-    this.possibleIntolerances = ["glucose", "gluten", "lactose", "fructose"];
+    this.possibleIntolerances = [];
 
     this.preferences = {
       diets: [],
       allergy: [],
-      intolerance: ["lucas", "lactose"]
+      intolerance: []
     };
   }
 
   ngOnInit() {}
-
-  onAllergyChange(event: { component: IonicSelectableComponent; value: any }) {
-    this.preferences.allergy = event.value;
-  }
-
-  deleteAllergy(ingredient: Ingredient) {
-    this.preferences.allergy.splice(
-      this.preferences.allergy.indexOf(ingredient),
-      1
-    );
-    console.log(this.preferences.allergy);
-    this.allergyComponent.confirm();
-  }
-
-  onIntoleranceChange(event: {
-    component: IonicSelectableComponent;
-    value: any;
-  }) {
-    this.preferences.intolerance = event.value;
-  }
-
-  deleteIntolerance(intolerance: string) {
-    this.preferences.intolerance.splice(
-      this.preferences.intolerance.indexOf(intolerance),
-      1
-    );
-    console.log(this.preferences.intolerance);
-    this.intoleranceComponent.confirm();
-  }
 
   saveNewUserFriend() {
     this.api.addRegisteredFriend(this.newUserFriend);
