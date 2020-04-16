@@ -1,3 +1,4 @@
+import { Intolerance } from "./../../utilities-class";
 import {
   Component,
   OnInit,
@@ -15,7 +16,7 @@ import { Preferences, Ingredient } from "../../utilities-class";
   styleUrls: ["./intolerance-selector.component.scss"],
 })
 export class IntoleranceSelectorComponent implements OnInit {
-  possibleIntolerances: Ingredient[];
+  possibleIntolerances: Intolerance[];
 
   @Input("preferences")
   userPreferences: Preferences;
@@ -26,7 +27,7 @@ export class IntoleranceSelectorComponent implements OnInit {
   @ViewChild("intoleranceComponent", { static: false })
   intoleranceComponent: IonicSelectableComponent;
 
-  @Output() result = new EventEmitter<Ingredient[]>();
+  @Output() result = new EventEmitter<Intolerance[]>();
 
   constructor() {
     this.possibleIntolerances = [];
@@ -38,16 +39,16 @@ export class IntoleranceSelectorComponent implements OnInit {
     component: IonicSelectableComponent;
     value: any;
   }) {
-    this.userPreferences.intolerance = event.value;
-    this.result.emit(this.userPreferences.intolerance);
+    this.userPreferences.intolerances = event.value;
+    this.result.emit(this.userPreferences.intolerances);
   }
 
-  deleteIntolerance(intolerance: Ingredient) {
-    this.userPreferences.intolerance.splice(
-      this.userPreferences.intolerance.indexOf(intolerance),
+  deleteIntolerance(intolerance: Intolerance) {
+    this.userPreferences.intolerances.splice(
+      this.userPreferences.intolerances.indexOf(intolerance),
       1
     );
-    console.log(this.userPreferences.intolerance);
+    console.log(this.userPreferences.intolerances);
     this.intoleranceComponent.confirm();
   }
 }

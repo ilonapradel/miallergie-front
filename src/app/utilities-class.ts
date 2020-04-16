@@ -16,11 +16,11 @@ export class UtilitiesClass {
             icon: "arrow-Back",
             handler: () => {
               this.router.navigate(["/profile"]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       })
-      .then(toast => {
+      .then((toast) => {
         toast.present();
       });
   }
@@ -30,9 +30,9 @@ export class UtilitiesClass {
       .create({
         message: text,
         duration,
-        color
+        color,
       })
-      .then(toast => {
+      .then((toast) => {
         toast.present();
       });
   }
@@ -102,13 +102,23 @@ export class User {
 
 export class Preferences {
   public diets?: Diet[];
-  public allergy?: Ingredient[];
-  public intolerance?: Ingredient[];
+  public allergies?: Allergy[];
+  public intolerances?: Intolerance[];
 }
 
 export class Friend {
   public preferences: Preferences;
   public surname: string;
+}
+
+export class Allergy {
+  public id: number;
+  public name: string;
+}
+
+export class Intolerance {
+  public id: number;
+  public name: string;
 }
 
 export const ApiUrl: string = "http://miallergie.freeboxos.fr:8080/";

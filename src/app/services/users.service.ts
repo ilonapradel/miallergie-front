@@ -5,6 +5,8 @@ import {
   Diet,
   Ingredient,
   Recipe,
+  Allergy,
+  Intolerance,
 } from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
@@ -34,11 +36,10 @@ export class UsersService {
 
     this.myUser.preferences = {
       diets: [],
-      allergy: [],
-      intolerance: [],
+      allergies: [],
+      intolerances: [],
     };
 
-    this.myUser.preferences = this.getUserPreferences();
     console.log(this.myUser.preferences);
   }
 
@@ -177,8 +178,7 @@ export class UsersService {
     this.myUser.username = username;
     this.myUser.id = id;
 
-    this.getUserPreferences(); //On les précharge
-    console.log(this.myUser.preferences);
+    this.loadUserPreferences();
   }
 
   private setUsername(newUsername: string) {
@@ -190,14 +190,16 @@ export class UsersService {
   }
 
   public getUserPreferences(): Preferences {
-    this.getUserDiets();
-    this.getUserIntolerances();
-    this.getUserAllergies();
+    this.loadUserPreferences();
 
     return this.myUser.preferences;
   }
 
-  private load;
+  private loadUserPreferences(): void {
+    this.getUserDiets();
+    this.getUserIntolerances();
+    this.getUserAllergies();
+  }
 
   private getUserDiets(): void {
     this.http
@@ -220,18 +222,15 @@ export class UsersService {
 
   private getUserAllergies(): void {
     this.http
-      .get<Ingredient[]>(
-        this.url + "users/" + this.userId + "/user-allergies",
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .toPromise<Ingredient[]>()
-      .then((ingredients) => {
-        for (const ing of ingredients) {
-          this.myUser.preferences.allergy.push(ing);
+      .get<Allergy[]>(this.url + "users/" + this.userId + "/user-allergies", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .toPromise<Allergy[]>()
+      .then((allergies) => {
+        for (const allergy of allergies) {
+          this.myUser.preferences.allergies.push(allergy);
         }
       })
       .catch((err) => console.error(err));
@@ -239,7 +238,7 @@ export class UsersService {
 
   private getUserIntolerances(): void {
     this.http
-      .get<Ingredient[]>(
+      .get<Intolerance[]>(
         this.url + "users/" + this.userId + "/user-intolerances",
         {
           headers: {
@@ -247,10 +246,10 @@ export class UsersService {
           },
         }
       )
-      .toPromise<Ingredient[]>()
+      .toPromise<Intolerance[]>()
       .then((intolerances) => {
         for (const intol of intolerances) {
-          this.myUser.preferences.intolerance.push(intol);
+          this.myUser.preferences.intolerances.push(intol);
         }
       })
       .catch((err) => console.error(err));
@@ -269,8 +268,10 @@ export class UsersService {
   public saveUserPreferences(newPreferences: Preferences) {
     console.log({ newPreferences });
     this.saveDiets(newPreferences.diets);
-    this.saveIntolerances(newPreferences.intolerance);
-    this.saveAllergies(newPreferences.allergy);
+    this.saveIntolerances(newPreferences.intolerances);
+    this.saveAllergies(newPreferences.allergies);
+
+    this.loadUserPreferences();
   }
 
   saveDiets(newDiets: Diet[]) {
@@ -292,11 +293,11 @@ export class UsersService {
     }
   }
 
-  saveIntolerances(newIntolerances: Ingredient[]) {
+  saveIntolerances(newIntolerances: Intolerance[]) {
     for (const intol of newIntolerances) {
       this.http
         .post(
-          this.url + "users/" + this.userId + "user-intolerances",
+          this.url + "users/" + this.userId + "/user-intolerances",
           {
             userId: this.userId,
             intoleranceId: intol.id,
@@ -311,11 +312,11 @@ export class UsersService {
     }
   }
 
-  saveAllergies(newAllergies: Ingredient[]) {
+  saveAllergies(newAllergies: Allergy[]) {
     for (const allergie of newAllergies) {
       this.http
         .post(
-          this.url + "users/" + this.userId + "user-allergies",
+          this.url + "users/" + this.userId + "/user-allergies",
           {
             userId: this.userId,
             allergyId: allergie.id,

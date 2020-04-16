@@ -2,14 +2,14 @@
   <ion-col>
     <ion-item>
       <ion-label>Intolérances alimentaires</ion-label>
-      <ionic-selectable #intoleranceComponent [isEnabled]="enabled" [(ngModel)]="userPreferences.intolerance"
+      <ionic-selectable #intoleranceComponent [isEnabled]="enabled" [(ngModel)]="userPreferences.intolerances"
         [items]="possibleIntolerances" [canSearch]="true" [isMultiple]="true" (onChange)="onIntoleranceChange($event)">
       </ionic-selectable>
     </ion-item>
   </ion-col>
 </ion-row>
-<ion-row *ngIf="userPreferences?.intolerance?.length!==0">
-  <ion-chip *ngFor="let intol of userPreferences.intolerance" outline color="tertiary">
+<ion-row *ngIf="userPreferences?.intolerances?.length!==0">
+  <ion-chip *ngFor="let intol of userPreferences.intolerances" outline color="tertiary">
     <ion-label>{{intol}}</ion-label>
     <ion-icon name="close" (click)="deleteIntolerance(intol)"></ion-icon>
   </ion-chip>

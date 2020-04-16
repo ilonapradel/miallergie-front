@@ -2,16 +2,16 @@
     <ion-col>
       <ion-item>
         <ion-label>Allergies alimentaires</ion-label>
-        <ionic-selectable #allergyComponent [isEnabled]="enabled" [(ngModel)]="userPreferences.allergy"
+        <ionic-selectable #allergyComponent [isEnabled]="enabled" [(ngModel)]="userPreferences.allergies"
           [items]="possibleAllergies" itemValueField="id" itemTextField="name" [canSearch]="true" [isMultiple]="true"
           (onChange)="onAllergyChange($event)">
         </ionic-selectable>
       </ion-item>
     </ion-col>
   </ion-row>
-  <ion-row *ngIf="userPreferences?.allergy?.length!==0">
-    <ion-chip *ngFor="let allergy of userPreferences.allergy" outline color="danger">
-      <ion-label>{{allergy.food.name}}</ion-label>
+  <ion-row *ngIf="userPreferences?.allergies?.length!==0">
+    <ion-chip *ngFor="let allergy of userPreferences.allergies" outline color="danger">
+      <ion-label>{{allergy.name}}</ion-label>
       <ion-icon name="close" [disabled]="enabled" (click)="deleteAllergy(allergy)"></ion-icon>
     </ion-chip>
   </ion-row>

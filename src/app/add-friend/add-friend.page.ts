@@ -1,4 +1,4 @@
-import { Friend, User } from "./../utilities-class";
+import { Friend, User, Allergy, Intolerance } from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient, Preferences } from "../utilities-class";
@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-add-friend",
   templateUrl: "./add-friend.page.html",
-  styleUrls: ["./add-friend.page.scss"]
+  styleUrls: ["./add-friend.page.scss"],
 })
 export class AddFriendPage implements OnInit {
   @ViewChild("allergyComponent", { static: false })
@@ -17,9 +17,9 @@ export class AddFriendPage implements OnInit {
   @ViewChild("intoleranceComponent", { static: false })
   intoleranceComponent: IonicSelectableComponent;
 
-  possibleAllergies: Ingredient[];
+  possibleAllergies: Allergy[];
 
-  possibleIntolerances: string[];
+  possibleIntolerances: Intolerance[];
   preferences: Preferences = new Preferences();
 
   newFriend: Friend = new Friend();
@@ -32,8 +32,8 @@ export class AddFriendPage implements OnInit {
 
     this.preferences = {
       diets: [],
-      allergy: [],
-      intolerance: []
+      allergies: [],
+      intolerances: [],
     };
   }
 
