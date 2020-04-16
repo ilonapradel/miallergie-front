@@ -1,4 +1,5 @@
-import { Preferences, Ingredient } from "../../utilities-class";
+import { AllergyService } from "./../../services/allergy.service";
+import { Preferences, Allergy } from "../../utilities-class";
 import {
   Component,
   OnInit,
@@ -22,30 +23,44 @@ export class AllergySelectorComponent implements OnInit {
   @Input("enabled")
   enabled: boolean;
 
-  @Output() result = new EventEmitter<Ingredient[]>();
+  @Output() result = new EventEmitter<Allergy[]>();
 
   @ViewChild("allergyComponent", { static: false })
   allergyComponent: IonicSelectableComponent;
 
-  possibleAllergies: Ingredient[];
+  possibleAllergies: Allergy[];
 
-  constructor() {
-    this.possibleAllergies = [];
+  constructor(private allergyService: AllergyService) {
+    this.allergyService
+      .getAllergies()
+      .then((allergies: Allergy[]) => {
+        // for (let a of allergies) {
+        //   this.possibleAllergies.push({
+        //     id: a.id,
+        //     name:a.name
+        //   })
+        // }
+        this.possibleAllergies = allergies;
+        console.log(allergies);
+      })
+      .catch((err) => console.log(err));
+    console.log({ allergies: this.possibleAllergies });
   }
 
   ngOnInit() {}
 
   onAllergyChange(event: { component: IonicSelectableComponent; value: any }) {
-    this.userPreferences.allergy = event.value;
-    this.result.emit(this.userPreferences.allergy);
+    console.log(event);
+    this.userPreferences.allergies = event.value;
+    this.result.emit(this.userPreferences.allergies);
   }
 
-  deleteAllergy(ingredient: Ingredient) {
-    this.userPreferences.allergy.splice(
-      this.userPreferences.allergy.indexOf(ingredient),
+  deleteAllergy(allergie: Allergy) {
+    this.userPreferences.allergies.splice(
+      this.userPreferences.allergies.indexOf(allergie),
       1
     );
-    console.log(this.userPreferences.allergy);
+    console.log(this.userPreferences.allergies);
     this.allergyComponent.confirm();
   }
 }

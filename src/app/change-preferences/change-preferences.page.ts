@@ -1,5 +1,11 @@
 import { ComponentsModule } from "./../components/components.module";
-import { Preferences, UtilitiesClass, Diet } from "./../utilities-class";
+import {
+  Preferences,
+  UtilitiesClass,
+  Diet,
+  Allergy,
+  Intolerance,
+} from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient } from "../utilities-class";
@@ -32,11 +38,11 @@ export class ChangePreferencesPage implements OnInit {
     this.userPreferences.diets = diets;
   }
 
-  onChangeAllergies(allergies: Ingredient[]) {
-    this.userPreferences.allergy = allergies;
+  onChangeAllergies(allergies: Allergy[]) {
+    this.userPreferences.allergies = allergies;
   }
 
-  onChangeIntolerances(intolerances: Ingredient[]) {
-    this.userPreferences.intolerance = intolerances;
+  onChangeIntolerances(intolerances: Intolerance[]) {
+    this.userPreferences.intolerances = intolerances;
   }
 }
