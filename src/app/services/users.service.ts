@@ -208,10 +208,12 @@ export class UsersService {
       })
       .toPromise<Diet[]>()
       .then(async (diets) => {
+        console.log(diets);
         for (const diet of diets) {
           const dietToSave = await this.dietService.getDiet(diet.id);
           this.myUser.preferences.diets.push(dietToSave);
         }
+        console.log(this.myUser.preferences);
       })
       .catch((err) => console.error(err));
   }
