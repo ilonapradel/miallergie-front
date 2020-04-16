@@ -3,7 +3,8 @@ import {
   Preferences,
   Friend,
   Diet,
-  Ingredient
+  Ingredient,
+  Recipe,
 } from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
@@ -12,49 +13,55 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap, catchError } from "rxjs/operators";
 import { User, ApiUrl } from "../utilities-class";
+import { DietService } from "./diet.service";
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class UsersService {
   private url: string = ApiUrl;
   public isAuth: boolean = false;
-  private id: string;
+  private userId: string;
   private myUser: User = new User();
-  private myUserPreferences: Preferences = {
-    diets: [],
-    allergy: [],
-    intolerance: []
-  };
 
   private utilities: UtilitiesClass;
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private dietService: DietService
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
+
+    this.myUser.preferences = {
+      diets: [],
+      allergy: [],
+      intolerance: [],
+    };
+
+    this.myUser.preferences = this.getUserPreferences();
+    console.log(this.myUser.preferences);
   }
 
   public init() {
+    //TODO : faire les gets !!!
     this.myUser.nonRegisteredFriends = [
       {
         surname: "test",
-        preferences: {}
-      }
+        preferences: {},
+      },
     ];
 
-    this.myUser.preferences = this.myUserPreferences;
     this.myUser.registeredFriends = [
       {
         email: "coucou",
         username: "Lucas",
-        preferences: {}
+        preferences: {},
       },
       {
         email: "blabla",
         username: "Adrien",
-        preferences: {}
-      }
+        preferences: {},
+      },
     ];
   }
 
@@ -63,7 +70,7 @@ export class UsersService {
       .post(this.url + "users/", {
         username: username,
         email: email,
-        password: password
+        password: password,
       })
       .toPromise();
   }
@@ -72,7 +79,7 @@ export class UsersService {
     return this.http
       .post(this.url + "users/login", {
         email: email,
-        password: password
+        password: password,
       })
       .pipe(
         tap(
@@ -86,7 +93,7 @@ export class UsersService {
             console.log(res);
             localStorage.setItem("access_token", token);
             this.isAuth = true;
-            this.id = res.id;
+            this.userId = res.id;
             this.setUser(res.email, res.username, res.id);
           }
         )
@@ -97,14 +104,14 @@ export class UsersService {
   public changeUsername(newUsername: string) {
     return this.http
       .put(
-        this.url + "users/" + this.id,
+        this.url + "users/" + this.userId,
         {
-          username: newUsername
+          username: newUsername,
         },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
       .pipe(
@@ -126,14 +133,14 @@ export class UsersService {
   public changeEmail(newEmail: string) {
     return this.http
       .put(
-        this.url + "users/" + this.id,
+        this.url + "users/" + this.userId,
         {
-          email: newEmail
+          email: newEmail,
         },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
       .pipe(
@@ -147,15 +154,15 @@ export class UsersService {
   public changePassword(newPassword: string, oldPassword: string) {
     return this.http
       .put(
-        this.url + "users/" + this.id,
+        this.url + "users/" + this.userId,
         {
           newPassword: newPassword,
-          oldPassword: oldPassword
+          oldPassword: oldPassword,
         },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
       .toPromise();
@@ -169,6 +176,9 @@ export class UsersService {
     this.myUser.email = email;
     this.myUser.username = username;
     this.myUser.id = id;
+
+    this.getUserPreferences(); //On les précharge
+    console.log(this.myUser.preferences);
   }
 
   private setUsername(newUsername: string) {
@@ -180,11 +190,68 @@ export class UsersService {
   }
 
   public getUserPreferences(): Preferences {
-    return this.myUserPreferences;
+    this.getUserDiets();
+    this.getUserIntolerances();
+    this.getUserAllergies();
+
+    return this.myUser.preferences;
   }
 
-  public changeUserPreferences(newPreferences: Preferences) {
-    this.myUserPreferences = newPreferences;
+  private load;
+
+  private getUserDiets(): void {
+    this.http
+      .get<Diet[]>(this.url + "users/" + this.userId + "/user-diets", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .toPromise<Diet[]>()
+      .then(async (diets) => {
+        for (const diet of diets) {
+          const dietToSave = await this.dietService.getDiet(diet.id);
+          this.myUser.preferences.diets.push(dietToSave);
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+
+  private getUserAllergies(): void {
+    this.http
+      .get<Ingredient[]>(
+        this.url + "users/" + this.userId + "/user-allergies",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .toPromise<Ingredient[]>()
+      .then((ingredients) => {
+        for (const ing of ingredients) {
+          this.myUser.preferences.allergy.push(ing);
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+
+  private getUserIntolerances(): void {
+    this.http
+      .get<Ingredient[]>(
+        this.url + "users/" + this.userId + "/user-intolerances",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .toPromise<Ingredient[]>()
+      .then((intolerances) => {
+        for (const intol of intolerances) {
+          this.myUser.preferences.intolerance.push(intol);
+        }
+      })
+      .catch((err) => console.error(err));
   }
 
   public addRegisteredFriend(newFriend: User) {
@@ -198,6 +265,7 @@ export class UsersService {
   }
 
   public saveUserPreferences(newPreferences: Preferences) {
+    console.log({ newPreferences });
     this.saveDiets(newPreferences.diets);
     this.saveIntolerances(newPreferences.intolerance);
     this.saveAllergies(newPreferences.allergy);
@@ -206,11 +274,18 @@ export class UsersService {
   saveDiets(newDiets: Diet[]) {
     for (const diet of newDiets) {
       this.http
-        .post(this.url + "users/" + this.id + "user-diets", diet.id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
+        .post(
+          this.url + "users/" + this.userId + "/user-diets",
+          {
+            userId: this.userId,
+            dietId: diet.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
           }
-        })
+        )
         .toPromise();
     }
   }
@@ -218,11 +293,18 @@ export class UsersService {
   saveIntolerances(newIntolerances: Ingredient[]) {
     for (const intol of newIntolerances) {
       this.http
-        .post(this.url + "users/" + this.id + "user-intolerances", intol.id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
+        .post(
+          this.url + "users/" + this.userId + "user-intolerances",
+          {
+            userId: this.userId,
+            intoleranceId: intol.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
           }
-        })
+        )
         .toPromise();
     }
   }
@@ -230,11 +312,18 @@ export class UsersService {
   saveAllergies(newAllergies: Ingredient[]) {
     for (const allergie of newAllergies) {
       this.http
-        .post(this.url + "users/" + this.id + "user-allergies", allergie.id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
+        .post(
+          this.url + "users/" + this.userId + "user-allergies",
+          {
+            userId: this.userId,
+            allergyId: allergie.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
           }
-        })
+        )
         .toPromise();
     }
   }

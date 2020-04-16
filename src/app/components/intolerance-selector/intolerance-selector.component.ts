@@ -1,14 +1,21 @@
-import { Component, OnInit, ViewChild, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Preferences, Ingredient } from "../../utilities-class";
 
 @Component({
   selector: "app-intolerance-selector",
   templateUrl: "./intolerance-selector.component.html",
-  styleUrls: ["./intolerance-selector.component.scss"]
+  styleUrls: ["./intolerance-selector.component.scss"],
 })
 export class IntoleranceSelectorComponent implements OnInit {
-  possibleIntolerances: string[];
+  possibleIntolerances: Ingredient[];
 
   @Input("preferences")
   userPreferences: Preferences;
@@ -19,8 +26,10 @@ export class IntoleranceSelectorComponent implements OnInit {
   @ViewChild("intoleranceComponent", { static: false })
   intoleranceComponent: IonicSelectableComponent;
 
+  @Output() result = new EventEmitter<Ingredient[]>();
+
   constructor() {
-    this.possibleIntolerances = ["glucose", "gluten", "lactose", "fructose"];
+    this.possibleIntolerances = [];
   }
 
   ngOnInit() {}
@@ -30,6 +39,7 @@ export class IntoleranceSelectorComponent implements OnInit {
     value: any;
   }) {
     this.userPreferences.intolerance = event.value;
+    this.result.emit(this.userPreferences.intolerance);
   }
 
   deleteIntolerance(intolerance: Ingredient) {

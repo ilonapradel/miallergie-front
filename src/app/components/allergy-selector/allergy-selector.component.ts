@@ -1,11 +1,19 @@
 import { Preferences, Ingredient } from "../../utilities-class";
-import { Component, OnInit, Input, ViewChild, NgModule } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  NgModule,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 
 @Component({
   selector: "app-allergy-selector",
   templateUrl: "./allergy-selector.component.html",
-  styleUrls: ["./allergy-selector.component.scss"]
+  styleUrls: ["./allergy-selector.component.scss"],
 })
 export class AllergySelectorComponent implements OnInit {
   @Input("preferences")
@@ -13,6 +21,8 @@ export class AllergySelectorComponent implements OnInit {
 
   @Input("enabled")
   enabled: boolean;
+
+  @Output() result = new EventEmitter<Ingredient[]>();
 
   @ViewChild("allergyComponent", { static: false })
   allergyComponent: IonicSelectableComponent;
@@ -27,6 +37,7 @@ export class AllergySelectorComponent implements OnInit {
 
   onAllergyChange(event: { component: IonicSelectableComponent; value: any }) {
     this.userPreferences.allergy = event.value;
+    this.result.emit(this.userPreferences.allergy);
   }
 
   deleteAllergy(ingredient: Ingredient) {
