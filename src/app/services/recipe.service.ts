@@ -9,7 +9,7 @@ import { Recipe, Ingredient, Diet } from "../utilities-class";
 import { ApiUrl } from "../utilities-class";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class RecipeService {
   private url: string = ApiUrl;
@@ -27,8 +27,8 @@ export class RecipeService {
     return this.http
       .get<Recipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""), {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .toPromise<Recipe[]>();
   }
@@ -42,8 +42,8 @@ export class RecipeService {
     return this.http
       .post<Recipe>(this.url + "recipes/", toSave, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Recipe>(
         catchError<Recipe, Observable<never>>((err: any) => {
@@ -57,16 +57,15 @@ export class RecipeService {
   }
 
   public updateRecipe(recipe: Recipe): Promise<Recipe> {
-    const toSave: Recipe = JSON.parse(JSON.stringify(recipe));
-    toSave.imageId = recipe.imageId;
-    toSave.image = recipe.image;
-    toSave.diets = recipe.diets;
-    toSave.ingredients = recipe.ingredients;
+    let toSave = JSON.parse(JSON.stringify(recipe));
+    toSave.diets = undefined;
+    toSave.image = undefined;
+    toSave.ingredients = undefined;
     return this.http
       .patch<Recipe>(this.url + "recipes/" + recipe.id, toSave, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Recipe>(
         catchError<Recipe, Observable<never>>((err: any) => {
@@ -83,8 +82,8 @@ export class RecipeService {
     return this.http
       .get<Ingredient[]>(this.url + "recipes/" + recipe.id + "/ingredients", {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Ingredient[]>(
         catchError<Ingredient[], Observable<never>>((err: any) => {
@@ -105,8 +104,8 @@ export class RecipeService {
         this.url + "recipes/" + recipe.id + "/recipe-diets",
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
       .pipe<[{ id: string; dietId: string; recipeId: string }]>(
@@ -128,12 +127,12 @@ export class RecipeService {
       .post<Diet>(
         this.url + "recipes/" + recipe.id + "/recipe-diets",
         {
-          dietId: diet.id
+          dietId: diet.id,
         },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
       .pipe<Diet>(
@@ -147,6 +146,24 @@ export class RecipeService {
       .toPromise<Diet>();
   }
 
+  public deleteDietsFromRecipe(recipe: Recipe): Promise<Diet> {
+    return this.http
+      .delete<any>(this.url + "recipes/" + recipe.id + "/recipe-diets", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+
   public addIngredientToRecipe(
     recipe: Recipe,
     ingredient: Ingredient
@@ -154,6 +171,7 @@ export class RecipeService {
     let toSave: Ingredient = JSON.parse(JSON.stringify(ingredient));
     toSave.food = undefined;
     toSave.foodId = ingredient.food.id;
+    toSave.id = undefined;
 
     return this.http
       .post<Ingredient>(
@@ -161,8 +179,8 @@ export class RecipeService {
         toSave,
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          }
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
         }
       )
       .pipe<Ingredient>(
@@ -176,14 +194,32 @@ export class RecipeService {
       .toPromise<Ingredient>();
   }
 
+  public deleteIngredientsFromRecipe(recipe: Recipe): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "recipes/" + recipe.id + "/ingredients/", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+
   public addImageToRecipe(recipe: Recipe, data: Blob, originalName: string) {
     const formData: FormData = new FormData();
     formData.append(recipe.id, data, originalName);
     return this.http
       .post(this.url + "recipes/" + recipe.id + "/uploadImage", formData, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Recipe>(
         catchError<Recipe, Observable<never>>((err: any) => {
@@ -200,8 +236,8 @@ export class RecipeService {
     return this.http
       .delete(this.url + "recipes/" + recipe.id, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Recipe>(
         catchError<Recipe, Observable<never>>((err: any) => {

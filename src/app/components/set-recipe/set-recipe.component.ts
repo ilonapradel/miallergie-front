@@ -4,7 +4,7 @@ import {
   Food,
   UtilitiesClass,
   Ingredient,
-  Diet
+  Diet,
 } from "src/app/utilities-class";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { RecipeService } from "src/app/services/recipe.service";
@@ -12,12 +12,12 @@ import { FoodService } from "src/app/services/food.service";
 import {
   Camera,
   PictureSourceType,
-  CameraOptions
+  CameraOptions,
 } from "@ionic-native/camera/ngx";
 import {
   ActionSheetController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { FilePath } from "@ionic-native/file-path/ngx";
 import { Router } from "@angular/router";
@@ -28,7 +28,7 @@ import { DietService } from "src/app/services/diet.service";
 @Component({
   selector: "app-set-recipe",
   templateUrl: "./set-recipe.component.html",
-  styleUrls: ["./set-recipe.component.scss"]
+  styleUrls: ["./set-recipe.component.scss"],
 })
 export class SetRecipeComponent implements OnInit {
   @Input()
@@ -58,7 +58,7 @@ export class SetRecipeComponent implements OnInit {
     "warning",
     "warning",
     "light",
-    "light"
+    "light",
   ];
 
   constructor(
@@ -77,12 +77,11 @@ export class SetRecipeComponent implements OnInit {
 
     this.foodService
       .getFoods()
-      .then(foods => (this.foodOptions = foods))
-      .catch(err => console.error(err));
+      .then((foods) => (this.foodOptions = foods))
+      .catch((err) => console.error(err));
   }
 
   ngOnInit() {
-    console.log(this.recipe);
     this.recipe.diets = [];
 
     if (this.toEdit) {
@@ -106,13 +105,10 @@ export class SetRecipeComponent implements OnInit {
   }
 
   clickOnAdd() {
-    console.log({ global: this.recipe });
     this.recipeService
       .addRecipe(this.recipe)
       .then((savedRecipe: Recipe) => {
         const saveProm: Promise<any>[] = [];
-
-        console.log("Sauvegarde de ", this.currentName, this.correctPath);
 
         this.saveIngredients(saveProm, savedRecipe);
         this.saveDiets(saveProm, savedRecipe);
@@ -127,11 +123,11 @@ export class SetRecipeComponent implements OnInit {
             );
             this.router.navigate(["/home"]);
           })
-          .catch(err => {
+          .catch((err) => {
             this.catchSavingError(err, " des ingrédients");
           });
       })
-      .catch(err => {
+      .catch((err) => {
         this.catchSavingError(err, " de la recette");
       });
   }
@@ -164,7 +160,6 @@ export class SetRecipeComponent implements OnInit {
       );
     }
   }
-
   saveImage(saveProm: Promise<any>[], savedRecipe: Recipe) {
     if (this.correctPath && this.currentName) {
       //save image if needed
@@ -180,14 +175,13 @@ export class SetRecipeComponent implements OnInit {
             )
           );
         })
-        .catch(err => {
+        .catch((err) => {
           this.catchSavingError(err, " de l'image");
         });
     }
   }
 
   onChangeNbStages(event: { detail: { value: number } }) {
-    console.log(event);
     if (event && event.detail && event.detail.value) {
       const nb = event.detail.value;
       if (nb > this.recipe.stages.length) {
@@ -208,19 +202,19 @@ export class SetRecipeComponent implements OnInit {
           text: "Load from Library",
           handler: () => {
             this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
-          }
+          },
         },
         {
           text: "Use Camera",
           handler: () => {
             this.takePicture(this.camera.PictureSourceType.CAMERA);
-          }
+          },
         },
         {
           text: "Cancel",
-          role: "cancel"
-        }
-      ]
+          role: "cancel",
+        },
+      ],
     });
     await actionSheet.present();
   }
@@ -230,15 +224,15 @@ export class SetRecipeComponent implements OnInit {
       quality: 100,
       sourceType: sourceType,
       saveToPhotoAlbum: false,
-      correctOrientation: true
+      correctOrientation: true,
     };
 
-    this.camera.getPicture(options).then(imagePath => {
+    this.camera.getPicture(options).then((imagePath) => {
       if (
         this.plt.is("android") &&
         sourceType === this.camera.PictureSourceType.PHOTOLIBRARY
       ) {
-        this.filePath.resolveNativePath(imagePath).then(filePath => {
+        this.filePath.resolveNativePath(imagePath).then((filePath) => {
           this.correctPath = filePath.substr(0, filePath.lastIndexOf("/") + 1);
           this.currentName = imagePath.substring(
             imagePath.lastIndexOf("/") + 1,
@@ -254,15 +248,12 @@ export class SetRecipeComponent implements OnInit {
 
   onChangeDiets(diets: Diet[]) {
     this.recipe.diets = diets;
-    console.log(this.recipe);
   }
 
   onIngredientChange(event: {
     component: IonicSelectableComponent;
     value: Food[];
   }) {
-    console.log(this.selectedFoodOptions);
-
     for (const food of this.selectedFoodOptions) {
       if (this.previouslySelectedFoodOptions.indexOf(food) === -1) {
         const ingredient = new Ingredient();
@@ -293,7 +284,6 @@ export class SetRecipeComponent implements OnInit {
         this.recipe
       );
       this.recipe.ingredients = [];
-      console.log(ingredients);
       for (const ingredient of ingredients) {
         let newFood = new Food();
         try {
@@ -308,7 +298,6 @@ export class SetRecipeComponent implements OnInit {
         this.selectedFoodOptions.push(newFood);
         this.previouslySelectedFoodOptions.push(newFood);
       }
-      console.log("asyn", this.selectedFoodOptions);
     } catch (error) {
       console.error(error);
     }
@@ -318,28 +307,56 @@ export class SetRecipeComponent implements OnInit {
     //getting diet
     this.recipeService
       .getDietsFromRecipe(this.recipe)
-      .then(async linkDiets => {
+      .then(async (linkDiets) => {
         this.recipe.diets = [];
         for (const linkDiet of linkDiets) {
           const diet = await this.dietService.getDiet(linkDiet.dietId);
           this.recipe.diets.push(diet);
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }
 
   clickOnUpdate() {
-    console.log({ global: this.recipe });
+    console.log({ recipe: this.recipe });
     this.recipeService
       .updateRecipe(this.recipe)
-      .then((savedRecipe: Recipe) => {
+      .then(async (savedRecipe: Recipe) => {
         const saveProm: Promise<any>[] = [];
 
-        console.log("Modification de ", this.currentName, this.correctPath);
-        this.utilities.showToastSimple("Recette modifiée !", 1000, "success");
-        this.router.navigate(["/home"]);
+        await this.recipeService.deleteIngredientsFromRecipe(this.recipe);
+        this.saveIngredients(saveProm, this.recipe);
+        await this.recipeService.deleteDietsFromRecipe(this.recipe);
+        this.saveDiets(saveProm, this.recipe);
+        this.saveImage(saveProm, this.recipe);
+
+        Promise.all(saveProm)
+          .then(() => {
+            this.utilities.showToastSimple(
+              "Recette sauvegardée !",
+              1000,
+              "success"
+            );
+            this.router.navigate(["/home"]);
+          })
+          .catch((err) => {
+            this.catchSavingError(err, " des ingrédients");
+          });
+
+        Promise.all(saveProm)
+          .then(() => {
+            this.utilities.showToastSimple(
+              "Recette modifiée !",
+              1000,
+              "success"
+            );
+            this.router.navigate(["/home"]);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       })
-      .catch(err => {
+      .catch((err) => {
         this.catchSavingError(err, " de la recette");
       });
   }
