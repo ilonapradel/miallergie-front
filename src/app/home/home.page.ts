@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
 @Component({
   selector: "app-home",
   templateUrl: "home.page.html",
-  styleUrls: ["home.page.scss"]
+  styleUrls: ["home.page.scss"],
 })
 export class HomePage {
   recipes: Recipe[] = [];
@@ -16,21 +16,20 @@ export class HomePage {
       .getRecipes(
         "filter[order]=createAt DESC&filter[include][0][relation]=image"
       )
-      .then(recipes => {
+      .then((recipes) => {
         for (const recipe of recipes) {
           this.recipes.push(recipe);
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }
 
   onClickRecipe(recipe: Recipe) {
     const navigationExtras: NavigationExtras = {
       state: {
-        recipe
-      }
+        recipe,
+      },
     };
-    console.log(navigationExtras);
     this.router.navigate(["recipe-display"], navigationExtras);
   }
 }

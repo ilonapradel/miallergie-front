@@ -25,7 +25,6 @@ export class AllergyService {
 
   public async getAllergies(): Promise<Allergy[]> {
     await this.loadAllergies();
-    console.log(this.possibleAllergies);
     return this.possibleAllergies;
   }
 
@@ -46,7 +45,6 @@ export class AllergyService {
         )
         .toPromise<{ id: string; userId: string; allergyId: string }[]>()
         .then(async (allergies) => {
-          console.log({ loadAllergies: allergies });
           const all: Allergy[] = [];
           for (const allergy of allergies) {
             const allergyToSave = await this.getAllergie(allergy.id);

@@ -39,8 +39,6 @@ export class UsersService {
     this.utilities = new UtilitiesClass(toastController, router);
 
     this.myUser.preferences = new Preferences();
-
-    console.log(this.myUser.preferences);
   }
 
   public init() {
@@ -91,7 +89,6 @@ export class UsersService {
             username: string;
           }) => {
             let token: string = res.token;
-            console.log(res);
             localStorage.setItem("access_token", token);
             this.isAuth = true;
             this.userId = res.id;
@@ -216,12 +213,10 @@ export class UsersService {
         .toPromise<{ id: string; userId: string; dietId: string }[]>()
         .then(async (diets) => {
           const userDiets: Diet[] = [];
-          console.log(diets);
           for (const diet of diets) {
             const dietToSave = await this.dietService.getDiet(diet.dietId);
             userDiets.push(dietToSave);
           }
-          console.log(this.myUser.preferences);
           this.myUser.preferences.diets = userDiets;
 
           resolve();
@@ -288,12 +283,10 @@ export class UsersService {
 
   public addRegisteredFriend(newFriend: User) {
     this.myUser.registeredFriends.push(newFriend);
-    console.log("addRegF", this.myUser.registeredFriends);
   }
 
   public addNonRegisteredFriend(newFriend: Friend) {
     this.myUser.nonRegisteredFriends.push(newFriend);
-    console.log("addNonRegF", this.myUser.nonRegisteredFriends);
   }
 
   public async saveUserPreferences(newPreferences: Preferences) {
@@ -301,7 +294,6 @@ export class UsersService {
     await this.deleteUserAllergies();
     await this.deleteUserIntolerances();
 
-    console.log({ newPreferences });
     this.saveDiets(newPreferences.diets);
     this.saveAllergies(newPreferences.allergies);
     this.saveIntolerances(newPreferences.intolerances);

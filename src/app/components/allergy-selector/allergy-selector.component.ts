@@ -32,15 +32,11 @@ export class AllergySelectorComponent implements OnInit {
 
   constructor(private allergyService: AllergyService) {
     this.possibleAllergies = this.allergyService.returnAllergies();
-    console.log({ allergies_allergyService: this.possibleAllergies });
   }
 
-  ngOnInit() {
-    console.log({ allergies_allergyService: this.possibleAllergies });
-  }
+  ngOnInit() {}
 
   onAllergyChange(event: { component: IonicSelectableComponent; value: any }) {
-    console.log(event);
     this.userPreferences.allergies = event.value;
     this.result.emit(this.userPreferences.allergies);
   }
@@ -50,7 +46,6 @@ export class AllergySelectorComponent implements OnInit {
       this.userPreferences.allergies.indexOf(allergie),
       1
     );
-    console.log(this.userPreferences.allergies);
     this.allergyComponent.confirm();
   }
 }

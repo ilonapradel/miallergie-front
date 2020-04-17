@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-register",
   templateUrl: "./register.page.html",
-  styleUrls: ["./register.page.scss"]
+  styleUrls: ["./register.page.scss"],
 })
 export class RegisterPage implements OnInit {
   username: string;
@@ -23,15 +23,15 @@ export class RegisterPage implements OnInit {
   ngOnInit() {}
 
   register() {
-    console.log(this.username, this.email, this.password, this.password2);
     if (this.password === this.password2) {
-      this.api.register(this.username, this.email, this.password).then(res => {
-        console.log({ resWs: res });
-        this.showToast();
-        setTimeout(() => {
-          this.router.navigate(["/authentication"]);
-        }, 2000);
-      });
+      this.api
+        .register(this.username, this.email, this.password)
+        .then((res) => {
+          this.showToast();
+          setTimeout(() => {
+            this.router.navigate(["/authentication"]);
+          }, 2000);
+        });
     }
   }
 
@@ -46,11 +46,11 @@ export class RegisterPage implements OnInit {
             icon: "arrow-Back",
             handler: () => {
               this.router.navigate(["/authentication"]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       })
-      .then(toast => {
+      .then((toast) => {
         toast.present();
       });
   }

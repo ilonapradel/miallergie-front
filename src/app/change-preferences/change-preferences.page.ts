@@ -27,9 +27,6 @@ export class ChangePreferencesPage implements OnInit {
   ngOnInit() {}
 
   savePreferences() {
-    //On renvoie vers l'api & le back (TODO)
-    console.log("save");
-    console.log({ pref: this.userPreferences });
     this.api.saveUserPreferences(this.userPreferences);
     this.router.navigate(["/profile"]);
   }

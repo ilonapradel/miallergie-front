@@ -6,7 +6,7 @@ import { Friend, User } from "../utilities-class";
 @Component({
   selector: "app-update-friend",
   templateUrl: "./update-friend.page.html",
-  styleUrls: ["./update-friend.page.scss"]
+  styleUrls: ["./update-friend.page.scss"],
 })
 export class UpdateFriendPage implements OnInit {
   public friend: Friend;
@@ -18,7 +18,7 @@ export class UpdateFriendPage implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (this.router.getCurrentNavigation().extras.state) {
         if (this.router.getCurrentNavigation().extras.state.friend) {
           this.friend = this.router.getCurrentNavigation().extras.state.friend;
@@ -27,7 +27,6 @@ export class UpdateFriendPage implements OnInit {
         if (this.router.getCurrentNavigation().extras.state.user) {
           this.user = this.router.getCurrentNavigation().extras.state.user;
         }
-        console.log(this.router.getCurrentNavigation().extras.state);
       }
     });
 
@@ -41,7 +40,6 @@ export class UpdateFriendPage implements OnInit {
   }
 
   savePreferences() {
-    console.log(this.userPref);
     this.router.navigate(["/friend"]);
   }
 }
