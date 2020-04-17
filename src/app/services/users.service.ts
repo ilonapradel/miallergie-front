@@ -1,3 +1,5 @@
+import { IntoleranceService } from "./intolerance.service";
+import { AllergyService } from "./allergy.service";
 import {
   UtilitiesClass,
   Preferences,
@@ -30,15 +32,13 @@ export class UsersService {
     private http: HttpClient,
     private router: Router,
     private toastController: ToastController,
-    private dietService: DietService
+    private dietService: DietService,
+    private allergyService: AllergyService,
+    private intoleranceService: IntoleranceService
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
 
-    this.myUser.preferences = {
-      diets: [],
-      allergies: [],
-      intolerances: [],
-    };
+    this.myUser.preferences = new Preferences();
 
     console.log(this.myUser.preferences);
   }
@@ -189,70 +189,101 @@ export class UsersService {
     this.myUser.email = newEmail;
   }
 
-  public getUserPreferences(): Preferences {
-    this.loadUserPreferences();
-
+  public returnUserPreferences(): Preferences {
     return this.myUser.preferences;
   }
 
-  private loadUserPreferences(): void {
-    this.getUserDiets();
-    this.getUserIntolerances();
-    this.getUserAllergies();
+  private async loadUserPreferences(): Promise<void> {
+    const promises: Promise<void>[] = [];
+    promises.push(this.getUserDiets());
+    promises.push(this.getUserIntolerances());
+    promises.push(this.getUserAllergies());
+
+    await Promise.all(promises);
   }
 
-  private getUserDiets(): void {
-    this.http
-      .get<Diet[]>(this.url + "users/" + this.userId + "/user-diets", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .toPromise<Diet[]>()
-      .then(async (diets) => {
-        console.log(diets);
-        for (const diet of diets) {
-          const dietToSave = await this.dietService.getDiet(diet.id);
-          this.myUser.preferences.diets.push(dietToSave);
-        }
-        console.log(this.myUser.preferences);
-      })
-      .catch((err) => console.error(err));
+  private getUserDiets(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .get<{ id: string; userId: string; dietId: string }[]>(
+          this.url + "users/" + this.userId + "/user-diets",
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .toPromise<{ id: string; userId: string; dietId: string }[]>()
+        .then(async (diets) => {
+          const userDiets: Diet[] = [];
+          console.log(diets);
+          for (const diet of diets) {
+            const dietToSave = await this.dietService.getDiet(diet.dietId);
+            userDiets.push(dietToSave);
+          }
+          console.log(this.myUser.preferences);
+          this.myUser.preferences.diets = userDiets;
+
+          resolve();
+        })
+        .catch((err) => console.error(err));
+    });
   }
 
-  private getUserAllergies(): void {
-    this.http
-      .get<Allergy[]>(this.url + "users/" + this.userId + "/user-allergies", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .toPromise<Allergy[]>()
-      .then((allergies) => {
-        for (const allergy of allergies) {
-          this.myUser.preferences.allergies.push(allergy);
-        }
-      })
-      .catch((err) => console.error(err));
+  private getUserAllergies(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .get<{ id: string; userId: string; allergyId: string }[]>(
+          this.url + "users/" + this.userId + "/user-allergies",
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .toPromise<{ id: string; userId: string; allergyId: string }[]>()
+        .then(async (allergies) => {
+          const userAllergies: Allergy[] = [];
+          for (const allergy of allergies) {
+            const allergyToSave = await this.allergyService.getAllergie(
+              allergy.allergyId
+            );
+            userAllergies.push(allergyToSave);
+          }
+          this.myUser.preferences.allergies = userAllergies;
+
+          resolve();
+        })
+        .catch((err) => console.error(err));
+    });
   }
 
-  private getUserIntolerances(): void {
-    this.http
-      .get<Intolerance[]>(
-        this.url + "users/" + this.userId + "/user-intolerances",
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .toPromise<Intolerance[]>()
-      .then((intolerances) => {
-        for (const intol of intolerances) {
-          this.myUser.preferences.intolerances.push(intol);
-        }
-      })
-      .catch((err) => console.error(err));
+  private getUserIntolerances(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .get<{ id: string; userId: string; intoleranceId: string }[]>(
+          this.url + "users/" + this.userId + "/user-intolerances",
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .toPromise<{ id: string; userId: string; intoleranceId: string }[]>()
+        .then(async (intolerances) => {
+          const intols: Intolerance[] = [];
+          for (const intol of intolerances) {
+            const intolToSave = await this.intoleranceService.getIntolerance(
+              intol.intoleranceId
+            );
+            intols.push(intolToSave);
+          }
+          this.myUser.preferences.intolerances = intols;
+
+          resolve();
+        })
+        .catch((err) => console.error(err));
+    });
   }
 
   public addRegisteredFriend(newFriend: User) {
@@ -265,13 +296,71 @@ export class UsersService {
     console.log("addNonRegF", this.myUser.nonRegisteredFriends);
   }
 
-  public saveUserPreferences(newPreferences: Preferences) {
+  public async saveUserPreferences(newPreferences: Preferences) {
+    await this.deleteUserDiets();
+    await this.deleteUserAllergies();
+    await this.deleteUserIntolerances();
+
     console.log({ newPreferences });
     this.saveDiets(newPreferences.diets);
-    this.saveIntolerances(newPreferences.intolerances);
     this.saveAllergies(newPreferences.allergies);
+    this.saveIntolerances(newPreferences.intolerances);
 
     this.loadUserPreferences();
+  }
+
+  deleteUserDiets(): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "users/" + this.userId + "/user-diets", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+
+  deleteUserAllergies(): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "users/" + this.userId + "/user-allergies", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+
+  deleteUserIntolerances(): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "users/" + this.userId + "/user-intolerances", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
   }
 
   saveDiets(newDiets: Diet[]) {

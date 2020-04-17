@@ -4,7 +4,7 @@ import {
   Input,
   ViewChild,
   Output,
-  EventEmitter
+  EventEmitter,
 } from "@angular/core";
 import { Diet } from "src/app/utilities-class";
 import { IonicSelectableComponent } from "ionic-selectable";
@@ -13,7 +13,7 @@ import { DietService } from "src/app/services/diet.service";
 @Component({
   selector: "app-diet-selector",
   templateUrl: "./diet-selector.component.html",
-  styleUrls: ["./diet-selector.component.scss"]
+  styleUrls: ["./diet-selector.component.scss"],
 })
 export class DietSelectorComponent implements OnInit {
   dietOptions: Diet[] = [];
@@ -30,12 +30,14 @@ export class DietSelectorComponent implements OnInit {
   dietComponent: IonicSelectableComponent;
 
   constructor(private dietService: DietService) {
+    console.log({ diets: this.diets });
+
     this.dietService
       .getDiets()
       .then((d: Diet[]) => {
         this.dietOptions = d;
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   ngOnInit() {}

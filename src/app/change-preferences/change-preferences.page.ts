@@ -21,7 +21,7 @@ export class ChangePreferencesPage implements OnInit {
   userPreferences: Preferences;
 
   constructor(private api: UsersService, public router: Router) {
-    this.userPreferences = api.getUserPreferences();
+    this.userPreferences = api.returnUserPreferences();
   }
 
   ngOnInit() {}

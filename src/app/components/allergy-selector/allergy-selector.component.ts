@@ -31,23 +31,13 @@ export class AllergySelectorComponent implements OnInit {
   possibleAllergies: Allergy[];
 
   constructor(private allergyService: AllergyService) {
-    this.allergyService
-      .getAllergies()
-      .then((allergies: Allergy[]) => {
-        // for (let a of allergies) {
-        //   this.possibleAllergies.push({
-        //     id: a.id,
-        //     name:a.name
-        //   })
-        // }
-        this.possibleAllergies = allergies;
-        console.log(allergies);
-      })
-      .catch((err) => console.log(err));
-    console.log({ allergies: this.possibleAllergies });
+    this.possibleAllergies = this.allergyService.returnAllergies();
+    console.log({ allergies_allergyService: this.possibleAllergies });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log({ allergies_allergyService: this.possibleAllergies });
+  }
 
   onAllergyChange(event: { component: IonicSelectableComponent; value: any }) {
     console.log(event);

@@ -1,4 +1,4 @@
-import { Ingredient } from "./../utilities-class";
+import { Ingredient, Intolerance } from "./../utilities-class";
 import { Injectable } from "@angular/core";
 import { UtilitiesClass, ApiUrl, Diet } from "../utilities-class";
 import { HttpClient } from "@angular/common/http";
@@ -22,39 +22,39 @@ export class IntoleranceService {
     this.utilities = new UtilitiesClass(toastController, router);
   }
 
-  public getIntolerances(): Promise<Ingredient[]> {
+  public getIntolerances(): Promise<Intolerance[]> {
     return this.http
-      .get<Ingredient[]>(this.url + "intolerances", {
+      .get<Intolerance[]>(this.url + "intolerances", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
-      .pipe<Ingredient[]>(
-        catchError<Ingredient[], Observable<never>>((err: any) => {
+      .pipe<Intolerance[]>(
+        catchError<Intolerance[], Observable<never>>((err: any) => {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
           return throwError(err);
         })
       )
-      .toPromise<Ingredient[]>();
+      .toPromise<Intolerance[]>();
   }
 
-  public getIntolerance(id: string): Promise<Ingredient> {
+  public getIntolerance(id: string): Promise<Intolerance> {
     return this.http
-      .get<Ingredient>(this.url + "intolerances/" + id, {
+      .get<Intolerance>(this.url + "intolerances/" + id, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
-      .pipe<Ingredient>(
-        catchError<Ingredient, Observable<never>>((err: any) => {
+      .pipe<Intolerance>(
+        catchError<Intolerance, Observable<never>>((err: any) => {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
           return throwError(err);
         })
       )
-      .toPromise<Ingredient>();
+      .toPromise<Intolerance>();
   }
 }
