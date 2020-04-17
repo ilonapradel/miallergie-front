@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-authentication",
   templateUrl: "./authentication.page.html",
-  styleUrls: ["./authentication.page.scss"]
+  styleUrls: ["./authentication.page.scss"],
 })
 export class AuthenticationPage implements OnInit {
   email: string;
@@ -26,14 +26,13 @@ export class AuthenticationPage implements OnInit {
   ngOnInit() {}
 
   connect(email: string, password: string) {
-    console.log(email, password);
     this.api
       .login(email, password)
-      .then(user => {
+      .then((user) => {
         this.utilities.showToastSimple("Vous êtes connecté !", 2000, "success");
         this.router.navigate(["/home"]);
       })
-      .catch(err => {
+      .catch((err) => {
         let err_msg = "Error";
         try {
           err_msg = err.message;

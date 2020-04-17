@@ -32,7 +32,6 @@ export class IntoleranceSelectorComponent implements OnInit {
 
   constructor(private intolService: IntoleranceService) {
     this.possibleIntolerances = intolService.returnIntolerances();
-    console.log({ intol: this.possibleIntolerances });
   }
 
   ngOnInit() {}
@@ -50,7 +49,6 @@ export class IntoleranceSelectorComponent implements OnInit {
       this.userPreferences.intolerances.indexOf(intolerance),
       1
     );
-    console.log(this.userPreferences.intolerances);
     this.intoleranceComponent.confirm();
   }
 }

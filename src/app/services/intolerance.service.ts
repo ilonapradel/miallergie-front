@@ -41,13 +41,11 @@ export class IntoleranceService {
         )
         .toPromise<{ id: string; userId: string; intoleranceId: string }[]>()
         .then(async (intolerances) => {
-          console.log("get", intolerances);
           const all: Intolerance[] = [];
           for (const intol of intolerances) {
             const intolToSave = await this.getIntolerance(intol.id);
             all.push(intolToSave);
           }
-          console.log("save", all);
           this.possibleIntolerances = all;
 
           resolve();
