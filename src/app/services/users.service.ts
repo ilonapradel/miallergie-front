@@ -301,7 +301,7 @@ export class UsersService {
         return false;
       }
 
-      this.postFriend(userFriend).then((users) => {
+      this.postRegisteredFriend(userFriend).then((users) => {
         this.loadFriends();
         return true;
       });
@@ -309,7 +309,7 @@ export class UsersService {
     return false;
   }
 
-  private postFriend(userFriend: User): Promise<User> {
+  private postRegisteredFriend(userFriend: User): Promise<User> {
     return this.http
       .post<User>(
         this.url + "users/" + this.userId + "/registered-friends",
@@ -325,25 +325,49 @@ export class UsersService {
       .toPromise();
   }
 
+  private postFriend(userFriend: Friend): Promise<User> {
+    return this.http
+      .post<User>(
+        this.url + "users/" + this.userId + "/friends",
+        {
+          surname: userFriend.surname,
+          userId: this.userId, // Todo : a supprimer quand lucas aura fix
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .toPromise();
+  }
+
   public addNonRegisteredFriend(newFriend: Friend) {
-    this.myUser.nonRegisteredFriends.push(newFriend);
+    this.postFriend(newFriend).then((friend) => {
+      this.savePreferences(newFriend.preferences, friend.id);
+    });
+    this.loadFriends();
   }
 
   public async saveUserPreferences(newPreferences: Preferences) {
-    await this.deleteUserDiets();
-    await this.deleteUserAllergies();
-    await this.deleteUserIntolerances();
-
-    this.saveDiets(newPreferences.diets);
-    this.saveAllergies(newPreferences.allergies);
-    this.saveIntolerances(newPreferences.intolerances);
+    this.savePreferences(newPreferences, this.userId);
 
     this.loadUserPreferences();
   }
 
-  deleteUserDiets(): Promise<any> {
+  private async savePreferences(newPreferences: Preferences, id: string) {
+    await this.deleteUserDiets(id);
+    await this.deleteUserAllergies(id);
+    await this.deleteUserIntolerances(id);
+
+    this.saveDiets(newPreferences.diets, id);
+    this.saveAllergies(newPreferences.allergies, id);
+    this.saveIntolerances(newPreferences.intolerances, id);
+  }
+
+  deleteUserDiets(id: string): Promise<any> {
     return this.http
-      .delete<any>(this.url + "users/" + this.userId + "/user-diets", {
+      .delete<any>(this.url + "users/" + id + "/user-diets", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
@@ -359,9 +383,9 @@ export class UsersService {
       .toPromise<any>();
   }
 
-  deleteUserAllergies(): Promise<any> {
+  deleteUserAllergies(id: string): Promise<any> {
     return this.http
-      .delete<any>(this.url + "users/" + this.userId + "/user-allergies", {
+      .delete<any>(this.url + "users/" + id + "/user-allergies", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
@@ -377,9 +401,9 @@ export class UsersService {
       .toPromise<any>();
   }
 
-  deleteUserIntolerances(): Promise<any> {
+  deleteUserIntolerances(id: string): Promise<any> {
     return this.http
-      .delete<any>(this.url + "users/" + this.userId + "/user-intolerances", {
+      .delete<any>(this.url + "users/" + id + "/user-intolerances", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
@@ -395,13 +419,13 @@ export class UsersService {
       .toPromise<any>();
   }
 
-  saveDiets(newDiets: Diet[]) {
+  saveDiets(newDiets: Diet[], id: string) {
     for (const diet of newDiets) {
       this.http
         .post(
-          this.url + "users/" + this.userId + "/user-diets",
+          this.url + "users/" + id + "/user-diets",
           {
-            userId: this.userId,
+            userId: id,
             dietId: diet.id,
           },
           {
@@ -414,13 +438,13 @@ export class UsersService {
     }
   }
 
-  saveIntolerances(newIntolerances: Intolerance[]) {
+  saveIntolerances(newIntolerances: Intolerance[], id: string) {
     for (const intol of newIntolerances) {
       this.http
         .post(
-          this.url + "users/" + this.userId + "/user-intolerances",
+          this.url + "users/" + id + "/user-intolerances",
           {
-            userId: this.userId,
+            userId: id,
             intoleranceId: intol.id,
           },
           {
@@ -433,13 +457,13 @@ export class UsersService {
     }
   }
 
-  saveAllergies(newAllergies: Allergy[]) {
+  saveAllergies(newAllergies: Allergy[], id: string) {
     for (const allergie of newAllergies) {
       this.http
         .post(
-          this.url + "users/" + this.userId + "/user-allergies",
+          this.url + "users/" + id + "/user-allergies",
           {
-            userId: this.userId,
+            userId: id,
             allergyId: allergie.id,
           },
           {
