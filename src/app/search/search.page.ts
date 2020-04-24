@@ -5,7 +5,7 @@ import { Ingredient } from "../utilities-class";
 @Component({
   selector: "app-search",
   templateUrl: "./search.page.html",
-  styleUrls: ["./search.page.scss"]
+  styleUrls: ["./search.page.scss"],
 })
 export class SearchPage implements OnInit {
   difficulty_color: Array<string> = [
@@ -13,7 +13,7 @@ export class SearchPage implements OnInit {
     "light",
     "light",
     "light",
-    "light"
+    "light",
   ];
 
   @ViewChild("ingredientComponent", { static: false })
@@ -25,8 +25,7 @@ export class SearchPage implements OnInit {
   selectedIngs: Ingredient[] = [];
 
   constructor() {
-    this.ings = [
-    ];
+    this.ings = [];
   }
 
   // TODO : Use async search for ingredientComponent https://stackblitz.com/edit/ionic-selectable-on-search?file=pages%2Fhome%2Fhome.ts
@@ -59,4 +58,6 @@ export class SearchPage implements OnInit {
     console.log(this.selectedIngs);
     this.ingredientComponent.confirm();
   }
+
+  clickOnSearch() {}
 }
