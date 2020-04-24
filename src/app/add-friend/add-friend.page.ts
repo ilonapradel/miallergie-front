@@ -1,9 +1,18 @@
-import { Friend, User, Allergy, Intolerance } from "./../utilities-class";
+import {
+  Friend,
+  User,
+  Allergy,
+  Intolerance,
+  Diet,
+  UtilitiesClass,
+} from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
-import { Ingredient, Preferences } from "../utilities-class";
+import { Preferences } from "../utilities-class";
 import { UsersService } from "../services/users.service";
 import { Router } from "@angular/router";
+import { isUndefined } from "util";
+import { ToastController } from "@ionic/angular";
 
 @Component({
   selector: "app-add-friend",
@@ -17,19 +26,18 @@ export class AddFriendPage implements OnInit {
   @ViewChild("intoleranceComponent", { static: false })
   intoleranceComponent: IonicSelectableComponent;
 
-  possibleAllergies: Allergy[];
-
-  possibleIntolerances: Intolerance[];
   preferences: Preferences = new Preferences();
 
   newFriend: Friend = new Friend();
   newUserFriend: User = new User();
+  utilities: UtilitiesClass;
 
-  constructor(private api: UsersService, public router: Router) {
-    this.possibleAllergies = [];
-
-    this.possibleIntolerances = [];
-
+  constructor(
+    private api: UsersService,
+    public router: Router,
+    private toast: ToastController
+  ) {
+    this.utilities = new UtilitiesClass(toast, router);
     this.preferences = {
       diets: [],
       allergies: [],
@@ -40,14 +48,51 @@ export class AddFriendPage implements OnInit {
   ngOnInit() {}
 
   saveNewUserFriend() {
-    this.api.addRegisteredFriend(this.newUserFriend);
+    if (isUndefined(this.newUserFriend.email)) {
+      this.utilities.showToastSimple(
+        "L'email de votre ami est obligatoire s'il est enregistré !",
+        2000,
+        "danger"
+      );
+      return;
+    }
+
+    if (!this.api.addRegisteredFriend(this.newUserFriend)) {
+      this.utilities.showToastSimple(
+        "Nous n'avons pas trouvé votre ami :(",
+        2000,
+        "danger"
+      );
+      return;
+    }
+
     this.router.navigate(["/friend"]);
   }
 
   saveNewFriend() {
+    if (isUndefined(this.newFriend.surname)) {
+      this.utilities.showToastSimple(
+        "Le surnom de votre ami est obligatoire !",
+        2000,
+        "danger"
+      );
+      return;
+    }
     this.newFriend.preferences = this.preferences;
 
     this.api.addNonRegisteredFriend(this.newFriend);
     this.router.navigate(["/friend"]);
+  }
+
+  onChangeDiets(diets: Diet[]) {
+    this.preferences.diets = diets;
+  }
+
+  onChangeAllergies(allergies: Allergy[]) {
+    this.preferences.allergies = allergies;
+  }
+
+  onChangeIntolerances(intolerances: Intolerance[]) {
+    this.preferences.intolerances = intolerances;
   }
 }

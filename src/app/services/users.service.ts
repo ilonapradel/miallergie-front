@@ -1,3 +1,4 @@
+import { isUndefined } from "util";
 import { IntoleranceService } from "./intolerance.service";
 import { AllergyService } from "./allergy.service";
 import {
@@ -41,27 +42,34 @@ export class UsersService {
     this.myUser.preferences = new Preferences();
   }
 
-  public init() {
-    //TODO : faire les gets !!!
-    this.myUser.nonRegisteredFriends = [
-      {
-        surname: "test",
-        preferences: {},
-      },
-    ];
+  public loadFriends(): void {
+    this.getRegisteredFriends().then((friends) => {
+      this.myUser.registeredFriends = friends;
+    });
 
-    this.myUser.registeredFriends = [
-      {
-        email: "coucou",
-        username: "Lucas",
-        preferences: {},
-      },
-      {
-        email: "blabla",
-        username: "Adrien",
-        preferences: {},
-      },
-    ];
+    this.getNonRegisteredFriends().then((friends) => {
+      this.myUser.nonRegisteredFriends = friends;
+    });
+  }
+
+  private getRegisteredFriends(): Promise<User[]> {
+    return this.http
+      .get<User[]>(this.url + "users/" + this.userId + "/registered-friends", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .toPromise();
+  }
+
+  private getNonRegisteredFriends(): Promise<Friend[]> {
+    return this.http
+      .get<Friend[]>(this.url + "users/" + this.userId + "/friends", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .toPromise();
   }
 
   public register(username: string, email: string, password: string) {
@@ -177,6 +185,7 @@ export class UsersService {
     this.myUser.id = id;
 
     this.loadUserPreferences();
+    this.loadFriends();
   }
 
   private setUsername(newUsername: string) {
@@ -282,8 +291,38 @@ export class UsersService {
     });
   }
 
-  public addRegisteredFriend(newFriend: User) {
-    this.myUser.registeredFriends.push(newFriend);
+  public addRegisteredFriend(newFriend: User): boolean {
+    let userFriend;
+    this.filterUserOnEmail(newFriend.email).then((user) => {
+      userFriend = user;
+
+      console.log(userFriend);
+      if (isUndefined(userFriend)) {
+        return false;
+      }
+
+      this.postFriend(userFriend).then((users) => {
+        this.loadFriends();
+        return true;
+      });
+    });
+    return false;
+  }
+
+  private postFriend(userFriend: User): Promise<User> {
+    return this.http
+      .post<User>(
+        this.url + "users/" + this.userId + "/registered-friends",
+        {
+          userId: userFriend.id,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .toPromise();
   }
 
   public addNonRegisteredFriend(newFriend: Friend) {
@@ -411,5 +450,17 @@ export class UsersService {
         )
         .toPromise();
     }
+  }
+
+  filterUserOnEmail(email: string): Promise<User> {
+    let filter = "?filter[where][email]=" + email;
+
+    return this.http
+      .get<User>(this.url + "users/" + filter, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .toPromise<User>();
   }
 }

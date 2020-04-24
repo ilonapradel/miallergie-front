@@ -10,7 +10,7 @@
       </ion-avatar>
       <ion-label>
         <h2>{{nrFriend.surname}}</h2>
-        <h3>{{nrFriend.preferences.diet}}</h3>
+        <h3 *ngFor="let diet of nrFriend.preferences.diets">{{diet.name}}</h3>
       </ion-label>
     </ion-item>
     <ion-item *ngFor="let rFriend of myRegFriends" (click)="goToSeeUser(rFriend)">
@@ -19,13 +19,13 @@
       </ion-avatar>
       <ion-label>
         <h2>{{rFriend.username}}</h2>
-        <h3>{{rFriend.preferences.diet}}</h3>
+        <h3 *ngFor="let diet of rFriend.preferences.diets">{{diet.name}}</h3>
       </ion-label>
     </ion-item>
   </ion-list>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" routerLink="/add-friend" routerDirection="forward">
     <ion-fab-button>
-      <ion-icon name="add" routerLink="/add-friend" routerDirection="forward"></ion-icon>
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
