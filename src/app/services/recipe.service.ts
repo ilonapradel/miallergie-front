@@ -267,10 +267,16 @@ export class RecipeService {
   }
 
   searchRecipesDependingOnPref(pref: Preferences): Promise<Recipe[]> {
-    let or = [];
+    let or_diets = [];
     for (const diet of pref.diets) {
-      or.push({ dietId: diet.id });
+      or_diets.push({ dietId: diet.id });
     }
+
+    //TODO implémenter les allergies dans les recettes
+    // let or_allergies = [];
+    // for (const allergy of pref.allergies) {
+    //   or_allergies.push({ allergyId: allergy.id });
+    // }
 
     return this.http
       .post<any>(
@@ -281,10 +287,18 @@ export class RecipeService {
               relation: "diets",
               scope: {
                 where: {
-                  or: or,
+                  or: or_diets,
                 },
               },
             },
+            // {
+            //   relation: "allergies",
+            //   scope: {
+            //     where: {
+            //       or: or_allergies,
+            //     },
+            //   },
+            // },
           ],
         },
         {
