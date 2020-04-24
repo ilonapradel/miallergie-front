@@ -28,7 +28,9 @@ export class AuthenticationPage implements OnInit {
   connect(email: string, password: string) {
     this.api
       .login(email, password)
-      .then((user) => {
+      .then(async (user) => {
+        await new Promise((r) => setTimeout(r, 1000));
+
         this.utilities.showToastSimple("Vous êtes connecté !", 2000, "success");
         this.router.navigate(["/home"]);
       })

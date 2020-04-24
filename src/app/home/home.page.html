@@ -1,4 +1,12 @@
 <ion-content>
+  <ion-segment color="secondary" (ionChange)="segmentChanged($event)" [value]="toSearch">
+    <ion-segment-button value="pref">
+      <ion-label>Selon mes préférences</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="all">
+      <ion-label>Voir tout</ion-label>
+    </ion-segment-button>
+  </ion-segment>
   <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (click)="onClickRecipe(recipe)"></app-recipe-card>
   <div style="height: 50px;"></div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

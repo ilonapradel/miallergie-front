@@ -89,6 +89,7 @@ export class UsersService {
             username: string;
           }) => {
             let token: string = res.token;
+            console.log({ token });
             localStorage.setItem("access_token", token);
             this.isAuth = true;
             this.userId = res.id;

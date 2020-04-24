@@ -55,7 +55,7 @@ export class UserRecipesPage implements OnInit {
             this.deleteRecipe(recipe)
               .then((recipe: Recipe) => {
                 this.utilities.showToastSimple(
-                  "Recette suprimmé !",
+                  "Recette suprimée !",
                   1000,
                   "success"
                 );

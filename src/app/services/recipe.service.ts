@@ -1,6 +1,6 @@
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { UtilitiesClass } from "./../utilities-class";
+import { UtilitiesClass, Preferences } from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
@@ -264,5 +264,35 @@ export class RecipeService {
         "success"
       );
     }
+  }
+
+  searchRecipesDependingOnPref(pref: Preferences): Promise<Recipe[]> {
+    let or = [];
+    for (const diet of pref.diets) {
+      or.push({ dietId: diet.id });
+    }
+
+    return this.http
+      .post<any>(
+        this.url + "recipes/search",
+        {
+          include: [
+            {
+              relation: "diets",
+              scope: {
+                where: {
+                  or: or,
+                },
+              },
+            },
+          ],
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .toPromise<Recipe[]>();
   }
 }
