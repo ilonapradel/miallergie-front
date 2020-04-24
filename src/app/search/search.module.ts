@@ -1,3 +1,4 @@
+import { ComponentsModule } from "./../components/components.module";
 import { IonicSelectableModule } from "ionic-selectable";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -14,8 +15,9 @@ import { SearchPage } from "./search.page";
     FormsModule,
     IonicModule,
     SearchPageRoutingModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    ComponentsModule,
   ],
-  declarations: [SearchPage]
+  declarations: [SearchPage],
 })
 export class SearchPageModule {}
