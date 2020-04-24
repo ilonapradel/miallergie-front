@@ -8,7 +8,7 @@ import { ToastController } from "@ionic/angular";
 @Component({
   selector: "app-change-username",
   templateUrl: "./change-username.page.html",
-  styleUrls: ["./change-username.page.scss"]
+  styleUrls: ["./change-username.page.scss"],
 })
 export class ChangeUsernamePage implements OnInit {
   user: User;
@@ -28,9 +28,8 @@ export class ChangeUsernamePage implements OnInit {
   }
 
   changeUsername() {
-    console.log(this.user.username, this.newUsername);
     if (this.user.username !== this.newUsername) {
-      this.api.changeUsername(this.newUsername).then(res => {
+      this.api.changeUsername(this.newUsername).then((res) => {
         this.utilities.showToastModification();
         this.utilities.redirectToProfile();
       });

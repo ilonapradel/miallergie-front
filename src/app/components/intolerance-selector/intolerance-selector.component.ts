@@ -1,3 +1,4 @@
+import { IntoleranceService } from "./../../services/intolerance.service";
 import { Intolerance } from "./../../utilities-class";
 import {
   Component,
@@ -29,8 +30,8 @@ export class IntoleranceSelectorComponent implements OnInit {
 
   @Output() result = new EventEmitter<Intolerance[]>();
 
-  constructor() {
-    this.possibleIntolerances = [];
+  constructor(private intolService: IntoleranceService) {
+    this.possibleIntolerances = intolService.returnIntolerances();
   }
 
   ngOnInit() {}
@@ -48,7 +49,6 @@ export class IntoleranceSelectorComponent implements OnInit {
       this.userPreferences.intolerances.indexOf(intolerance),
       1
     );
-    console.log(this.userPreferences.intolerances);
     this.intoleranceComponent.confirm();
   }
 }

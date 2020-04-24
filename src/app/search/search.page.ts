@@ -55,7 +55,7 @@ export class SearchPage implements OnInit {
 
   deleteIngredient(ingredient: Ingredient) {
     this.selectedIngs.splice(this.selectedIngs.indexOf(ingredient), 1);
-    console.log(this.selectedIngs);
+    this.selectedIngs;
     this.ingredientComponent.confirm();
   }
 

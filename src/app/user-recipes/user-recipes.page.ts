@@ -9,7 +9,7 @@ import { ActionSheetController, ToastController } from "@ionic/angular";
 @Component({
   selector: "app-user-recipes",
   templateUrl: "./user-recipes.page.html",
-  styleUrls: ["./user-recipes.page.scss"]
+  styleUrls: ["./user-recipes.page.scss"],
 })
 export class UserRecipesPage implements OnInit {
   recipes: Recipe[] = [];
@@ -39,20 +39,19 @@ export class UserRecipesPage implements OnInit {
           text: "Voir",
           handler: () => {
             this.seeRecipe(recipe);
-          }
+          },
         },
         {
           text: "Modifier",
           handler: () => {
             this.updateRecipe(recipe);
             this.reload();
-          }
+          },
         },
         {
           text: "Supprimer",
           role: "destructive",
           handler: () => {
-            console.log({ recipe: recipe });
             this.deleteRecipe(recipe)
               .then((recipe: Recipe) => {
                 this.utilities.showToastSimple(
@@ -62,7 +61,7 @@ export class UserRecipesPage implements OnInit {
                 );
                 this.reload();
               })
-              .catch(err => {
+              .catch((err) => {
                 let err_msg = "Error";
                 try {
                   err_msg = err.message;
@@ -72,14 +71,14 @@ export class UserRecipesPage implements OnInit {
                 } catch {}
                 this.utilities.showToastSimple(err_msg, 2000, "danger");
               });
-          }
+          },
         },
         {
           text: "Annuler",
           icon: "close",
-          role: "cancel"
-        }
-      ]
+          role: "cancel",
+        },
+      ],
     });
 
     await actionSheet.present();
@@ -88,8 +87,8 @@ export class UserRecipesPage implements OnInit {
   seeRecipe(recipe: Recipe) {
     const navigationExtras: NavigationExtras = {
       state: {
-        recipe
-      }
+        recipe,
+      },
     };
     this.router.navigate(["recipe-display"], navigationExtras);
   }
@@ -97,8 +96,8 @@ export class UserRecipesPage implements OnInit {
   updateRecipe(recipe: Recipe) {
     const navigationExtras: NavigationExtras = {
       state: {
-        recipe
-      }
+        recipe,
+      },
     };
     this.router.navigate(["edit-recipe"], navigationExtras);
   }
@@ -115,12 +114,12 @@ export class UserRecipesPage implements OnInit {
 
     this.recipeService
       .getRecipes(filter)
-      .then(recipes => {
+      .then((recipes) => {
         this.recipes = [];
         for (const recipe of recipes) {
           this.recipes.push(recipe);
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }
 }

@@ -101,9 +101,9 @@ export class User {
 }
 
 export class Preferences {
-  public diets?: Diet[];
-  public allergies?: Allergy[];
-  public intolerances?: Intolerance[];
+  public diets?: Diet[] = [];
+  public allergies?: Allergy[] = [];
+  public intolerances?: Intolerance[] = [];
 }
 
 export class Friend {
@@ -112,12 +112,12 @@ export class Friend {
 }
 
 export class Allergy {
-  public id: number;
+  public id: string;
   public name: string;
 }
 
 export class Intolerance {
-  public id: number;
+  public id: string;
   public name: string;
 }
 

@@ -318,7 +318,6 @@ export class SetRecipeComponent implements OnInit {
   }
 
   clickOnUpdate() {
-    console.log({ recipe: this.recipe });
     this.recipeService
       .updateRecipe(this.recipe)
       .then(async (savedRecipe: Recipe) => {
