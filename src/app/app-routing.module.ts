@@ -99,7 +99,11 @@ const routes: Routes = [
       import("./edit-recipe/edit-recipe.module").then(
         m => m.EditRecipePageModule
       )
+  },  {
+    path: 'search-results',
+    loadChildren: () => import('./search-results/search-results.module').then( m => m.SearchResultsPageModule)
   }
+
 ];
 
 @NgModule({
