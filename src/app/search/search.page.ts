@@ -69,12 +69,43 @@ export class SearchPage implements OnInit {
       };
     }
     if (this.types && this.types.length > 0) {
-      let tab = [];
+      let tab: SearchRequestWhereOr[] = [];
       for (const type of this.types) {
         tab.push({ type: type });
       }
-      where.or = tab;
+      where.end.push({ or: tab });
     }
+
+    if (this.selectedFoods && this.selectedFoods.length > 0) {
+      let relationRequest = new SearchRequestInclude();
+      relationRequest.relation = "ingredients";
+
+      let tab: SearchRequestWhereOr[] = [];
+      for (const selectedFood of this.selectedFoods) {
+        let newR: SearchRequestWhereOr = {
+          foodId: selectedFood.id,
+        };
+        tab.push(newR);
+      }
+      relationRequest.scope.where.or = tab;
+      where.include.push(relationRequest);
+    }
+
+    if (this.diets && this.diets.length > 0) {
+      let relationRequest = new SearchRequestInclude();
+      relationRequest.relation = "diets";
+
+      let tab: SearchRequestWhereOr[] = [];
+      for (const diet of this.diets) {
+        let newR: SearchRequestWhereOr = {
+          dietId: diet.id,
+        };
+        tab.push(newR);
+      }
+      relationRequest.scope.where.or = tab;
+      where.include.push(relationRequest);
+    }
+
     where.duration = {
       between: [this.rangeValue.lower, this.rangeValue.upper],
     };
@@ -110,14 +141,29 @@ class SearchRequest {
 class SearchRequestWhere {
   name?: SearchRequestWhereLike;
   duration?: SearchRequestWhereBetwen;
-  or?: SearchRequestWhereOr[];
   difficulty: SearchRequestWhereLowerThan;
+  end: SearchRequestWhereEnd[] = [];
+  include: SearchRequestInclude[] = [];
+  or: SearchRequestWhereOr[] = [];
+}
+
+class SearchRequestIncludeScope {
+  where: SearchRequestWhere = new SearchRequestWhere();
+}
+class SearchRequestInclude {
+  relation: string;
+  scope: SearchRequestIncludeScope = new SearchRequestIncludeScope();
+}
+class SearchRequestWhereEnd {
+  or?: SearchRequestWhereOr[];
 }
 class SearchRequestWhereLike {
   like: string;
 }
 class SearchRequestWhereOr {
   type?: string;
+  foodId?: string;
+  dietId?: string;
 }
 class SearchRequestWhereBetwen {
   between: [number, number];

@@ -52,7 +52,7 @@
           <ionic-selectable
             #ingredientComponent
             placeholder="Ingrédients"
-            [(ngModel)]="selectedFoodOptions"
+            [(ngModel)]="selectedFoods"
             [items]="foodOptions"
             itemValueField="id"
             itemTextField="name"
@@ -70,7 +70,7 @@
         outline
         color="secondary"
       >
-        <ion-label>{{ingredient.food.name}}</ion-label>
+        <ion-label>{{ingredient.name}}</ion-label>
         <ion-icon
           name="close"
           (click)="deleteIngredient(ingredient)"
