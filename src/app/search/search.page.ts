@@ -1,3 +1,4 @@
+import { RecipeService } from "src/app/services/recipe.service";
 import { FoodService } from "./../services/food.service";
 import { Food } from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
@@ -34,7 +35,10 @@ export class SearchPage implements OnInit {
   foodOptions: Food[] = [];
   selectedFoods: Food[] = [];
 
-  constructor(private foodService: FoodService) {}
+  constructor(
+    private foodService: FoodService,
+    private recipeService: RecipeService
+  ) {}
 
   // TODO : Use async search for ingredientComponent https://stackblitz.com/edit/ionic-selectable-on-search?file=pages%2Fhome%2Fhome.ts
 
@@ -62,10 +66,13 @@ export class SearchPage implements OnInit {
   }
 
   clickOnSearch() {
-    let where: SearchRequestWhere = new SearchRequestWhere();
+    let request = new SearchRequest();
+    let where = request.where;
+    let include = request.include;
+
     if (this.searchText != "") {
       where.name = {
-        like: "%" + this.searchText + "%",
+        like: ".*" + this.searchText + ".*",
       };
     }
     if (this.types && this.types.length > 0) {
@@ -73,7 +80,7 @@ export class SearchPage implements OnInit {
       for (const type of this.types) {
         tab.push({ type: type });
       }
-      where.end.push({ or: tab });
+      where.or = tab;
     }
 
     if (this.selectedFoods && this.selectedFoods.length > 0) {
@@ -87,8 +94,8 @@ export class SearchPage implements OnInit {
         };
         tab.push(newR);
       }
-      relationRequest.scope.where.or = tab;
-      where.include.push(relationRequest);
+      relationRequest.scope.where.and = tab;
+      include.push(relationRequest);
     }
 
     if (this.diets && this.diets.length > 0) {
@@ -103,7 +110,7 @@ export class SearchPage implements OnInit {
         tab.push(newR);
       }
       relationRequest.scope.where.or = tab;
-      where.include.push(relationRequest);
+      include.push(relationRequest);
     }
 
     where.duration = {
@@ -113,10 +120,12 @@ export class SearchPage implements OnInit {
     where.difficulty = {
       lte: this.difficulty,
     };
-    let request: SearchRequest = {
-      where: where,
-    };
     console.log(request);
+    console.log("filter=" + JSON.stringify(request));
+    this.recipeService
+      .getRecipes("filter=" + JSON.stringify(request))
+      .then((recipes) => console.log(recipes))
+      .catch((err) => console.error(err));
   }
 
   onChangeDiets(diets: Diet[]) {
@@ -136,15 +145,15 @@ export class SearchPage implements OnInit {
 }
 
 class SearchRequest {
-  where: SearchRequestWhere;
+  where: SearchRequestWhere = new SearchRequestWhere();
+  include: SearchRequestInclude[] = [];
 }
 class SearchRequestWhere {
   name?: SearchRequestWhereLike;
   duration?: SearchRequestWhereBetwen;
   difficulty: SearchRequestWhereLowerThan;
-  end: SearchRequestWhereEnd[] = [];
-  include: SearchRequestInclude[] = [];
-  or: SearchRequestWhereOr[] = [];
+  or?: SearchRequestWhereOr[];
+  and?: SearchRequestWhereAnd[];
 }
 
 class SearchRequestIncludeScope {
@@ -154,13 +163,15 @@ class SearchRequestInclude {
   relation: string;
   scope: SearchRequestIncludeScope = new SearchRequestIncludeScope();
 }
-class SearchRequestWhereEnd {
-  or?: SearchRequestWhereOr[];
-}
 class SearchRequestWhereLike {
   like: string;
 }
 class SearchRequestWhereOr {
+  type?: string;
+  foodId?: string;
+  dietId?: string;
+}
+class SearchRequestWhereAnd {
   type?: string;
   foodId?: string;
   dietId?: string;
