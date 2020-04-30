@@ -291,22 +291,29 @@ export class UsersService {
     });
   }
 
-  public addRegisteredFriend(newFriend: User): boolean {
-    let userFriend;
-    this.filterUserOnEmail(newFriend.email).then((user) => {
-      userFriend = user;
+  public addRegisteredFriend(newFriend: User): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.filterUserOnEmail(newFriend.email)
+        .then((bddUsers) => {
+          console.log({ bddUsers });
+          if (isUndefined(bddUsers) || bddUsers.length === 0) {
+            resolve(false);
+          }
+          const findedUser = bddUsers[0];
 
-      console.log(userFriend);
-      if (isUndefined(userFriend)) {
-        return false;
-      }
+          for (const friend of this.myUser.registeredFriends) {
+            if (findedUser.id === friend.id) {
+              resolve(false);
+            }
+          }
 
-      this.postRegisteredFriend(userFriend).then((users) => {
-        this.loadFriends();
-        return true;
-      });
+          this.postRegisteredFriend(findedUser).then((user) => {
+            this.loadFriends();
+            resolve(true);
+          });
+        })
+        .catch((err) => reject(err));
     });
-    return false;
   }
 
   private postRegisteredFriend(userFriend: User): Promise<User> {
@@ -314,7 +321,8 @@ export class UsersService {
       .post<User>(
         this.url + "users/" + this.userId + "/registered-friends",
         {
-          userId: userFriend.id,
+          friendUserId: userFriend.id,
+          ownerUserId: this.userId,
         },
         {
           headers: {
@@ -476,15 +484,15 @@ export class UsersService {
     }
   }
 
-  filterUserOnEmail(email: string): Promise<User> {
+  filterUserOnEmail(email: string): Promise<User[]> {
     let filter = "?filter[where][email]=" + email;
 
     return this.http
-      .get<User>(this.url + "users/" + filter, {
+      .get<User[]>(this.url + "users/" + filter, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
-      .toPromise<User>();
+      .toPromise<User[]>();
   }
 }
