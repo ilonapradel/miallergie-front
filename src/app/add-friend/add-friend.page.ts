@@ -47,7 +47,7 @@ export class AddFriendPage implements OnInit {
 
   ngOnInit() {}
 
-  saveNewUserFriend() {
+  async saveNewUserFriend() {
     if (isUndefined(this.newUserFriend.email)) {
       this.utilities.showToastSimple(
         "L'email de votre ami est obligatoire s'il est enregistré !",
@@ -56,8 +56,8 @@ export class AddFriendPage implements OnInit {
       );
       return;
     }
-
-    if (!this.api.addRegisteredFriend(this.newUserFriend)) {
+    let test = await this.api.addRegisteredFriend(this.newUserFriend);
+    if (!test) {
       this.utilities.showToastSimple(
         "Nous n'avons pas trouvé votre ami :(",
         2000,
