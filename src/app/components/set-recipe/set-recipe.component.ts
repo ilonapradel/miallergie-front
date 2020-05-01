@@ -38,7 +38,7 @@ export class SetRecipeComponent implements OnInit {
   toEdit: boolean;
 
   //const
-  unites: string[] = ["Cuillère à soupe", "g", "cL", "pincées"]; // TODO gérer avec le WS
+  unites: string[] = [];
   foodOptions: Food[] = [];
   selectedFoodOptions: Food[] = [];
   previouslySelectedFoodOptions: Food[] = [];
@@ -78,6 +78,15 @@ export class SetRecipeComponent implements OnInit {
     this.foodService
       .getFoods()
       .then((foods) => (this.foodOptions = foods))
+      .catch((err) => console.error(err));
+
+    this.foodService
+      .getUnits()
+      .then((units) => {
+        for (let unit of units) {
+          this.unites.push(unit.value);
+        }
+      })
       .catch((err) => console.error(err));
   }
 

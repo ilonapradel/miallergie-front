@@ -104,8 +104,22 @@
       <ion-col>
         <ion-item>
           <ion-label position="floating">Nombre d'étapes</ion-label>
-          <ion-input (ionChange)="onChangeNbStages($event)" [value]="recipe.stages.length" type="number"
-            inputmode="numeric" min="0"></ion-input>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="8">
+                <ion-input (ionChange)="onChangeNbStages($event)" [value]="recipe.stages.length" type="number"
+                  inputmode="numeric" min="0"></ion-input>
+              </ion-col>
+              <ion-col size="2">
+                <ion-icon name="add-circle-outline" color="primary" size="large" (click)="recipe.stages.push('')">
+                </ion-icon>
+              </ion-col>
+              <ion-col size="2">
+                <ion-icon name="remove-circle-outline" color="primary" size="large" (click)="recipe.stages.pop()">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-item>
       </ion-col>
     </ion-row>
