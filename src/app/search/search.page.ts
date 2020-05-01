@@ -5,6 +5,11 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient, Diet } from "../utilities-class";
 import { NavigationExtras, Router } from "@angular/router";
+import {
+  SearchRequest,
+  SearchRequestWhereOr,
+  SearchRequestInclude,
+} from "../search-utilities";
 
 @Component({
   selector: "app-search",
@@ -161,43 +166,4 @@ export class SearchPage implements OnInit {
     }
     this.difficulty = position;
   }
-}
-
-class SearchRequest {
-  where: SearchRequestWhere = new SearchRequestWhere();
-  include: SearchRequestInclude[] = [];
-}
-class SearchRequestWhere {
-  name?: SearchRequestWhereLike;
-  duration?: SearchRequestWhereBetwen;
-  difficulty: SearchRequestWhereLowerThan;
-  or?: SearchRequestWhereOr[];
-  and?: SearchRequestWhereAnd[];
-}
-
-class SearchRequestIncludeScope {
-  where: SearchRequestWhere = new SearchRequestWhere();
-}
-class SearchRequestInclude {
-  relation: string;
-  scope: SearchRequestIncludeScope = new SearchRequestIncludeScope();
-}
-class SearchRequestWhereLike {
-  like: string;
-}
-class SearchRequestWhereOr {
-  type?: string;
-  foodId?: string;
-  dietId?: string;
-}
-class SearchRequestWhereAnd {
-  type?: string;
-  foodId?: string;
-  dietId?: string;
-}
-class SearchRequestWhereBetwen {
-  between: [number, number];
-}
-class SearchRequestWhereLowerThan {
-  lte: number;
 }

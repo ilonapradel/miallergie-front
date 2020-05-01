@@ -7,6 +7,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Recipe, Ingredient, Diet } from "../utilities-class";
 import { ApiUrl } from "../utilities-class";
+import {
+  SearchRequest,
+  SearchRequestWhereOr,
+  SearchRequestInclude,
+} from "../search-utilities";
 
 @Injectable({
   providedIn: "root",
@@ -34,7 +39,7 @@ export class RecipeService {
   }
 
   public addRecipe(recipe: Recipe): Promise<Recipe> {
-    let toSave: Recipe = JSON.parse(JSON.stringify(recipe));
+    const toSave: Recipe = JSON.parse(JSON.stringify(recipe));
     toSave.imageId = undefined;
     toSave.image = undefined;
     toSave.diets = undefined;
@@ -57,7 +62,7 @@ export class RecipeService {
   }
 
   public updateRecipe(recipe: Recipe): Promise<Recipe> {
-    let toSave = JSON.parse(JSON.stringify(recipe));
+    const toSave = JSON.parse(JSON.stringify(recipe));
     toSave.diets = undefined;
     toSave.image = undefined;
     toSave.ingredients = undefined;
@@ -168,7 +173,7 @@ export class RecipeService {
     recipe: Recipe,
     ingredient: Ingredient
   ): Promise<Ingredient> {
-    let toSave: Ingredient = JSON.parse(JSON.stringify(ingredient));
+    const toSave: Ingredient = JSON.parse(JSON.stringify(ingredient));
     toSave.food = undefined;
     toSave.foodId = ingredient.food.id;
     toSave.id = undefined;
@@ -267,9 +272,23 @@ export class RecipeService {
   }
 
   searchRecipesDependingOnPref(pref: Preferences): Promise<Recipe[]> {
-    let or_diets = [];
-    for (const diet of pref.diets) {
-      or_diets.push({ dietId: diet.id });
+    const request = new SearchRequest();
+    const where = request.where;
+    const include = request.include;
+
+    if (pref.diets && pref.diets.length > 0) {
+      const relationRequest = new SearchRequestInclude();
+      relationRequest.relation = "diets";
+
+      const tab: SearchRequestWhereOr[] = [];
+      for (const diet of pref.diets) {
+        const newR: SearchRequestWhereOr = {
+          dietId: diet.id,
+        };
+        tab.push(newR);
+      }
+      relationRequest.scope.where.or = tab;
+      include.push(relationRequest);
     }
 
     // TODO implémenter les allergies dans les recettes
@@ -278,41 +297,13 @@ export class RecipeService {
     //   or_allergies.push({ allergyId: allergy.id });
     // }
 
-    return this.http
-      .post<any>(
-        this.url + "recipes/search",
-        {
-          include: [
-            // TODO : faire marcher le include image...
-            // {
-            //   relation: "image",
-            //   scope: { where: {} },
-            // },
-            {
-              relation: "diets",
-              scope: {
-                where: {
-                  or: or_diets,
-                },
-              },
-            },
+    const relationImageRequest = new SearchRequestInclude();
+    relationImageRequest.relation = "image";
+    console.log("IPL", relationImageRequest);
+    include.push(relationImageRequest);
 
-            // {
-            //   relation: "allergies",
-            //   scope: {
-            //     where: {
-            //       or: or_allergies,
-            //     },
-            //   },
-            // },
-          ],
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .toPromise<Recipe[]>();
+    console.log(request);
+    console.log("filter=" + JSON.stringify(request));
+    return this.getRecipes("filter=" + JSON.stringify(request));
   }
 }
