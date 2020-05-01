@@ -42,6 +42,49 @@ export class UsersService {
     this.myUser.preferences = new Preferences();
   }
 
+  public getAllAboutUser(): Promise<any> {
+    return this.http
+      .get<any>(this.url + "users/me", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .toPromise();
+  }
+
+  private loadUserData(): void {
+    this.getAllAboutUser().then((userData) => {
+      this.myUser.preferences.allergies = userData.allergies;
+      this.myUser.preferences.diets = userData.diets;
+      this.myUser.preferences.intolerances = userData.intolerances;
+      // this.getFriendFromUserData(userData.nonRegisteredFriends, false);
+      // this.getFriendFromUserData(userData.registeredFriends, true);
+    });
+  }
+
+  private getFriendFromUserData(friends: any, areRegistered: boolean) {
+    if (areRegistered) {
+      for (const rgDataFriend of friends) {
+        let friend: User;
+        friend.id = rgDataFriend.friendUser.id;
+        friend.username = rgDataFriend.friendUser.username;
+        friend.preferences.allergies = rgDataFriend.friendUser.allergies;
+        friend.preferences.intolerances = rgDataFriend.friendUser.intolerances;
+        friend.preferences.diets = rgDataFriend.friendUser.diets;
+        this.myUser.registeredFriends.push(friend);
+      }
+    } else {
+      for (const nonRgDataFriend of friends) {
+        let friend: Friend;
+        friend.surname = nonRgDataFriend.surname;
+        friend.preferences.allergies = nonRgDataFriend.allergies;
+        friend.preferences.intolerances = nonRgDataFriend.intolerances;
+        friend.preferences.diets = nonRgDataFriend.diets;
+        this.myUser.nonRegisteredFriends.push(friend);
+      }
+    }
+  }
+
   public loadFriends(): void {
     this.getRegisteredFriends().then((friends) => {
       this.myUser.registeredFriends = friends;
@@ -102,6 +145,7 @@ export class UsersService {
             this.isAuth = true;
             this.userId = res.id;
             this.setUser(res.email, res.username, res.id);
+            this.loadUserData();
           }
         )
       )
