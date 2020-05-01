@@ -8,7 +8,7 @@ import { ApiUrl } from "../utilities-class";
 import { catchError } from "rxjs/operators";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class FoodService {
   private url: string = ApiUrl;
@@ -26,8 +26,8 @@ export class FoodService {
     return this.http
       .get<Food[]>(this.url + "foods", {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Food[]>(
         catchError<Food[], Observable<never>>((err: any) => {
@@ -38,5 +38,23 @@ export class FoodService {
         })
       )
       .toPromise<Food[]>();
+  }
+
+  public getUnits(): Promise<any[]> {
+    return this.http
+      .get<any[]>(this.url + "units", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any[]>(
+        catchError<Food[], Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any[]>();
   }
 }

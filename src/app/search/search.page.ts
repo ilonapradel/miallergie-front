@@ -1,9 +1,10 @@
 import { RecipeService } from "src/app/services/recipe.service";
 import { FoodService } from "./../services/food.service";
-import { Food } from "./../utilities-class";
+import { Food, Recipe } from "./../utilities-class";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { IonicSelectableComponent } from "ionic-selectable";
 import { Ingredient, Diet } from "../utilities-class";
+import { NavigationExtras, Router } from "@angular/router";
 
 @Component({
   selector: "app-search",
@@ -27,17 +28,18 @@ export class SearchPage implements OnInit {
 
   rangeValue: { lower: number; upper: number } = { lower: 20, upper: 100 };
 
-  searchText: string = "";
+  searchText = "";
   types: string[] = [];
   diets: Diet[] = [];
-  difficulty: number = 3;
+  difficulty = 3;
 
   foodOptions: Food[] = [];
   selectedFoods: Food[] = [];
 
   constructor(
     private foodService: FoodService,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private router: Router
   ) {}
 
   // TODO : Use async search for ingredientComponent https://stackblitz.com/edit/ionic-selectable-on-search?file=pages%2Fhome%2Fhome.ts
@@ -66,9 +68,9 @@ export class SearchPage implements OnInit {
   }
 
   clickOnSearch() {
-    let request = new SearchRequest();
-    let where = request.where;
-    let include = request.include;
+    const request = new SearchRequest();
+    const where = request.where;
+    const include = request.include;
 
     if (this.searchText != "") {
       where.name = {
@@ -76,20 +78,20 @@ export class SearchPage implements OnInit {
       };
     }
     if (this.types && this.types.length > 0) {
-      let tab: SearchRequestWhereOr[] = [];
+      const tab: SearchRequestWhereOr[] = [];
       for (const type of this.types) {
-        tab.push({ type: type });
+        tab.push({ type });
       }
       where.or = tab;
     }
 
     if (this.selectedFoods && this.selectedFoods.length > 0) {
-      let relationRequest = new SearchRequestInclude();
+      const relationRequest = new SearchRequestInclude();
       relationRequest.relation = "ingredients";
 
-      let tab: SearchRequestWhereOr[] = [];
+      const tab: SearchRequestWhereOr[] = [];
       for (const selectedFood of this.selectedFoods) {
-        let newR: SearchRequestWhereOr = {
+        const newR: SearchRequestWhereOr = {
           foodId: selectedFood.id,
         };
         tab.push(newR);
@@ -99,12 +101,12 @@ export class SearchPage implements OnInit {
     }
 
     if (this.diets && this.diets.length > 0) {
-      let relationRequest = new SearchRequestInclude();
+      const relationRequest = new SearchRequestInclude();
       relationRequest.relation = "diets";
 
-      let tab: SearchRequestWhereOr[] = [];
+      const tab: SearchRequestWhereOr[] = [];
       for (const diet of this.diets) {
-        let newR: SearchRequestWhereOr = {
+        const newR: SearchRequestWhereOr = {
           dietId: diet.id,
         };
         tab.push(newR);
@@ -112,6 +114,11 @@ export class SearchPage implements OnInit {
       relationRequest.scope.where.or = tab;
       include.push(relationRequest);
     }
+
+    const relationImageRequest = new SearchRequestInclude();
+    relationImageRequest.relation = "image";
+    console.log("IPL", relationImageRequest);
+    include.push(relationImageRequest);
 
     where.duration = {
       between: [this.rangeValue.lower, this.rangeValue.upper],
@@ -124,8 +131,20 @@ export class SearchPage implements OnInit {
     console.log("filter=" + JSON.stringify(request));
     this.recipeService
       .getRecipes("filter=" + JSON.stringify(request))
-      .then((recipes) => console.log(recipes))
+      .then((recipes) => {
+        console.log(recipes);
+        this.goToSearchResultsPage(recipes);
+      })
       .catch((err) => console.error(err));
+  }
+
+  goToSearchResultsPage(recipes: Recipe[]) {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        recipes,
+      },
+    };
+    this.router.navigate(["search-results"], navigationExtras);
   }
 
   onChangeDiets(diets: Diet[]) {

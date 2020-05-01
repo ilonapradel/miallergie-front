@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Recipe } from "../utilities-class";
-import { NavigationExtras, Router } from "@angular/router";
+import { NavigationExtras, Router, ActivatedRoute } from "@angular/router";
 import { RecipeService } from "../services/recipe.service";
 
 @Component({
@@ -9,12 +9,23 @@ import { RecipeService } from "../services/recipe.service";
   styleUrls: ["./search-results.page.scss"],
 })
 export class SearchResultsPage implements OnInit {
-  @Input("recipes")
   recipes: Recipe[];
+  constructor(
+    private recipeService: RecipeService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  constructor(private recipeService: RecipeService, private router: Router) {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        if (this.router.getCurrentNavigation().extras.state.recipes) {
+          this.recipes = this.router.getCurrentNavigation().extras.state.recipes;
+        }
+      }
+    });
+    console.log(this.recipes);
+  }
 
   onClickRecipe(recipe: Recipe) {
     const navigationExtras: NavigationExtras = {

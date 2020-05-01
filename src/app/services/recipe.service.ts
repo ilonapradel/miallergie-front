@@ -272,7 +272,7 @@ export class RecipeService {
       or_diets.push({ dietId: diet.id });
     }
 
-    //TODO implémenter les allergies dans les recettes
+    // TODO implémenter les allergies dans les recettes
     // let or_allergies = [];
     // for (const allergy of pref.allergies) {
     //   or_allergies.push({ allergyId: allergy.id });
@@ -283,6 +283,11 @@ export class RecipeService {
         this.url + "recipes/search",
         {
           include: [
+            // TODO : faire marcher le include image...
+            // {
+            //   relation: "image",
+            //   scope: { where: {} },
+            // },
             {
               relation: "diets",
               scope: {
@@ -291,6 +296,7 @@ export class RecipeService {
                 },
               },
             },
+
             // {
             //   relation: "allergies",
             //   scope: {

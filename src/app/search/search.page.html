@@ -1,10 +1,7 @@
 <ion-content>
   <ion-grid>
     <ion-row ion-align-items-center>
-      <ion-searchbar
-        placeholder="Une recette"
-        [(ngModel)]="searchText"
-      ></ion-searchbar>
+      <ion-searchbar placeholder="Une recette" [(ngModel)]="searchText"></ion-searchbar>
     </ion-row>
     <ion-row>
       <ion-col ion-align-items-center></ion-col>
@@ -15,12 +12,7 @@
         <ion-list>
           <ion-item>
             <ion-label>Type de plat</ion-label>
-            <ion-select
-              multiple="true"
-              okText="Ok"
-              cancelText="Annuler"
-              [(ngModel)]="types"
-            >
+            <ion-select multiple="true" okText="Ok" cancelText="Annuler" [(ngModel)]="types">
               <ion-select-option value="Entrée">Entrée</ion-select-option>
               <ion-select-option value="Plat">Plat</ion-select-option>
               <ion-select-option value="Dessert">Dessert</ion-select-option>
@@ -34,12 +26,7 @@
         <ion-list>
           <ion-item>
             <ion-label>Régime alimentaire</ion-label>
-            <app-diet-selector
-              style="width: 100%;"
-              [enabled]="true"
-              [diets]="diets"
-              (result)="onChangeDiets($event)"
-            >
+            <app-diet-selector style="width: 100%;" [enabled]="true" [diets]="diets" (result)="onChangeDiets($event)">
             </app-diet-selector>
           </ion-item>
         </ion-list>
@@ -49,62 +36,30 @@
       <ion-col>
         <ion-item>
           <ion-label>Ingrédient</ion-label>
-          <ionic-selectable
-            #ingredientComponent
-            placeholder="Ingrédients"
-            [(ngModel)]="selectedFoods"
-            [items]="foodOptions"
-            itemValueField="id"
-            itemTextField="name"
-            [canSearch]="true"
-            [isMultiple]="true"
-            (onChange)="onIngredientChange($event)"
-          >
+          <ionic-selectable #ingredientComponent placeholder="Ingrédients" [(ngModel)]="selectedFoods"
+            [items]="foodOptions" itemValueField="id" itemTextField="name" [canSearch]="true" [isMultiple]="true"
+            (onChange)="onIngredientChange($event)">
           </ionic-selectable>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="selectedFoods.length!==0">
-      <ion-chip
-        *ngFor="let ingredient of selectedFoods"
-        outline
-        color="secondary"
-      >
+      <ion-chip *ngFor="let ingredient of selectedFoods" outline color="secondary">
         <ion-label>{{ingredient.name}}</ion-label>
-        <ion-icon
-          name="close"
-          (click)="deleteIngredient(ingredient)"
-        ></ion-icon>
+        <ion-icon name="close" (click)="deleteIngredient(ingredient)"></ion-icon>
       </ion-chip>
     </ion-row>
     <ion-row>
       <ion-col class="paddingTop">
-        <ion-text
-          >Durée de la recette : de {{rangeValue.lower}} à {{rangeValue.upper}}
-          minutes {{rangeValue.upper===120? "ou plus":""}}</ion-text
-        >
+        <ion-text>Durée de la recette : de {{rangeValue.lower}} à {{rangeValue.upper}}
+          minutes {{rangeValue.upper===120? "ou plus":""}}</ion-text>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-range
-          class="paddingTop"
-          debounce="100"
-          (ionChange)="changeValue($event.detail.value)"
-          [value]="rangeValue"
-          dualKnobs="true"
-          min="5"
-          max="120"
-          step="5"
-          pin="true"
-          color="secondary"
-        >
-          <ion-icon
-            color="dark"
-            size="small"
-            slot="start"
-            name="time"
-          ></ion-icon>
+        <ion-range class="paddingTop" debounce="100" (ionChange)="changeValue($event.detail.value)" [value]="rangeValue"
+          dualKnobs="true" min="5" max="120" step="5" pin="true" color="secondary">
+          <ion-icon color="dark" size="small" slot="start" name="time"></ion-icon>
           <ion-icon color="dark" slot="end" name="time"></ion-icon>
         </ion-range>
       </ion-col>
@@ -113,13 +68,8 @@
     <ion-row center>
       <ion-col align-self-center>
         <ion-label>Difficulté</ion-label>
-        <ion-icon
-          *ngFor="let num of [0, 1, 2, 3, 4]"
-          size="large"
-          name="trophy"
-          [(color)]="diff_name[num]"
-          (click)="clickOnDifficulty(num)"
-        >
+        <ion-icon *ngFor="let num of [0, 1, 2, 3, 4]" size="large" name="trophy" [(color)]="diff_name[num]"
+          (click)="clickOnDifficulty(num)">
         </ion-icon>
       </ion-col>
     </ion-row>
