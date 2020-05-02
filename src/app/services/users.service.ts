@@ -54,19 +54,38 @@ export class UsersService {
 
   private loadUserData(): void {
     this.getAllAboutUser().then((userData) => {
-      this.myUser.preferences.allergies = userData.allergies;
-      this.myUser.preferences.diets = userData.diets;
-      this.myUser.preferences.intolerances = userData.intolerances;
-      // this.getFriendFromUserData(userData.nonRegisteredFriends, false);
-      // this.getFriendFromUserData(userData.registeredFriends, true);
+      this.getDietsFromUserData(userData.diets);
+      this.getAllergiesFromUserData(userData.allergies);
+      this.getIntolerancesFromUserData(userData.intolerances);
+      this.getFriendFromUserData(userData.nonRegisteredFriends, false);
+      this.getFriendFromUserData(userData.registeredFriends, true);
     });
+  }
+
+  private getDietsFromUserData(diets: any[]) {
+    for (const dataDiet of diets) {
+      const dietToSave = dataDiet.diet;
+      this.myUser.preferences.diets.push(dietToSave);
+    }
+  }
+  private getAllergiesFromUserData(allergies: any[]) {
+    for (const dataAllergie of allergies) {
+      const toSave = dataAllergie.allergy;
+      this.myUser.preferences.allergies.push(toSave);
+    }
+  }
+  private getIntolerancesFromUserData(intolerances: any[]) {
+    for (const dataIntol of intolerances) {
+      const toSave = dataIntol.intolerance;
+      this.myUser.preferences.intolerances.push(toSave);
+    }
   }
 
   private getFriendFromUserData(friends: any, areRegistered: boolean) {
     if (areRegistered) {
       for (const rgDataFriend of friends) {
-        let friend: User;
-        friend.id = rgDataFriend.friendUser.id;
+        const friend: User = new User();
+        friend.id = rgDataFriend.userid;
         friend.username = rgDataFriend.friendUser.username;
         friend.preferences.allergies = rgDataFriend.friendUser.allergies;
         friend.preferences.intolerances = rgDataFriend.friendUser.intolerances;
@@ -75,7 +94,7 @@ export class UsersService {
       }
     } else {
       for (const nonRgDataFriend of friends) {
-        let friend: Friend;
+        const friend: Friend = new Friend();
         friend.surname = nonRgDataFriend.surname;
         friend.preferences.allergies = nonRgDataFriend.allergies;
         friend.preferences.intolerances = nonRgDataFriend.intolerances;
@@ -85,35 +104,35 @@ export class UsersService {
     }
   }
 
-  public loadFriends(): void {
-    this.getRegisteredFriends().then((friends) => {
-      this.myUser.registeredFriends = friends;
-    });
+  // public loadFriends(): void {
+  //   this.getRegisteredFriends().then((friends) => {
+  //     this.myUser.registeredFriends = friends;
+  //   });
 
-    this.getNonRegisteredFriends().then((friends) => {
-      this.myUser.nonRegisteredFriends = friends;
-    });
-  }
+  //   this.getNonRegisteredFriends().then((friends) => {
+  //     this.myUser.nonRegisteredFriends = friends;
+  //   });
+  // }
 
-  private getRegisteredFriends(): Promise<User[]> {
-    return this.http
-      .get<User[]>(this.url + "users/" + this.userId + "/registered-friends", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .toPromise();
-  }
+  // private getRegisteredFriends(): Promise<User[]> {
+  //   return this.http
+  //     .get<User[]>(this.url + "users/" + this.userId + "/registered-friends", {
+  //       headers: {
+  //         Authorization: "Bearer " + localStorage.getItem("access_token"),
+  //       },
+  //     })
+  //     .toPromise();
+  // }
 
-  private getNonRegisteredFriends(): Promise<Friend[]> {
-    return this.http
-      .get<Friend[]>(this.url + "users/" + this.userId + "/friends", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .toPromise();
-  }
+  // private getNonRegisteredFriends(): Promise<Friend[]> {
+  //   return this.http
+  //     .get<Friend[]>(this.url + "users/" + this.userId + "/friends", {
+  //       headers: {
+  //         Authorization: "Bearer " + localStorage.getItem("access_token"),
+  //       },
+  //     })
+  //     .toPromise();
+  // }
 
   public register(username: string, email: string, password: string) {
     return this.http
@@ -227,9 +246,6 @@ export class UsersService {
     this.myUser.email = email;
     this.myUser.username = username;
     this.myUser.id = id;
-
-    this.loadUserPreferences();
-    this.loadFriends();
   }
 
   private setUsername(newUsername: string) {
@@ -244,102 +260,10 @@ export class UsersService {
     return this.myUser.preferences;
   }
 
-  private async loadUserPreferences(): Promise<void> {
-    const promises: Promise<void>[] = [];
-    promises.push(this.getUserDiets());
-    promises.push(this.getUserIntolerances());
-    promises.push(this.getUserAllergies());
-
-    await Promise.all(promises);
-  }
-
-  private getUserDiets(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<{ id: string; userId: string; dietId: string }[]>(
-          this.url + "users/" + this.userId + "/user-diets",
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .toPromise<{ id: string; userId: string; dietId: string }[]>()
-        .then(async (diets) => {
-          const userDiets: Diet[] = [];
-          for (const diet of diets) {
-            const dietToSave = await this.dietService.getDiet(diet.dietId);
-            userDiets.push(dietToSave);
-          }
-          this.myUser.preferences.diets = userDiets;
-
-          resolve();
-        })
-        .catch((err) => console.error(err));
-    });
-  }
-
-  private getUserAllergies(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<{ id: string; userId: string; allergyId: string }[]>(
-          this.url + "users/" + this.userId + "/user-allergies",
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .toPromise<{ id: string; userId: string; allergyId: string }[]>()
-        .then(async (allergies) => {
-          const userAllergies: Allergy[] = [];
-          for (const allergy of allergies) {
-            const allergyToSave = await this.allergyService.getAllergie(
-              allergy.allergyId
-            );
-            userAllergies.push(allergyToSave);
-          }
-          this.myUser.preferences.allergies = userAllergies;
-
-          resolve();
-        })
-        .catch((err) => console.error(err));
-    });
-  }
-
-  private getUserIntolerances(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<{ id: string; userId: string; intoleranceId: string }[]>(
-          this.url + "users/" + this.userId + "/user-intolerances",
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .toPromise<{ id: string; userId: string; intoleranceId: string }[]>()
-        .then(async (intolerances) => {
-          const intols: Intolerance[] = [];
-          for (const intol of intolerances) {
-            const intolToSave = await this.intoleranceService.getIntolerance(
-              intol.intoleranceId
-            );
-            intols.push(intolToSave);
-          }
-          this.myUser.preferences.intolerances = intols;
-
-          resolve();
-        })
-        .catch((err) => console.error(err));
-    });
-  }
-
   public addRegisteredFriend(newFriend: User): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.filterUserOnEmail(newFriend.email)
         .then((bddUsers) => {
-          console.log({ bddUsers });
           if (isUndefined(bddUsers) || bddUsers.length === 0) {
             resolve(false);
           }
@@ -352,7 +276,7 @@ export class UsersService {
           }
 
           this.postRegisteredFriend(findedUser).then((user) => {
-            this.loadFriends();
+            this.myUser.registeredFriends.push(findedUser);
             resolve(true);
           });
         })
@@ -398,13 +322,10 @@ export class UsersService {
     this.postFriend(newFriend).then((friend) => {
       this.savePreferences(newFriend.preferences, friend.id);
     });
-    this.loadFriends();
   }
 
   public async saveUserPreferences(newPreferences: Preferences) {
     this.savePreferences(newPreferences, this.userId);
-
-    this.loadUserPreferences();
   }
 
   private async savePreferences(newPreferences: Preferences, id: string) {

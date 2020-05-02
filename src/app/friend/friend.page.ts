@@ -17,7 +17,7 @@ export class FriendPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
-    this.api.loadFriends();
+    // this.api.loadFriends();
     this.myNonRegFriends = this.api.getUser().nonRegisteredFriends;
     this.myRegFriends = this.api.getUser().registeredFriends;
   }

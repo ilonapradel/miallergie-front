@@ -122,7 +122,6 @@ export class SearchPage implements OnInit {
 
     const relationImageRequest = new SearchRequestInclude();
     relationImageRequest.relation = "image";
-    console.log("IPL", relationImageRequest);
     include.push(relationImageRequest);
 
     where.duration = {
@@ -132,12 +131,9 @@ export class SearchPage implements OnInit {
     where.difficulty = {
       lte: this.difficulty,
     };
-    console.log(request);
-    console.log("filter=" + JSON.stringify(request));
     this.recipeService
       .getRecipes("filter=" + JSON.stringify(request))
       .then((recipes) => {
-        console.log(recipes);
         this.goToSearchResultsPage(recipes);
       })
       .catch((err) => console.error(err));

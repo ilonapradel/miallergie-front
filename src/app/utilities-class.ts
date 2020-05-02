@@ -95,9 +95,9 @@ export class User {
   public password?: string;
   public email: string;
   public id?: string;
-  public preferences: Preferences;
-  public nonRegisteredFriends?: Friend[];
-  public registeredFriends?: User[];
+  public preferences: Preferences = new Preferences();
+  public nonRegisteredFriends?: Friend[] = [];
+  public registeredFriends?: User[] = [];
 }
 
 export class Preferences {

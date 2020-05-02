@@ -299,11 +299,8 @@ export class RecipeService {
 
     const relationImageRequest = new SearchRequestInclude();
     relationImageRequest.relation = "image";
-    console.log("IPL", relationImageRequest);
     include.push(relationImageRequest);
 
-    console.log(request);
-    console.log("filter=" + JSON.stringify(request));
     return this.getRecipes("filter=" + JSON.stringify(request));
   }
 }
