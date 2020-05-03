@@ -12,6 +12,7 @@ import { catchError } from "rxjs/operators";
 })
 export class FoodService {
   private url: string = ApiUrl;
+  private knownFoods: Food[] = [];
 
   private utilities: UtilitiesClass;
   constructor(
@@ -20,9 +21,15 @@ export class FoodService {
     private toastController: ToastController
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
+    this.getFoods().then((foods) => (this.knownFoods = foods));
   }
 
-  public getFoods(): Promise<Food[]> {
+  public returnFoods() {
+    return this.knownFoods;
+  }
+
+  //?filter[include][0][relation]=food-allergies
+  private getFoods(): Promise<Food[]> {
     return this.http
       .get<Food[]>(this.url + "foods", {
         headers: {

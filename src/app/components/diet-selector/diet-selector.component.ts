@@ -30,12 +30,7 @@ export class DietSelectorComponent implements OnInit {
   dietComponent: IonicSelectableComponent;
 
   constructor(private dietService: DietService) {
-    this.dietService
-      .getDiets()
-      .then((d: Diet[]) => {
-        this.dietOptions = d;
-      })
-      .catch((err) => console.log(err));
+    this.dietOptions = this.dietService.returnDiets();
   }
 
   ngOnInit() {}

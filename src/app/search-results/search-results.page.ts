@@ -24,7 +24,6 @@ export class SearchResultsPage implements OnInit {
         }
       }
     });
-    console.log(this.recipes);
   }
 
   onClickRecipe(recipe: Recipe) {

@@ -75,10 +75,7 @@ export class SetRecipeComponent implements OnInit {
   ) {
     this.utilities = new UtilitiesClass(new ToastController(), router);
 
-    this.foodService
-      .getFoods()
-      .then((foods) => (this.foodOptions = foods))
-      .catch((err) => console.error(err));
+    this.foodOptions = this.foodService.returnFoods();
 
     this.foodService
       .getUnits()
@@ -122,6 +119,7 @@ export class SetRecipeComponent implements OnInit {
         this.saveIngredients(saveProm, savedRecipe);
         this.saveDiets(saveProm, savedRecipe);
         this.saveImage(saveProm, savedRecipe);
+        this.recipeService.saveAllergiesAndIntolerancesOfRecipe(savedRecipe);
 
         Promise.all(saveProm)
           .then(() => {
@@ -169,6 +167,9 @@ export class SetRecipeComponent implements OnInit {
       );
     }
   }
+
+  saveAllergiesOfRecipe() {}
+
   saveImage(saveProm: Promise<any>[], savedRecipe: Recipe) {
     if (this.correctPath && this.currentName) {
       //save image if needed
@@ -319,7 +320,7 @@ export class SetRecipeComponent implements OnInit {
       .then(async (linkDiets) => {
         this.recipe.diets = [];
         for (const linkDiet of linkDiets) {
-          const diet = await this.dietService.getDiet(linkDiet.dietId);
+          const diet = this.dietService.returnDietById(linkDiet.dietId);
           this.recipe.diets.push(diet);
         }
       })

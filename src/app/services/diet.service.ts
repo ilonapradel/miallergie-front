@@ -8,11 +8,12 @@ import { catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class DietService {
   private utilities: UtilitiesClass;
   private url: string = ApiUrl;
+  private knownDiets: Diet[] = [];
 
   constructor(
     private http: HttpClient,
@@ -20,14 +21,16 @@ export class DietService {
     private toastController: ToastController
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
+
+    this.getDiets().then((diets) => (this.knownDiets = diets));
   }
 
-  public getDiets(): Promise<Diet[]> {
+  private getDiets(): Promise<Diet[]> {
     return this.http
       .get<Diet[]>(this.url + "diets", {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Diet[]>(
         catchError<Diet[], Observable<never>>((err: any) => {
@@ -40,12 +43,24 @@ export class DietService {
       .toPromise<Diet[]>();
   }
 
-  public getDiet(id: string): Promise<Diet> {
+  public returnDiets(): Diet[] {
+    return this.knownDiets;
+  }
+
+  public returnDietById(id: string) {
+    for (const diet of this.knownDiets) {
+      if (diet.id === id) {
+        return diet;
+      }
+    }
+  }
+
+  private getDiet(id: string): Promise<Diet> {
     return this.http
       .get<Diet>(this.url + "diets/" + id, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Diet>(
         catchError<Diet, Observable<never>>((err: any) => {

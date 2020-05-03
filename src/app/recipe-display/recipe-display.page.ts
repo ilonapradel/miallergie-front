@@ -12,7 +12,7 @@ import { ApiUrl } from "../utilities-class";
 @Component({
   selector: "app-recipe-display",
   templateUrl: "./recipe-display.page.html",
-  styleUrls: ["./recipe-display.page.scss"]
+  styleUrls: ["./recipe-display.page.scss"],
 })
 export class RecipeDisplayPage implements OnInit {
   recipe: Recipe = new Recipe();
@@ -23,7 +23,7 @@ export class RecipeDisplayPage implements OnInit {
     "light",
     "light",
     "light",
-    "light"
+    "light",
   ];
 
   constructor(
@@ -35,7 +35,7 @@ export class RecipeDisplayPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(async params => {
+    this.route.queryParams.subscribe(async (params) => {
       if (this.router.getCurrentNavigation().extras.state) {
         if (this.router.getCurrentNavigation().extras.state.recipe) {
           this.recipe = this.router.getCurrentNavigation().extras.state.recipe;
@@ -43,14 +43,14 @@ export class RecipeDisplayPage implements OnInit {
           //getting diet
           this.recipeService
             .getDietsFromRecipe(this.recipe)
-            .then(async linkDiets => {
+            .then(async (linkDiets) => {
               this.recipe.diets = [];
               for (const linkDiet of linkDiets) {
-                let diet = await this.dietService.getDiet(linkDiet.dietId);
+                const diet = this.dietService.returnDietById(linkDiet.dietId);
                 this.recipe.diets.push(diet);
               }
             })
-            .catch(err => console.error(err));
+            .catch((err) => console.error(err));
 
           //getting ingrediants with their food
           try {

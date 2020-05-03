@@ -50,10 +50,7 @@ export class SearchPage implements OnInit {
   // TODO : Use async search for ingredientComponent https://stackblitz.com/edit/ionic-selectable-on-search?file=pages%2Fhome%2Fhome.ts
 
   ngOnInit() {
-    this.foodService
-      .getFoods()
-      .then((foods) => (this.foodOptions = foods))
-      .catch((err) => console.error(err));
+    this.foodOptions = this.foodService.returnFoods();
   }
 
   changeValue(value: { lower: number; upper: number }) {
