@@ -35,6 +35,8 @@ export class HomePage {
       )
       .then((recipes) => {
         for (const recipe of recipes) {
+          // this.recipeService.getAllergiesAndIntolerancesFromRecipe(recipe);
+          console.log(recipe);
           this.recipes.push(recipe);
         }
       })
@@ -48,6 +50,9 @@ export class HomePage {
       .then((recipes) => {
         for (const recipe of recipes) {
           if (recipe.diets !== undefined) {
+            console.log(recipe);
+            // this.recipeService.getAllergiesAndIntolerancesFromRecipe(recipe);
+            console.log(recipe);
             this.recipes.push(recipe);
           }
         }

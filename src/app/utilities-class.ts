@@ -60,8 +60,10 @@ export class Ingredient {
 }
 
 export class Food {
-  id: string = "";
-  name: string = "";
+  public id: string = "";
+  public name: string = "";
+  public allergies: Allergy[] = [];
+  public intolerances: Intolerance[] = [];
 }
 
 export class Recipe {
@@ -76,6 +78,8 @@ export class Recipe {
   public numberOfPeople: number = 1;
   public stages: string[] = ["", "", "", "", ""];
   public type: string;
+  public intolerances: Intolerance[];
+  public allergies: Allergy[];
 }
 
 export class File {
@@ -107,7 +111,7 @@ export class Preferences {
 }
 
 export class Friend {
-  public preferences: Preferences;
+  public preferences: Preferences = new Preferences();
   public surname: string;
 }
 

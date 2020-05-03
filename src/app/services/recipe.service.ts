@@ -1,6 +1,13 @@
+import { AllergyService } from "./allergy.service";
+import { IntoleranceService } from "./intolerance.service";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { UtilitiesClass, Preferences } from "./../utilities-class";
+import {
+  UtilitiesClass,
+  Preferences,
+  Intolerance,
+  Allergy,
+} from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
@@ -12,6 +19,7 @@ import {
   SearchRequestWhereOr,
   SearchRequestInclude,
 } from "../search-utilities";
+import { isNullOrUndefined } from "util";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +31,9 @@ export class RecipeService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private intoleranceService: IntoleranceService,
+    private allergieService: AllergyService
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
   }
@@ -303,4 +313,105 @@ export class RecipeService {
 
     return this.getRecipes("filter=" + JSON.stringify(request));
   }
+
+  public saveAllergiesAndIntolerancesOfRecipe(recipe: Recipe): void {
+    for (const ing of recipe.ingredients) {
+      const allergies = ing.food.allergies;
+      for (const all of allergies) {
+        if (recipe.allergies.indexOf(all) === -1) {
+          recipe.allergies.push(all);
+        }
+      }
+
+      const intolerances = ing.food.intolerances;
+      for (const intol of intolerances) {
+        if (recipe.intolerances.indexOf(intol) === -1) {
+          recipe.intolerances.push(intol);
+        }
+      }
+    }
+
+    this.postAllergiesOfRecipe(recipe);
+    this.postIntolerancesOfRecipe(recipe);
+  }
+
+  private postAllergiesOfRecipe(recipe: Recipe): void {
+    for (const all of recipe.allergies) {
+      this.http
+        .post<Recipe>(
+          this.url + "recipes/" + recipe.id + "/recipe-allergies",
+          {
+            allergyId: all.id,
+            recipeId: recipe.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .pipe<Recipe>(
+          catchError<Recipe, Observable<never>>((err: any) => {
+            if (err.status === 401) {
+              this.utilities.disconnect();
+            }
+            return throwError(err);
+          })
+        );
+    }
+  }
+
+  private postIntolerancesOfRecipe(recipe: Recipe): void {
+    for (const intol of recipe.intolerances) {
+      this.http
+        .post<Recipe>(
+          this.url + "recipes/" + recipe.id + "/recipe-intolerances",
+          {
+            intoleranceId: intol.id,
+            recipeId: recipe.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .pipe<Recipe>(
+          catchError<Recipe, Observable<never>>((err: any) => {
+            if (err.status === 401) {
+              this.utilities.disconnect();
+            }
+            return throwError(err);
+          })
+        );
+    }
+  }
+
+  // public getAllergiesAndIntolerancesFromRecipe(recipe: Recipe): void {
+  //   let intolerancesInRecipe: Intolerance[] = [];
+  //   let allergiesInRecipe: Allergy[] = [];
+  //   this.getIngredientFromRecipe(recipe).then((ingredients) => {
+  //     recipe.ingredients = ingredients;
+  //     for (const ing of recipe.ingredients) {
+  //       this.intoleranceService
+  //         .getIntolerancesOfFood(ing.foodId)
+  //         .then((intols) => {
+  //           console.log({ intols });
+  //           intolerancesInRecipe.concat(intols);
+  //         });
+
+  //       this.allergieService
+  //         .getAllergiesOfFood(ing.foodId)
+  //         .then((allergies) => {
+  //           console.log(allergies);
+  //           allergiesInRecipe.concat(allergies);
+  //         });
+  //     }
+  //     console.log(intolerancesInRecipe);
+  //     console.log(allergiesInRecipe);
+  //   });
+
+  //   recipe.allergies = allergiesInRecipe;
+  //   recipe.intolerances = intolerancesInRecipe;
+  // }
 }
