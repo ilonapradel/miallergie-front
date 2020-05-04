@@ -1,3 +1,7 @@
+import { AllergyService } from "./../services/allergy.service";
+import { IntoleranceService } from "./../services/intolerance.service";
+import { DietService } from "src/app/services/diet.service";
+import { FoodService } from "src/app/services/food.service";
 import { UsersService } from "./../services/users.service";
 import { NavigationExtras, Router } from "@angular/router";
 import { RecipeService } from "./../services/recipe.service";
@@ -17,7 +21,11 @@ export class HomePage {
   constructor(
     private recipeService: RecipeService,
     private router: Router,
-    private userService: UsersService
+    private userService: UsersService,
+    private foodService: FoodService,
+    private dietService: DietService,
+    private intolService: IntoleranceService,
+    private AllergyService: AllergyService
   ) {
     this.userPreferences = userService.returnUserPreferences();
     if (this.toSearch === "pref") {
