@@ -30,7 +30,7 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./edit-recipe.page.scss"],
 })
 export class EditRecipePage implements OnInit {
-  private recipe: Recipe;
+  public recipe: Recipe;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
