@@ -130,7 +130,11 @@ export class SearchPage implements OnInit {
     };
     this.recipeService
       .getRecipes("filter=" + JSON.stringify(request))
-      .then((recipes) => {
+      .then((recipesBack) => {
+        let recipes: Recipe[] = [];
+        for (const recipeBack of recipesBack) {
+          recipes.push(this.recipeService.matchRecipe(recipeBack));
+        }
         this.goToSearchResultsPage(recipes);
       })
       .catch((err) => console.error(err));

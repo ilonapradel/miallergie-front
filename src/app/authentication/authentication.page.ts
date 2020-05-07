@@ -1,8 +1,12 @@
+import { AllergyService } from "./../services/allergy.service";
 import { ToastController } from "@ionic/angular";
 import { UtilitiesClass } from "./../utilities-class";
 import { UsersService } from "./../services/users.service";
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { FoodService } from "../services/food.service";
+import { DietService } from "../services/diet.service";
+import { IntoleranceService } from "../services/intolerance.service";
 
 @Component({
   selector: "app-authentication",
@@ -18,7 +22,11 @@ export class AuthenticationPage implements OnInit {
   constructor(
     private api: UsersService,
     private router: Router,
-    private toast: ToastController
+    private toast: ToastController,
+    private foodService: FoodService,
+    private dietService: DietService,
+    private intolService: IntoleranceService,
+    private allergyService: AllergyService
   ) {
     this.utilities = new UtilitiesClass(toast, router);
   }
@@ -29,6 +37,10 @@ export class AuthenticationPage implements OnInit {
     this.api
       .login(email, password)
       .then(async (user) => {
+        this.allergyService.loadAllergies();
+        this.foodService.loadFoods();
+        this.dietService.loadDiets();
+        this.intolService.loadIntolerances();
         await new Promise((r) => setTimeout(r, 1000));
 
         this.utilities.showToastSimple("Vous êtes connecté !", 2000, "success");

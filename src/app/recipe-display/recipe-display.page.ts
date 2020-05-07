@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from "util";
 import { DietService } from "src/app/services/diet.service";
 import { IngredientService } from "./../services/ingredient.service";
 import { FoodService } from "./../services/food.service";
@@ -41,16 +42,12 @@ export class RecipeDisplayPage implements OnInit {
           this.recipe = this.router.getCurrentNavigation().extras.state.recipe;
 
           //getting diet
-          this.recipeService
-            .getDietsFromRecipe(this.recipe)
-            .then(async (linkDiets) => {
-              this.recipe.diets = [];
-              for (const linkDiet of linkDiets) {
-                const diet = this.dietService.returnDietById(linkDiet.dietId);
-                this.recipe.diets.push(diet);
-              }
-            })
-            .catch((err) => console.error(err));
+          if (
+            isNullOrUndefined(this.recipe.diets) ||
+            this.recipe.diets.length === 0
+          ) {
+            this.recipeService.getDietsFromRecipe(this.recipe);
+          }
 
           //getting ingrediants with their food
           try {

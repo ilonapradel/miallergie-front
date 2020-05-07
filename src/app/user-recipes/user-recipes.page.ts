@@ -117,7 +117,7 @@ export class UserRecipesPage implements OnInit {
       .then((recipes) => {
         this.recipes = [];
         for (const recipe of recipes) {
-          this.recipes.push(recipe);
+          this.recipes.push(this.recipeService.matchRecipe(recipe));
         }
       })
       .catch((err) => console.error(err));

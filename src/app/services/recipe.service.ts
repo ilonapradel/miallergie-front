@@ -7,6 +7,8 @@ import {
   Preferences,
   Intolerance,
   Allergy,
+  RecipeAllergy,
+  RecipeBack,
 } from "./../utilities-class";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
@@ -20,6 +22,7 @@ import {
   SearchRequestInclude,
 } from "../search-utilities";
 import { isNullOrUndefined } from "util";
+import { DietService } from "./diet.service";
 
 @Injectable({
   providedIn: "root",
@@ -33,19 +36,20 @@ export class RecipeService {
     private router: Router,
     private toastController: ToastController,
     private intoleranceService: IntoleranceService,
-    private allergieService: AllergyService
+    private allergieService: AllergyService,
+    private dietService: DietService
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
   }
 
-  public getRecipes(filter?: string): Promise<Recipe[]> {
+  public getRecipes(filter?: string): Promise<RecipeBack[]> {
     return this.http
-      .get<Recipe[]>(this.url + "recipes/" + (filter ? "?" + filter : ""), {
+      .get<RecipeBack[]>(this.url + "recipes/" + (filter ? "?" + filter : ""), {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       })
-      .toPromise<Recipe[]>();
+      .toPromise<RecipeBack[]>();
   }
 
   public addRecipe(recipe: Recipe): Promise<Recipe> {
@@ -111,7 +115,7 @@ export class RecipeService {
       .toPromise<Ingredient[]>();
   }
 
-  public getDietsFromRecipe(
+  public getRecipeDiets(
     recipe: Recipe
   ): Promise<[{ id: string; dietId: string; recipeId: string }]> {
     return this.http
@@ -135,6 +139,17 @@ export class RecipeService {
         })
       )
       .toPromise<[{ id: string; dietId: string; recipeId: string }]>();
+  }
+
+  public getDietsFromRecipe(recipe: Recipe) {
+    this.getRecipeDiets(recipe).then((linkDiets) => {
+      const dietsToSave: Diet[] = [];
+      for (const linkDiet of linkDiets) {
+        const diet = this.dietService.returnDietById(linkDiet.dietId);
+        dietsToSave.push(diet);
+      }
+      recipe.diets = dietsToSave;
+    });
   }
 
   public addDietToRecipe(recipe: Recipe, diet: Diet): Promise<Diet> {
@@ -281,7 +296,7 @@ export class RecipeService {
     }
   }
 
-  searchRecipesDependingOnPref(pref: Preferences): Promise<Recipe[]> {
+  searchRecipesDependingOnPref(pref: Preferences): Promise<RecipeBack[]> {
     const request = new SearchRequest();
     const where = request.where;
     const include = request.include;
@@ -314,35 +329,44 @@ export class RecipeService {
     return this.getRecipes("filter=" + JSON.stringify(request));
   }
 
-  public saveAllergiesAndIntolerancesOfRecipe(recipe: Recipe): void {
+  public saveAllergiesAndIntolerancesOfRecipe(
+    recipe: Recipe,
+    savedRecipeId: string
+  ): void {
+    recipe.allergies = [];
+    recipe.intolerances = [];
+
     for (const ing of recipe.ingredients) {
-      const allergies = ing.food.allergies;
-      for (const all of allergies) {
-        if (recipe.allergies.indexOf(all) === -1) {
-          recipe.allergies.push(all);
+      const allergies = ing.food.foodAllergies;
+      if (!isNullOrUndefined(allergies)) {
+        for (const all of allergies) {
+          if (recipe.allergies.indexOf(all) === -1) {
+            recipe.allergies.push(all);
+          }
         }
       }
-
-      const intolerances = ing.food.intolerances;
-      for (const intol of intolerances) {
-        if (recipe.intolerances.indexOf(intol) === -1) {
-          recipe.intolerances.push(intol);
+      const intolerances = ing.food.foodIntolerances;
+      if (!isNullOrUndefined(intolerances)) {
+        for (const intol of intolerances) {
+          if (recipe.intolerances.indexOf(intol) === -1) {
+            recipe.intolerances.push(intol);
+          }
         }
       }
     }
 
-    this.postAllergiesOfRecipe(recipe);
-    this.postIntolerancesOfRecipe(recipe);
+    this.postAllergiesOfRecipe(recipe, savedRecipeId);
+    this.postIntolerancesOfRecipe(recipe, savedRecipeId);
   }
 
-  private postAllergiesOfRecipe(recipe: Recipe): void {
+  private postAllergiesOfRecipe(recipe: Recipe, savedRecipeId: string): void {
     for (const all of recipe.allergies) {
       this.http
-        .post<Recipe>(
-          this.url + "recipes/" + recipe.id + "/recipe-allergies",
+        .post<any>(
+          this.url + "recipes/" + savedRecipeId + "/recipe-allergies",
           {
             allergyId: all.id,
-            recipeId: recipe.id,
+            recipeId: savedRecipeId,
           },
           {
             headers: {
@@ -350,25 +374,30 @@ export class RecipeService {
             },
           }
         )
-        .pipe<Recipe>(
-          catchError<Recipe, Observable<never>>((err: any) => {
+        .pipe<any>(
+          catchError<any, Observable<never>>((err: any) => {
             if (err.status === 401) {
               this.utilities.disconnect();
             }
             return throwError(err);
           })
-        );
+        )
+        .toPromise()
+        .then();
     }
   }
 
-  private postIntolerancesOfRecipe(recipe: Recipe): void {
+  private postIntolerancesOfRecipe(
+    recipe: Recipe,
+    savedRecipeId: string
+  ): void {
     for (const intol of recipe.intolerances) {
       this.http
         .post<Recipe>(
-          this.url + "recipes/" + recipe.id + "/recipe-intolerances",
+          this.url + "recipes/" + savedRecipeId + "/recipe-intolerances",
           {
             intoleranceId: intol.id,
-            recipeId: recipe.id,
+            recipeId: savedRecipeId,
           },
           {
             headers: {
@@ -387,31 +416,48 @@ export class RecipeService {
     }
   }
 
-  // public getAllergiesAndIntolerancesFromRecipe(recipe: Recipe): void {
-  //   let intolerancesInRecipe: Intolerance[] = [];
-  //   let allergiesInRecipe: Allergy[] = [];
-  //   this.getIngredientFromRecipe(recipe).then((ingredients) => {
-  //     recipe.ingredients = ingredients;
-  //     for (const ing of recipe.ingredients) {
-  //       this.intoleranceService
-  //         .getIntolerancesOfFood(ing.foodId)
-  //         .then((intols) => {
-  //           console.log({ intols });
-  //           intolerancesInRecipe.concat(intols);
-  //         });
+  public getRecipeAllergies(recipe: Recipe): Promise<RecipeAllergy[]> {
+    return this.http
+      .get<RecipeAllergy[]>(
+        this.url + "recipes/" + recipe.id + "/recipe-allergies",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .toPromise<RecipeAllergy[]>();
+  }
 
-  //       this.allergieService
-  //         .getAllergiesOfFood(ing.foodId)
-  //         .then((allergies) => {
-  //           console.log(allergies);
-  //           allergiesInRecipe.concat(allergies);
-  //         });
-  //     }
-  //     console.log(intolerancesInRecipe);
-  //     console.log(allergiesInRecipe);
-  //   });
+  public getAllergiesFromRecipe(recipe: Recipe): void {
+    let allergiesInRecipe: Allergy[] = [];
+    this.getRecipeAllergies(recipe).then((recipeAllergies) => {
+      for (let recipeAllergy of recipeAllergies) {
+        let allergy = this.allergieService.getAllergie(recipeAllergy.allergyId);
+        allergiesInRecipe.push(allergy);
+      }
+      recipe.allergies = allergiesInRecipe;
+    });
+  }
 
-  //   recipe.allergies = allergiesInRecipe;
-  //   recipe.intolerances = intolerancesInRecipe;
-  // }
+  public matchRecipe(recipeBack: RecipeBack): Recipe {
+    let recipe = new Recipe();
+    recipe.name = recipeBack.name;
+    recipe.id = recipeBack.id;
+    recipe.difficulty = recipeBack.difficulty;
+    recipe.duration = recipeBack.duration;
+    recipe.image = recipeBack.image;
+    recipe.imageId = recipeBack.imageId;
+    recipe.numberOfPeople = recipeBack.numberOfPeople;
+    recipe.stages = recipeBack.stages;
+
+    if (!isNullOrUndefined(recipeBack.diets)) {
+      for (const dietBack of recipeBack.diets) {
+        const diet = this.dietService.returnDietById(dietBack.dietId);
+        recipe.diets.push(diet);
+      }
+    }
+
+    return recipe;
+  }
 }

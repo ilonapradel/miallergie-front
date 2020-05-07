@@ -21,7 +21,9 @@ export class DietService {
     private toastController: ToastController
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
+  }
 
+  public loadDiets(): void {
     this.getDiets().then((diets) => (this.knownDiets = diets));
   }
 

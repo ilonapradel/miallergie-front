@@ -62,24 +62,31 @@ export class Ingredient {
 export class Food {
   public id: string = "";
   public name: string = "";
-  public allergies: Allergy[] = [];
-  public intolerances: Intolerance[] = [];
+  public foodAllergies: Allergy[] = [];
+  public foodIntolerances: Intolerance[] = [];
 }
 
-export class Recipe {
+export class RecipeRoot {
   public id: string;
   public name: string;
-  public ingredients: Ingredient[] = [];
   public difficulty: number = 3;
-  public diets?: Diet[];
   public duration: number = 15;
-  public imageId?: string;
-  public image?: File = new File();
   public numberOfPeople: number = 1;
   public stages: string[] = ["", "", "", "", ""];
   public type: string;
-  public intolerances: Intolerance[];
-  public allergies: Allergy[];
+  public imageId?: string;
+  public image?: File = new File();
+}
+
+export class Recipe extends RecipeRoot {
+  public ingredients: Ingredient[] = [];
+  public diets?: Diet[] = [];
+  public intolerances: Intolerance[] = [];
+  public allergies: Allergy[] = [];
+}
+
+export class RecipeBack extends RecipeRoot {
+  public diets: { id: string; dietId: string; recipeId: string }[];
 }
 
 export class File {
@@ -123,6 +130,12 @@ export class Allergy {
 export class Intolerance {
   public id: string;
   public name: string;
+}
+
+export class RecipeAllergy {
+  public id: string;
+  public allergyId: string;
+  public recipeId: string;
 }
 
 export const ApiUrl: string = "http://miallergie.freeboxos.fr:8080/";

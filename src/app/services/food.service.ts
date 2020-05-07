@@ -21,21 +21,30 @@ export class FoodService {
     private toastController: ToastController
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
-    this.getFoods().then((foods) => (this.knownFoods = foods));
   }
 
   public returnFoods() {
     return this.knownFoods;
   }
 
+  public loadFoods(): void {
+    this.getFoods().then((foods) => {
+      this.knownFoods = foods;
+    });
+  }
+
   //?filter[include][0][relation]=food-allergies
   private getFoods(): Promise<Food[]> {
     return this.http
-      .get<Food[]>(this.url + "foods", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
+      .get<Food[]>(
+        this.url + "foods?filter[include][0][relation]=foodAllergies",
+
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
       .pipe<Food[]>(
         catchError<Food[], Observable<never>>((err: any) => {
           if (err.status === 401) {

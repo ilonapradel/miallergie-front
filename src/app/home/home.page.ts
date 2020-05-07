@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from "util";
 import { AllergyService } from "./../services/allergy.service";
 import { IntoleranceService } from "./../services/intolerance.service";
 import { DietService } from "src/app/services/diet.service";
@@ -22,10 +23,7 @@ export class HomePage {
     private recipeService: RecipeService,
     private router: Router,
     private userService: UsersService,
-    private foodService: FoodService,
-    private dietService: DietService,
-    private intolService: IntoleranceService,
-    private AllergyService: AllergyService
+    private dietService: DietService
   ) {
     this.userPreferences = userService.returnUserPreferences();
     if (this.toSearch === "pref") {
@@ -39,28 +37,32 @@ export class HomePage {
     this.recipes = [];
     this.recipeService
       .getRecipes(
-        "filter[order]=createAt DESC&filter[include][0][relation]=image"
+        "filter[order]=createAt DESC&filter[include][0][relation]=image&filter[include][1][relation]=diets"
       )
-      .then((recipes) => {
-        for (const recipe of recipes) {
-          // this.recipeService.getAllergiesAndIntolerancesFromRecipe(recipe);
-          console.log(recipe);
+      .then((recipesBack) => {
+        for (const recipeBack of recipesBack) {
+          let recipe = this.recipeService.matchRecipe(recipeBack);
+
+          this.recipeService.getAllergiesFromRecipe(recipe);
           this.recipes.push(recipe);
         }
       })
       .catch((err) => console.error(err));
   }
 
+  getDietsFromRecipeDiet(): void {}
+
   searchRecipesForUser(): void {
     this.recipes = [];
     this.recipeService
       .searchRecipesDependingOnPref(this.userPreferences)
-      .then((recipes) => {
-        for (const recipe of recipes) {
-          if (recipe.diets !== undefined) {
-            console.log(recipe);
-            // this.recipeService.getAllergiesAndIntolerancesFromRecipe(recipe);
-            console.log(recipe);
+      .then((recipesBack) => {
+        for (const recipeBack of recipesBack) {
+          let recipe = this.recipeService.matchRecipe(recipeBack);
+
+          this.recipeService.getAllergiesFromRecipe(recipe);
+
+          if (!isNullOrUndefined(recipe.diets) && recipe.diets.length !== 0) {
             this.recipes.push(recipe);
           }
         }

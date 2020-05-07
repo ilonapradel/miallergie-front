@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from "util";
 import { Injectable } from "@angular/core";
 import { UtilitiesClass, ApiUrl, Allergy } from "../utilities-class";
 import { HttpClient } from "@angular/common/http";
@@ -20,52 +21,48 @@ export class AllergyService {
     private toastController: ToastController
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
-    this.loadAllergies();
   }
 
-  public async getAllergies(): Promise<Allergy[]> {
-    await this.loadAllergies();
-    return this.possibleAllergies;
+  public loadAllergies(): void {
+    this.getAllergies().then((allergies) => {
+      this.possibleAllergies = allergies;
+    });
   }
 
   public returnAllergies(): Allergy[] {
     return this.possibleAllergies;
   }
 
-  private loadAllergies(): Promise<Allergy[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<Allergy[]>(this.url + "allergies", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
+  private getAllergies(): Promise<Allergy[]> {
+    return this.http
+      .get<Allergy[]>(this.url + "allergies", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<Allergy[]>(
+        catchError<Allergy[], Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
         })
-        .toPromise<Allergy[]>()
-        .then(async (allergies) => {
-          this.possibleAllergies = allergies;
-          resolve();
-        })
-        .catch((err) => console.error(err));
-    });
+      )
+      .toPromise<Allergy[]>();
   }
 
-  // public getAllergie(id: string): Promise<Allergy> {
-  //   return this.http
-  //     .get<Allergy>(this.url + "allergies/" + id, {
-  //       headers: {
-  //         Authorization: "Bearer " + localStorage.getItem("access_token"),
-  //       },
-  //     })
-  //     .pipe<Allergy>(
-  //       catchError<Allergy, Observable<never>>((err: any) => {
-  //         if (err.status === 401) {
-  //           this.utilities.disconnect();
-  //         }
-  //         return throwError(err);
-  //       })
-  //     )
-  //     .toPromise<Allergy>();
-  // }
+  public getAllergie(id: string): Allergy {
+    if (isNullOrUndefined(this.possibleAllergies)) {
+      this.getAllergies().then((allergies) => {
+        this.possibleAllergies = allergies;
+      });
+    }
+    for (const allergy of this.possibleAllergies) {
+      if (allergy.id === id) {
+        return allergy;
+      }
+    }
+  }
 
   // public getAllergiesOfFood(foodId: string): Promise<Allergy[]> {
   //   return this.http

@@ -4,7 +4,7 @@
       <ion-row>
         <ion-col size="9"><img [src]="server + recipe?.image?.path" /></ion-col>
         <ion-col style="align-self: center" text-center>
-          <ion-icon size="large" name="checkmark-circle-outline" color="success"></ion-icon>
+          <ion-icon size="large" [name]="icon" [color]="color"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-grid>

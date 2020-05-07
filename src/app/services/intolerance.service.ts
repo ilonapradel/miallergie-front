@@ -21,27 +21,34 @@ export class IntoleranceService {
     private toastController: ToastController
   ) {
     this.utilities = new UtilitiesClass(toastController, router);
-    this.getIntolerances();
   }
 
   public returnIntolerances(): Intolerance[] {
     return this.knownIntolerances;
   }
 
-  private getIntolerances(): Promise<Intolerance[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<Intolerance[]>(this.url + "intolerances", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        })
-        .toPromise<Intolerance[]>()
-        .then(async (intolerances) => {
-          this.knownIntolerances = intolerances;
-        })
-        .catch((err) => console.error(err));
+  public loadIntolerances(): void {
+    this.getIntolerances().then((intolerances) => {
+      this.knownIntolerances = intolerances;
     });
+  }
+
+  private getIntolerances(): Promise<Intolerance[]> {
+    return this.http
+      .get<Intolerance[]>(this.url + "intolerances", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<Intolerance[]>(
+        catchError<Intolerance[], Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<Intolerance[]>();
   }
 
   public returnIntoleranceById(id: string) {
@@ -50,24 +57,6 @@ export class IntoleranceService {
         return intol;
       }
     }
-  }
-
-  private getIntolerance(id: string): Promise<Intolerance> {
-    return this.http
-      .get<Intolerance>(this.url + "intolerances/" + id, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .pipe<Intolerance>(
-        catchError<Intolerance, Observable<never>>((err: any) => {
-          if (err.status === 401) {
-            this.utilities.disconnect();
-          }
-          return throwError(err);
-        })
-      )
-      .toPromise<Intolerance>();
   }
 
   public getIntolerancesOfFood(foodId: string): Promise<Intolerance[]> {
