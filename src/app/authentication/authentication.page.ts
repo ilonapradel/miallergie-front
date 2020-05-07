@@ -14,8 +14,8 @@ import { IntoleranceService } from "../services/intolerance.service";
   styleUrls: ["./authentication.page.scss"],
 })
 export class AuthenticationPage implements OnInit {
-  email: string = "admin1@admin.fr";
-  password: string = "admin1";
+  email: string = "";
+  password: string = "";
 
   utilities: UtilitiesClass;
 
