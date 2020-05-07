@@ -42,6 +42,6 @@ export class DietSelectorComponent implements OnInit {
 
   deleteDiet(diet: Diet) {
     this.diets.splice(this.diets.indexOf(diet), 1);
-    this.dietComponent.confirm();
+    this.result.emit(this.diets);
   }
 }

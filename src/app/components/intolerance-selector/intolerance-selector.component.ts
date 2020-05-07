@@ -49,6 +49,6 @@ export class IntoleranceSelectorComponent implements OnInit {
       this.userPreferences.intolerances.indexOf(intolerance),
       1
     );
-    this.intoleranceComponent.confirm();
+    this.result.emit(this.userPreferences.intolerances);
   }
 }

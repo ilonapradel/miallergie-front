@@ -46,6 +46,6 @@ export class AllergySelectorComponent implements OnInit {
       this.userPreferences.allergies.indexOf(allergie),
       1
     );
-    this.allergyComponent.confirm();
+    this.result.emit(this.userPreferences.allergies);
   }
 }
