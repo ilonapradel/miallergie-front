@@ -52,14 +52,19 @@ export class UsersService {
       .toPromise();
   }
 
-  private loadUserData(): void {
-    this.getAllAboutUser().then((userData) => {
-      this.getDietsFromUserData(userData.diets);
-      this.getAllergiesFromUserData(userData.allergies);
-      this.getIntolerancesFromUserData(userData.intolerances);
-      this.getFriendFromUserData(userData.nonRegisteredFriends, false);
-      this.getFriendFromUserData(userData.registeredFriends, true);
-    });
+  private async loadUserData(): Promise<void> {
+    let userData = await this.getAllAboutUser();
+    this.getDietsFromUserData(userData.diets);
+    this.getAllergiesFromUserData(userData.allergies);
+    this.getIntolerancesFromUserData(userData.intolerances);
+    this.getFriendFromUserData(userData.nonRegisteredFriends, false);
+    this.getFriendFromUserData(userData.registeredFriends, true);
+  }
+
+  public async reloadUserFriends(): Promise<void> {
+    let userData = await this.getAllAboutUser();
+    this.getFriendFromUserData(userData.nonRegisteredFriends, false);
+    this.getFriendFromUserData(userData.registeredFriends, true);
   }
 
   private getDietsFromUserData(diets: any[]) {
@@ -83,6 +88,7 @@ export class UsersService {
 
   private getFriendFromUserData(friends: any, areRegistered: boolean) {
     if (areRegistered) {
+      this.myUser.registeredFriends = [];
       for (const rgDataFriend of friends) {
         const friend: User = new User();
         friend.id = rgDataFriend.userid;
@@ -93,6 +99,7 @@ export class UsersService {
         this.myUser.registeredFriends.push(friend);
       }
     } else {
+      this.myUser.nonRegisteredFriends = [];
       for (const nonRgDataFriend of friends) {
         const friend: Friend = new Friend();
         friend.surname = nonRgDataFriend.surname;
@@ -319,8 +326,13 @@ export class UsersService {
   }
 
   public addNonRegisteredFriend(newFriend: Friend) {
-    this.postFriend(newFriend).then((friend) => {
-      this.savePreferences(newFriend.preferences, friend.id);
+    return new Promise((resolve, reject) => {
+      this.postFriend(newFriend)
+        .then((friend) => {
+          this.savePreferences(newFriend.preferences, friend.id);
+          resolve();
+        })
+        .catch((err) => reject(err));
     });
   }
 

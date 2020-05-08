@@ -64,9 +64,16 @@ export class AddFriendPage implements OnInit {
         "danger"
       );
       return;
+    } else {
+      this.api.reloadUserFriends().then(() => {
+        this.utilities.showToastSimple(
+          "Votre ami(e) a été ajouté!",
+          1000,
+          "success"
+        );
+        this.router.navigate(["/friend"]);
+      });
     }
-
-    this.router.navigate(["/friend"]);
   }
 
   saveNewFriend() {
@@ -80,8 +87,16 @@ export class AddFriendPage implements OnInit {
     }
     this.newFriend.preferences = this.preferences;
 
-    this.api.addNonRegisteredFriend(this.newFriend);
-    this.router.navigate(["/friend"]);
+    this.api.addNonRegisteredFriend(this.newFriend).then(() => {
+      this.api.reloadUserFriends().then(() => {
+        this.utilities.showToastSimple(
+          "Votre ami(e) a été ajouté!",
+          1000,
+          "success"
+        );
+        this.router.navigate(["/friend"]);
+      });
+    });
   }
 
   onChangeDiets(diets: Diet[]) {
