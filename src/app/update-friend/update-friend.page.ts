@@ -1,4 +1,6 @@
-import { Diet, Intolerance } from "src/app/utilities-class";
+import { ToastController } from "@ionic/angular";
+import { UsersService } from "./../services/users.service";
+import { Diet, Intolerance, UtilitiesClass } from "src/app/utilities-class";
 import { Preferences, Allergy } from "./../utilities-class";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
@@ -16,7 +18,16 @@ export class UpdateFriendPage implements OnInit {
   public name: string;
   public userPref: Preferences;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  utilities: UtilitiesClass;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private api: UsersService,
+    private toast: ToastController
+  ) {
+    this.utilities = new UtilitiesClass(toast, router);
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -41,12 +52,16 @@ export class UpdateFriendPage implements OnInit {
   }
 
   savePreferences() {
-    //this.router.navigate(["/friend"]);
-    console.log(this.userPref);
+    console.log(this);
+    this.api
+      .saveNonRegisteredFriendPreferences(this.userPref, this.friend.id)
+      .then(() => {
+        this.utilities.showToastSimple("Modifié !", 1000, "succes");
+        this.router.navigate(["/friend"]);
+      });
   }
 
   onChangeDiets(diets: Diet[]) {
-    console.log({ step: "onChangeDiets", diets: diets });
     this.userPref.diets = diets;
   }
 

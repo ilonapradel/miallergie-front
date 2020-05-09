@@ -93,19 +93,38 @@ export class UsersService {
         const friend: User = new User();
         friend.id = rgDataFriend.userid;
         friend.username = rgDataFriend.friendUser.username;
-        friend.preferences.allergies = rgDataFriend.friendUser.allergies;
-        friend.preferences.intolerances = rgDataFriend.friendUser.intolerances;
-        friend.preferences.diets = rgDataFriend.friendUser.diets;
+        friend.preferences.allergies = Array.from(
+          rgDataFriend.friendUser.allergies,
+          ({ allergy }) => allergy
+        );
+        friend.preferences.intolerances = Array.from(
+          rgDataFriend.friendUser.intolerances,
+          ({ intolerance }) => intolerance
+        );
+        friend.preferences.diets = Array.from(
+          rgDataFriend.friendUser.diets,
+          ({ diet }) => diet
+        );
         this.myUser.registeredFriends.push(friend);
       }
     } else {
       this.myUser.nonRegisteredFriends = [];
       for (const nonRgDataFriend of friends) {
         const friend: Friend = new Friend();
+        friend.id = nonRgDataFriend.id;
         friend.surname = nonRgDataFriend.surname;
-        friend.preferences.allergies = nonRgDataFriend.allergies;
-        friend.preferences.intolerances = nonRgDataFriend.intolerances;
-        friend.preferences.diets = nonRgDataFriend.diets;
+        friend.preferences.allergies = Array.from(
+          nonRgDataFriend.allergies,
+          ({ allergy }) => allergy
+        );
+        friend.preferences.intolerances = Array.from(
+          nonRgDataFriend.intolerances,
+          ({ intolerance }) => intolerance
+        );
+        friend.preferences.diets = Array.from(
+          nonRgDataFriend.diets,
+          ({ diet }) => diet
+        );
         this.myUser.nonRegisteredFriends.push(friend);
       }
     }
@@ -334,6 +353,142 @@ export class UsersService {
         })
         .catch((err) => reject(err));
     });
+  }
+  public async saveNonRegisteredFriendPreferences(
+    newPreferences: Preferences,
+    nonRegisteredFriendId: string
+  ) {
+    await this.deleteNonRegisteredFriendDiets(nonRegisteredFriendId);
+    await this.deleteNonRegisteredFriendAllergies(nonRegisteredFriendId);
+    await this.deleteNonRegisteredFriendIntolerances(nonRegisteredFriendId);
+
+    this.saveNonRegisteredFriendDiets(
+      newPreferences.diets,
+      nonRegisteredFriendId
+    );
+    this.saveNonRegisteredFriendAllergies(
+      newPreferences.allergies,
+      nonRegisteredFriendId
+    );
+    this.saveNonRegisteredFriendIntolerances(
+      newPreferences.intolerances,
+      nonRegisteredFriendId
+    );
+  }
+
+  private deleteNonRegisteredFriendDiets(id: string): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "friends/" + id + "/friend-diets", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+  private deleteNonRegisteredFriendAllergies(id: string): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "friends/" + id + "/friend-allergies", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+  private deleteNonRegisteredFriendIntolerances(id: string): Promise<any> {
+    return this.http
+      .delete<any>(this.url + "friends/" + id + "/friend-intolerances", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .pipe<any>(
+        catchError<any, Observable<never>>((err: any) => {
+          if (err.status === 401) {
+            this.utilities.disconnect();
+          }
+          return throwError(err);
+        })
+      )
+      .toPromise<any>();
+  }
+
+  private saveNonRegisteredFriendDiets(newDiets: Diet[], id: string) {
+    for (const diet of newDiets) {
+      this.http
+        .post(
+          this.url + "friends/" + id + "/friend-diets",
+          {
+            friendId: id,
+            dietId: diet.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .toPromise();
+    }
+  }
+
+  private saveNonRegisteredFriendIntolerances(
+    newIntolerances: Intolerance[],
+    id: string
+  ) {
+    for (const intol of newIntolerances) {
+      this.http
+        .post(
+          this.url + "friends/" + id + "/friend-intolerances",
+          {
+            friendId: id,
+            intoleranceId: intol.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .toPromise();
+    }
+  }
+
+  private saveNonRegisteredFriendAllergies(
+    newAllergies: Allergy[],
+    id: string
+  ) {
+    for (const allergie of newAllergies) {
+      this.http
+        .post(
+          this.url + "friends/" + id + "/friend-allergies",
+          {
+            friendId: id,
+            allergyId: allergie.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .toPromise();
+    }
   }
 
   public async saveUserPreferences(newPreferences: Preferences) {

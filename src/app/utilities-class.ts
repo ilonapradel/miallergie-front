@@ -118,6 +118,7 @@ export class Preferences {
 }
 
 export class Friend {
+  public id?: string;
   public preferences: Preferences = new Preferences();
   public surname: string;
 }
