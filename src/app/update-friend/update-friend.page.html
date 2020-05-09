@@ -5,10 +5,25 @@
         <ion-title>Préférences alimentaires de {{name}}</ion-title>
       </ion-col>
     </ion-row>
-    <app-diet-selector style="width: 100%;" [diets]="userPref.diets" [enabled]="amAFriend"></app-diet-selector>
-    <app-allergy-selector style="width: 100%;" [preferences]="userPref" [enabled]="amAFriend">
+    <app-diet-selector
+      style="width: 100%;"
+      [diets]="userPref.diets"
+      [enabled]="amAFriend"
+      (result)="onChangeDiets($event)"
+    ></app-diet-selector>
+    <app-allergy-selector
+      style="width: 100%;"
+      [preferences]="userPref"
+      [enabled]="amAFriend"
+      (result)="onChangeAllergies($event)"
+    >
     </app-allergy-selector>
-    <app-intolerance-selector style="width: 100%;" [preferences]="userPref" [enabled]="amAFriend">
+    <app-intolerance-selector
+      style="width: 100%;"
+      [preferences]="userPref"
+      [enabled]="amAFriend"
+      (result)="onChangeIntolerances($event)"
+    >
     </app-intolerance-selector>
     <ion-row>
       <ion-col>

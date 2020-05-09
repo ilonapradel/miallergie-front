@@ -1,4 +1,5 @@
-import { Preferences } from "./../utilities-class";
+import { Diet, Intolerance } from "src/app/utilities-class";
+import { Preferences, Allergy } from "./../utilities-class";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { Friend, User } from "../utilities-class";
@@ -40,6 +41,20 @@ export class UpdateFriendPage implements OnInit {
   }
 
   savePreferences() {
-    this.router.navigate(["/friend"]);
+    //this.router.navigate(["/friend"]);
+    console.log(this.userPref);
+  }
+
+  onChangeDiets(diets: Diet[]) {
+    console.log({ step: "onChangeDiets", diets: diets });
+    this.userPref.diets = diets;
+  }
+
+  onChangeAllergies(allergies: Allergy[]) {
+    this.userPref.allergies = allergies;
+  }
+
+  onChangeIntolerances(intolerances: Intolerance[]) {
+    this.userPref.intolerances = intolerances;
   }
 }
