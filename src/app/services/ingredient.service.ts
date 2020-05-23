@@ -8,7 +8,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class IngredientService {
   private url: string = ApiUrl;
@@ -26,15 +26,20 @@ export class IngredientService {
     return this.http
       .get<Food>(this.url + "ingredients/" + ingredient.id + "/food", {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token")
-        }
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       })
       .pipe<Food>(
         catchError<Food, Observable<never>>((err: any) => {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Food>();

@@ -45,7 +45,12 @@ export class IntoleranceService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Intolerance[]>();
@@ -71,7 +76,12 @@ export class IntoleranceService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Intolerance[]>();

@@ -220,7 +220,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise();
@@ -388,7 +393,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -405,7 +415,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -422,7 +437,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -517,7 +537,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -535,7 +560,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -553,7 +583,12 @@ export class UsersService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();

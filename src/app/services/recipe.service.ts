@@ -58,6 +58,8 @@ export class RecipeService {
     toSave.image = undefined;
     toSave.diets = undefined;
     toSave.ingredients = undefined;
+    toSave.allergies = undefined;
+    toSave.intolerances = undefined;
     return this.http
       .post<Recipe>(this.url + "recipes/", toSave, {
         headers: {
@@ -69,7 +71,13 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            console.log(err.error.error);
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Recipe>();
@@ -80,6 +88,8 @@ export class RecipeService {
     toSave.diets = undefined;
     toSave.image = undefined;
     toSave.ingredients = undefined;
+    toSave.intolerances = undefined;
+    toSave.allergies = undefined;
     return this.http
       .patch<Recipe>(this.url + "recipes/" + recipe.id, toSave, {
         headers: {
@@ -91,7 +101,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Recipe>();
@@ -109,7 +124,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Ingredient[]>();
@@ -135,7 +155,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<[{ id: string; dietId: string; recipeId: string }]>();
@@ -170,7 +195,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Diet>();
@@ -188,7 +218,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -218,7 +253,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Ingredient>();
@@ -236,7 +276,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<any>();
@@ -256,7 +301,12 @@ export class RecipeService {
           if (err.status === 401) {
             this.utilities.disconnect();
           }
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise();
@@ -272,7 +322,12 @@ export class RecipeService {
       .pipe<Recipe>(
         catchError<Recipe, Observable<never>>((err: any) => {
           this.catchErrorOnDelete(err);
-          return throwError(err);
+          try {
+            let str = err.error.error.details[0];
+            return throwError(str);
+          } catch (error) {
+            return throwError(err);
+          }
         })
       )
       .toPromise<Recipe>();
@@ -379,7 +434,12 @@ export class RecipeService {
             if (err.status === 401) {
               this.utilities.disconnect();
             }
-            return throwError(err);
+            try {
+              let str = err.error.error.details[0];
+              return throwError(str);
+            } catch (error) {
+              return throwError(err);
+            }
           })
         )
         .toPromise()
@@ -410,7 +470,12 @@ export class RecipeService {
             if (err.status === 401) {
               this.utilities.disconnect();
             }
-            return throwError(err);
+            try {
+              let str = err.error.error.details[0];
+              return throwError(str);
+            } catch (error) {
+              return throwError(err);
+            }
           })
         );
     }
