@@ -515,6 +515,7 @@ export class RecipeService {
     recipe.imageId = recipeBack.imageId;
     recipe.numberOfPeople = recipeBack.numberOfPeople;
     recipe.stages = recipeBack.stages;
+    recipe.type = recipeBack.type;
 
     if (!isNullOrUndefined(recipeBack.diets)) {
       for (const dietBack of recipeBack.diets) {
