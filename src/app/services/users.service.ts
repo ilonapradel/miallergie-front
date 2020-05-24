@@ -185,7 +185,6 @@ export class UsersService {
             username: string;
           }) => {
             let token: string = res.token;
-            console.log({ token });
             localStorage.setItem("access_token", token);
             this.isAuth = true;
             this.userId = res.id;
@@ -353,7 +352,10 @@ export class UsersService {
     return new Promise((resolve, reject) => {
       this.postFriend(newFriend)
         .then((friend) => {
-          this.savePreferences(newFriend.preferences, friend.id);
+          this.saveNonRegisteredFriendPreferences(
+            newFriend.preferences,
+            friend.id
+          );
           resolve();
         })
         .catch((err) => reject(err));
